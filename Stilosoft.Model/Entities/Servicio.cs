@@ -23,5 +23,8 @@ namespace Stilosoft.Model.Entities
         [Required(ErrorMessage = "El costo es obligatorio")]
         public long Costo { get; set; }
         public bool Estado { get; set; }
+
+        public virtual List<DetalleCitaServicios> DetalleCitaServicios { get; set; }
+        public virtual List<DetalleEmpleadoServicios> DetalleEmpleadoServicios { get; set; }
     }
 }

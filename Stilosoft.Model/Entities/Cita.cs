@@ -22,11 +22,11 @@ namespace Stilosoft.Model.Entities
         public string Hora { get; set; }
         [Required]
         public long Total { get; set; }
-        [Column(TypeName = "nvarchar(20)")]
         [Required]
         public int EstadoCitaId { get; set; }
+
         public virtual EstadoCita EstadoCita { get; set; }
         public virtual Cliente Cliente { get; set; }
-        //public virtual List<DetalleCita> DetalleCitas { get; set; }
+        public virtual List<DetalleCitaServicios> DetalleCitaServicios { get; set; }
     }
 }

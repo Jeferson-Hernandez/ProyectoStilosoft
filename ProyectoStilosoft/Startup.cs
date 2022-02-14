@@ -30,6 +30,8 @@ namespace ProyectoStilosoft
             var conexion = Configuration["ConnectionStrings:conexion_sqlServer"];
             services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(conexion));
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
