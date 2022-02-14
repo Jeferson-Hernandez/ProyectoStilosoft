@@ -31,7 +31,7 @@ namespace ProyectoStilosoft
             services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(conexion));
 
-            
+            //prueba
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
