@@ -34,6 +34,7 @@ namespace ProyectoStilosoft
                     options.UseSqlServer(conexion));
 
             services.AddScoped<IServicioService, ServicioService>();
+            services.AddScoped<IClienteService, ClienteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
