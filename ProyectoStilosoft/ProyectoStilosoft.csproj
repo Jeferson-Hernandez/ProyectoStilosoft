@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Stilosoft.Business\Stilosoft.Business.csproj" />
     <ProjectReference Include="..\Stilosoft.Model\Stilosoft.Model.csproj" />
   </ItemGroup>
