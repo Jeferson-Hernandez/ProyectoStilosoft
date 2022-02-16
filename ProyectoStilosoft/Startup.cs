@@ -61,7 +61,7 @@ namespace ProyectoStilosoft
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Servicios}/{action=Index}/{id?}");
             });
         }
     }

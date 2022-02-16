@@ -1,0 +1,12 @@
+﻿﻿body {
+    background-color: #668cff !important;
+}
+
+.login-box {
+    width: 27rem !important;
+    height: auto !important;
+}
+
+.card-body {
+    border-radius: 5px !important;
+}
