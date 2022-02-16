@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Stilosoft.Business.Abstract;
+using Stilosoft.Business.Business;
 using Stilosoft.Model.DAL;
 using System;
 using System.Collections.Generic;
@@ -31,8 +33,9 @@ namespace ProyectoStilosoft
             services.AddDbContext<AppDbContext>(options =>
                     options.UseSqlServer(conexion));
 
-            
+            services.AddScoped<IClienteService, ClienteService>();
         }
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
