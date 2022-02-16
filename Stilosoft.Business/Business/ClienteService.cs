@@ -21,11 +21,11 @@ namespace Stilosoft.Business.Business
 
         public async Task<IEnumerable<Cliente>> ObtenerListaClientes()
         {
-            return await _context.Cliente.Include(u=>u.IdentityUser).ToListAsync();
+            return await _context.clientes.Include(u=>u.IdentityUser).ToListAsync();
         }
         public async Task<Cliente> ObtenerClientePorId(string id)
         {
-            return await _context.Cliente.Include(u => u.IdentityUser).FirstOrDefaultAsync(s=>s.ClienteId.Contains(id));
+            return await _context.clientes.Include(u => u.IdentityUser).FirstOrDefaultAsync(s=>s.ClienteId.Contains(id));
         }
 
         public async Task GuardarCliente(Cliente cliente)
