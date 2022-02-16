@@ -1,0 +1,25 @@
+﻿header.masthead {
+    background-image: url("principal.jpg") !important;
+}
+
+.nav-link:hover {
+    color: #F7F7F7 !important;
+    background-color: #3876F1 !important;
+    border-radius: 10px !important;
+}
+
+.nav-link {
+    background-color: #212529 !important;
+    border-radius: 10px !important;
+}
+
+/*.btn-primary {
+    background-color: #3876F1 !important;
+    border-color: #3876F1 !important;
+}
+
+.btn-primary:hover {
+    background-color: #164297 !important;
+    border-color: #164297 !important;
+    font-size: 19px;
+}*/

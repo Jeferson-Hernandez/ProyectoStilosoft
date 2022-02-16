@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Stilosoft.Model.Entities.Servicio>
+
+@{
+    ViewData["Title"] = "Servicios";
+}
+<section class="content pt-5 pl-3 pr-3">
+    <p>
+        <a onclick="mostrarModalS('@Url.Action("Crear","Servicios","null",Context.Request.Scheme)','Registrar servicio')" class="btn btn-success"> Registrar servicio</a>
+    </p>
+    <table class="table" id="tabla">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Duracion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Costo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Estado)
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Costo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Duracion)
+                    </td>
+                    <td>
+                        @if (item.Estado == true)
+                        {
+                            <form asp-action="EditarEstado" asp-route-id="@item.ServicioId">
+                                <button type="submit"><i class="fas fa-toggle-on"></i></button>
+                            </form>
+                        }
+                        else if (item.Estado == false)
+                        {
+                            <form asp-action="EditarEstado" asp-route-id="@item.ServicioId">
+                                <button type="submit"><i class="fas fa-toggle-off"></i></button>
+                            </form>
+                        }
+                    </td>
+                    <td>
+                        <a onclick="mostrarModalS('@Url.Action("Editar","Servicios", new {id = item.ServicioId}, Context.Request.Scheme)', 'Editar servicio')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</section>
+
+@section Scripts{
+
+    <script src="~/js/tabla.js"></script>
+    <script src="~/js/modals.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
+        alertify.alert('Guardar servicio', '@TempData["Mensaje"]', function () { alertify.success('Servicio guardado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]');
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
+        alertify.alert('Editar servicio', '@TempData["Mensaje"]', function () { alertify.success('Servicio editado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Eliminar")) { <text>
+        alertify.alert('Eliminar servicio', '@TempData["Mensaje"]', function () { alertify.error('Servicio eliminado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
+        alertify.success('Estado cambiado correctamente.');
+                 </text>
+        }
+    </script>
+}
