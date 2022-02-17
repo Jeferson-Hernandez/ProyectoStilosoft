@@ -1,0 +1,38 @@
+﻿@model ProyectoStilosoft.ViewModels.Proveedores.ProveedorViewModels
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Editar";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            <form asp-action="Editar" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="ProveedorId" />
+                <input type="hidden" asp-for="Estado" />
+                <input type="hidden" asp-for="Nit" />
+
+                <div class="form-group">
+                    <label asp-for="Nombre" class="control-label"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Direccion" class="control-label"></label>
+                    <input asp-for="Direccion" class="form-control" />
+                    <span asp-validation-for="Direccion" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Celular" class="control-label"></label>
+                    <input asp-for="Celular" class="form-control" />
+                    <span asp-validation-for="Celular" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
