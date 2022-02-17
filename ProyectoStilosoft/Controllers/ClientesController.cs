@@ -38,6 +38,7 @@ namespace Stilosoft.Controllers
         [HttpPost]
         public async Task<IActionResult> Crear(UsuarioViewModel usuarioViewModel)
         {
+            
             if (ModelState.IsValid)
             {
                 IdentityUser identityUser = new()

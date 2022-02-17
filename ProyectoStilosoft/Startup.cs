@@ -38,6 +38,7 @@ namespace ProyectoStilosoft
 
             services.AddScoped<IServicioService, ServicioService>();
             services.AddScoped<IClienteService, ClienteService>();
+            services.AddScoped<IUsuarioService, UsuarioService>();
 
 
             services.Configure<IdentityOptions>(options =>
@@ -90,7 +91,7 @@ namespace ProyectoStilosoft
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Servicios}/{action=Index}/{id?}");
+                    pattern: "{controller=Usuarios}/{action=Login}/{id?}");
             });
         }
     }
