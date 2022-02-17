@@ -361,7 +361,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "5da55772-7c55-425c-84a8-674179a2ec72", "admin@gmail.com", false, false, null, null, null, "AQAAAAEAACcQAAAAEJZ2KGuHI9zfEU3xm8Ndw4QX/WF6/HJ7WfMGJVJBUZGL4D7aIXBkeSu5rCZqTQCKnw==", "1234567890", false, "07b35cd8-f8c8-475d-a7a6-a9061e4541ce", false, "Admin" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "e629de32-a2a4-4b81-bf47-59aaaad5c7fc", "admin@gmail.com", false, false, null, null, null, "AQAAAAEAACcQAAAAEAkpwzP0g4gFFlzNKjfTwEuZCu377EiBQlGJ/qi4jqbYzOf8T9BDg6oswIgpdhMe/A==", "1234567890", false, "c3b03c43-bfde-44fd-9502-c4e56a97a8b1", false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

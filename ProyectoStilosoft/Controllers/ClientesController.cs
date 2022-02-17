@@ -52,7 +52,7 @@ namespace Stilosoft.Controllers
                     if (resultado.Succeeded)
                     {
                         var usuario = await _userManager.FindByEmailAsync(usuarioViewModel.Email);
-                        await _userManager.AddToRoleAsync(usuario, "cliente");
+                        await _userManager.AddToRoleAsync(usuario, "Client");
                         Cliente cliente = new()
                         {
                             ClienteId = usuario.Id,
