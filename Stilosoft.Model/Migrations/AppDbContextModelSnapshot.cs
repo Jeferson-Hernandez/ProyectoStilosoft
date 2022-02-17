@@ -155,16 +155,18 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4ea0d8f1-f87b-4732-a61a-1f87ab5ce263",
+                            ConcurrencyStamp = "f8052ec3-a21a-4b10-9a9f-b78854a597f7",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEDtmALQmmFoSTenzdiuemerOZyq16LcdyjYuTRuSylXCVsu/vk1wwDQReZYmWczErA==",
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGt8M7eO7ERIMjFw5vIMQTIX4lM2xHUJKrxP+Lafovg61iRGjovHnRmYssGX3f/ZKA==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "10a67d83-0210-40ef-b513-f525a7ffac9d",
+                            SecurityStamp = "17356ca0-81f7-4c28-9b9d-988f85785762",
                             TwoFactorEnabled = false,
-                            UserName = "Admin"
+                            UserName = "admin@gmail.com"
                         });
                 });
 
@@ -404,6 +406,23 @@ namespace Stilosoft.Model.Migrations
                     b.HasKey("EstadoCitaId");
 
                     b.ToTable("estadoCitas");
+
+                    b.HasData(
+                        new
+                        {
+                            EstadoCitaId = 1,
+                            Nombre = "Confirmada"
+                        },
+                        new
+                        {
+                            EstadoCitaId = 2,
+                            Nombre = "En curso"
+                        },
+                        new
+                        {
+                            EstadoCitaId = 3,
+                            Nombre = "Finalizada"
+                        });
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Proveedor", b =>

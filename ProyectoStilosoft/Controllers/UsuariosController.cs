@@ -121,9 +121,9 @@ namespace Stilosoft.Controllers
                     var usuario = await _userManager.FindByEmailAsync(loginViewModel.Email);
                     var rol = await _userManager.GetRolesAsync(usuario);
 
-                    if (rol.Contains("Admin") || rol.Contains("Asistente"))
+                    if (rol.Contains("Administrador"))
                     {
-                        return RedirectToAction("index", "Usuarios");
+                        return RedirectToAction("index", "Clientes");
                     }
                     else if (rol.Contains("Cliente"))
                     {
@@ -441,8 +441,8 @@ namespace Stilosoft.Controllers
         public async Task<IActionResult> CerrarSesion()
         {
             await _signInManager.SignOutAsync();
-            _httpContextAccessor.HttpContext.Session.Clear();
-            return RedirectToAction("Index","Landing");
+            //_httpContextAccessor.HttpContext.Session.Clear();
+            return RedirectToAction("login", "Usuarios");
         }
         private bool ClienteExists(string id)
         {

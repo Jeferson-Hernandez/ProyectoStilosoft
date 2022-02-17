@@ -24,6 +24,7 @@ namespace Stilosoft.Model.DAL
             this.SeedUsers(builder);
             this.SeedRoles(builder);
             this.SeedUserRoles(builder);
+            this.SeedEstadosCita(builder);
         }
 
         private void SeedUsers(ModelBuilder builder)
@@ -31,8 +32,10 @@ namespace Stilosoft.Model.DAL
             IdentityUser user = new IdentityUser()
             {
                 Id = "b74ddd14-6340-4840-95c2-db12554843e5",
-                UserName = "Admin",
+                UserName = "admin@gmail.com",
                 Email = "admin@gmail.com",
+                NormalizedEmail = "ADMIN@GMAIL.COM",
+                NormalizedUserName = "ADMIN@GMAIL.COM",
                 LockoutEnabled = false,
                 PhoneNumber = "1234567890"
             };
@@ -55,6 +58,27 @@ namespace Stilosoft.Model.DAL
         {
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>() { RoleId = "fab4fac1-c546-41de-aebc-a14da6895711", UserId = "b74ddd14-6340-4840-95c2-db12554843e5" }
+                );
+        }
+
+        private void SeedEstadosCita(ModelBuilder builder)
+        {
+            builder.Entity<EstadoCita>().HasData(
+                new EstadoCita
+                {
+                    EstadoCitaId = 1,
+                    Nombre = "Confirmada"
+                },
+                new EstadoCita
+                {
+                    EstadoCitaId = 2,
+                    Nombre = "En curso"
+                },
+                new EstadoCita
+                {
+                    EstadoCitaId = 3,
+                    Nombre = "Finalizada"
+                }
                 );
         }
 

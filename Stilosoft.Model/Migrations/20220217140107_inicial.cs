@@ -351,17 +351,26 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "1", "Administrador", "Admin" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "c7b013f0-5201-4317-abd8-c211f91b7330", "2", "Cliente", "Client" });
+                values: new object[,]
+                {
+                    { "fab4fac1-c546-41de-aebc-a14da6895711", "1", "Administrador", "Admin" },
+                    { "c7b013f0-5201-4317-abd8-c211f91b7330", "2", "Cliente", "Client" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "4ea0d8f1-f87b-4732-a61a-1f87ab5ce263", "admin@gmail.com", false, false, null, null, null, "AQAAAAEAACcQAAAAEDtmALQmmFoSTenzdiuemerOZyq16LcdyjYuTRuSylXCVsu/vk1wwDQReZYmWczErA==", "1234567890", false, "10a67d83-0210-40ef-b513-f525a7ffac9d", false, "Admin" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "f8052ec3-a21a-4b10-9a9f-b78854a597f7", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEGt8M7eO7ERIMjFw5vIMQTIX4lM2xHUJKrxP+Lafovg61iRGjovHnRmYssGX3f/ZKA==", "1234567890", false, "17356ca0-81f7-4c28-9b9d-988f85785762", false, "admin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "estadoCitas",
+                columns: new[] { "EstadoCitaId", "Nombre" },
+                values: new object[,]
+                {
+                    { 1, "Confirmada" },
+                    { 2, "En curso" },
+                    { 3, "Finalizada" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
