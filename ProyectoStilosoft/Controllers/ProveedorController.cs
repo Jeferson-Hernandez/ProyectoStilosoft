@@ -9,7 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
-{    
+{
+    [Authorize(Roles = "Administrador")]
     public class ProveedorController : Controller
     {
         private readonly IProveedorService _proveedorService;
