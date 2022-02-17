@@ -121,13 +121,13 @@
             </div>
         </div><br />
         <div class="row" id="busqueda">
-            @foreach (var item in Model)
+            foreach (var item in Model)
             {
                 <div class="card box" style="width: 18rem;">
-                    <img class="card-img-top" src="~/imagenes/@item.RutaImagen" alt="Card image cap">
+                    <img class="card-img-top" src="~/imagenes/item.RutaImagen" alt="Card image cap">
                     <div class="card-body">
-                        <h5 class="card-title">@item.Nombre - $@item.Precio</h5>
-                        <p class="card-text">@item.Descripcion</p>
+                        <h5 class="card-title">item.Nombre - $item.Precio</h5>
+                        <p class="card-text">item.Descripcion</p>
                     </div>
                 </div>
             }
