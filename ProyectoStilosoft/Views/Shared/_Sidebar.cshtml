@@ -41,35 +41,23 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-store-alt"></i>
+                 <li class="nav-item">
+                    <a asp-action="index" asp-controller="Empleado" class="nav-link">
+                        <i class="fas fa-vest"></i>
                         <p>
-                            SERVICIOS
-                            <i class="right fas fa-angle-left"></i>
+                            EMPLEADOS
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a asp-action="index" asp-controller="Empleado" class="nav-link">
-                                <i class="fas fa-vest"></i>
-                                <p>Empleado</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-action="index" asp-controller="Servicios" class="nav-link">
-                                <i class="fas fa-cut"></i>
-                                <p>Servicios</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-calendar-check"></i>
-                                <p>Agenda Empleado</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
+                <li class="nav-item">
+                    <a asp-action="index" asp-controller="Servicios" class="nav-link">
+                        <i class="fas fa-cut"></i>
+                        <p>
+                            SERVICIOS
+                        </p>
+                    </a>
+                </li>
+                
                 @*<li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="fas fa-cash-register"></i>
