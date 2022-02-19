@@ -44,6 +44,7 @@ namespace ProyectoStilosoft
             services.AddScoped<IServicioService, ServicioService>();
             services.AddScoped<IClienteService, ClienteService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IProveedorService, ProvepedorService>();
 
 
             services.Configure<IdentityOptions>(options =>

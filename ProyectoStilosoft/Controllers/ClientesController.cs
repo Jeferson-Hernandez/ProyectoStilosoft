@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Stilosoft.Controllers
 {
-    
+    [Authorize(Roles = "Administrador")]
     public class ClientesController : Controller
     {
         private readonly IClienteService _clienteService;
