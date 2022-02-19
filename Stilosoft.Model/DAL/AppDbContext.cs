@@ -50,7 +50,8 @@ namespace Stilosoft.Model.DAL
         {
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole() { Id = "fab4fac1-c546-41de-aebc-a14da6895711", Name = "Administrador", ConcurrencyStamp = "1", NormalizedName = "Admin" },
-                new IdentityRole() { Id = "c7b013f0-5201-4317-abd8-c211f91b7330", Name = "Cliente", ConcurrencyStamp = "2", NormalizedName = "Client" }
+                new IdentityRole() { Id = "c7b013f0-5201-4317-abd8-c211f91b7330", Name = "Cliente", ConcurrencyStamp = "2", NormalizedName = "Client" },
+                new IdentityRole() { Id = "cub049f0-5302-2217-abc1-c123f55n7229", Name = "Empleado", ConcurrencyStamp = "3", NormalizedName = "Empleado" }
                 );
         }
 

@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220217140107_inicial")]
+    [Migration("20220219233943_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,6 +61,13 @@ namespace Stilosoft.Model.Migrations
                             ConcurrencyStamp = "2",
                             Name = "Cliente",
                             NormalizedName = "Client"
+                        },
+                        new
+                        {
+                            Id = "cub049f0-5302-2217-abc1-c123f55n7229",
+                            ConcurrencyStamp = "3",
+                            Name = "Empleado",
+                            NormalizedName = "Empleado"
                         });
                 });
 
@@ -157,16 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f8052ec3-a21a-4b10-9a9f-b78854a597f7",
+                            ConcurrencyStamp = "7755ebb5-173f-49ab-b9cf-8cdbee12ca93",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGt8M7eO7ERIMjFw5vIMQTIX4lM2xHUJKrxP+Lafovg61iRGjovHnRmYssGX3f/ZKA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOmcP7zecstWshLAWoEz8AO/FQoeG/Abz4D4s4DpDLLM6fOHJXDBUauXTbYUqTenng==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "17356ca0-81f7-4c28-9b9d-988f85785762",
+                            SecurityStamp = "33d45e9f-1eff-4237-986c-b38a37fd3244",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
