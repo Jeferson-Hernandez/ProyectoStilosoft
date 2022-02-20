@@ -348,6 +348,36 @@ namespace Stilosoft.Model.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "fab4fac1-c546-41de-aebc-a14da6895711", "1", "Administrador", "Admin" },
+                    { "c7b013f0-5201-4317-abd8-c211f91b7330", "2", "Cliente", "Client" },
+                    { "cub049f0-5302-2217-abc1-c123f55n7229", "3", "Empleado", "Empleado" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "7755ebb5-173f-49ab-b9cf-8cdbee12ca93", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEOmcP7zecstWshLAWoEz8AO/FQoeG/Abz4D4s4DpDLLM6fOHJXDBUauXTbYUqTenng==", "1234567890", false, "33d45e9f-1eff-4237-986c-b38a37fd3244", false, "admin@gmail.com" });
+
+            migrationBuilder.InsertData(
+                table: "estadoCitas",
+                columns: new[] { "EstadoCitaId", "Nombre" },
+                values: new object[,]
+                {
+                    { 1, "Confirmada" },
+                    { 2, "En curso" },
+                    { 3, "Finalizada" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "b74ddd14-6340-4840-95c2-db12554843e5" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",

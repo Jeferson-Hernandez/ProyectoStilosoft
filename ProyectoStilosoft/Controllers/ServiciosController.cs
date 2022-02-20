@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoStilosoft.ViewModels.Servicios;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.Entities;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class ServiciosController : Controller
     {
         private readonly IServicioService _servicioService;

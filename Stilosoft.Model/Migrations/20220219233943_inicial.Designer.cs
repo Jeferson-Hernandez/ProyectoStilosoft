@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220214205222_inicial")]
+    [Migration("20220219233943_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,29 @@ namespace Stilosoft.Model.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "fab4fac1-c546-41de-aebc-a14da6895711",
+                            ConcurrencyStamp = "1",
+                            Name = "Administrador",
+                            NormalizedName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "c7b013f0-5201-4317-abd8-c211f91b7330",
+                            ConcurrencyStamp = "2",
+                            Name = "Cliente",
+                            NormalizedName = "Client"
+                        },
+                        new
+                        {
+                            Id = "cub049f0-5302-2217-abc1-c123f55n7229",
+                            ConcurrencyStamp = "3",
+                            Name = "Empleado",
+                            NormalizedName = "Empleado"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -135,6 +158,25 @@ namespace Stilosoft.Model.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "b74ddd14-6340-4840-95c2-db12554843e5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7755ebb5-173f-49ab-b9cf-8cdbee12ca93",
+                            Email = "admin@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@GMAIL.COM",
+                            NormalizedUserName = "ADMIN@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOmcP7zecstWshLAWoEz8AO/FQoeG/Abz4D4s4DpDLLM6fOHJXDBUauXTbYUqTenng==",
+                            PhoneNumber = "1234567890",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "33d45e9f-1eff-4237-986c-b38a37fd3244",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -196,6 +238,13 @@ namespace Stilosoft.Model.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "b74ddd14-6340-4840-95c2-db12554843e5",
+                            RoleId = "fab4fac1-c546-41de-aebc-a14da6895711"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -366,6 +415,23 @@ namespace Stilosoft.Model.Migrations
                     b.HasKey("EstadoCitaId");
 
                     b.ToTable("estadoCitas");
+
+                    b.HasData(
+                        new
+                        {
+                            EstadoCitaId = 1,
+                            Nombre = "Confirmada"
+                        },
+                        new
+                        {
+                            EstadoCitaId = 2,
+                            Nombre = "En curso"
+                        },
+                        new
+                        {
+                            EstadoCitaId = 3,
+                            Nombre = "Finalizada"
+                        });
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Proveedor", b =>

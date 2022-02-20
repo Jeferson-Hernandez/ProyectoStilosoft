@@ -9,36 +9,37 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Stilosoft.Business.Business
-{
-    public class UsuarioService:IUsuarioService
-    {
-        private readonly AppDbContext _context;
-
-        public UsuarioService(AppDbContext context)
+{   
+        public class UsuarioService:IUsuarioService
         {
-            _context = context;
-        }
+            private readonly AppDbContext _context;
 
-        public async Task<IEnumerable<Usuario>> ObtenerListaUsuarios()
-        {
-            return await _context.usuarios.Include(u => u.IdentityUser).ToListAsync();
-        }
-        public async Task<Usuario> ObtenerUsuarioPorId(string id)
-        {
-            return await _context.usuarios.Include(u => u.IdentityUser).FirstOrDefaultAsync(s => s.UsuarioId == id);
-        }
+            public UsuarioService(AppDbContext context)
+            {
+                _context = context;
+            }
 
-        public async Task GuardarUsuario(Usuario usuario1)
-        {
-            _context.Add(usuario1);
-            await _context.SaveChangesAsync();
-        }
+            public async Task<IEnumerable<Usuario>> ObtenerListaUsuarios()
+            {
+                return await _context.usuarios.Include(u => u.IdentityUser).ToListAsync();
+            }
+            public async Task<Usuario> ObtenerUsuarioPorId(string id)
+            {
+                return await _context.usuarios.Include(u => u.IdentityUser).FirstOrDefaultAsync(s => s.UsuarioId == id);
+            }
 
-        public async Task EditarUsuario(Usuario usuario1)
-        {
-            _context.Update(usuario1);
-            await _context.SaveChangesAsync();
-        }
+            public async Task GuardarUsuario(Usuario usuario1)
+            {
+                _context.Add(usuario1);
+                await _context.SaveChangesAsync();
+            }
 
+            public async Task EditarUsuario(Usuario usuario1)
+            {
+                _context.Update(usuario1);
+                await _context.SaveChangesAsync();
+            }
+
+        }
     }
-}
+

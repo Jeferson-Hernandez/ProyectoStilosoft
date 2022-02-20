@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Stilosoft.Business.Dtos.Usuarios;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Stilosoft.Model.DAL;
+using Stilosoft.Business.Abstract;
+using Stilosoft.Model.Entities;
+using Stilosoft.ViewModels.Usuarios;
 using System;
 using System.Linq;
 using Stilosoft.Business.Abstract;
@@ -13,13 +15,15 @@ using ProyectoStilosoft.ViewModels.Usuarios;
 using Stilosoft.Model.Entities;
 using Stilosoft.Business.Dtos.Usuarios;
 using System.Net.Mail;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
+using Stilosoft.Model.DAL;
 
-namespace ProyectoStilosoft.Controllers
+namespace Stilosoft.Controllers
 {
     public class UsuariosController : Controller
     {
-        //private readonly IClienteService _clienteService;
+        private readonly IClienteService _clienteService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -29,9 +33,9 @@ namespace ProyectoStilosoft.Controllers
         private readonly AppDbContext _context;
         const string SesionNombre = "_Nombre";
 
-        public UsuariosController(/*IClienteService clienteService,*/ UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUsuarioService usuarioService, AppDbContext context)
+        public UsuariosController(IClienteService clienteService, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUsuarioService usuarioService, AppDbContext context)
         {
-            //_clienteService = clienteService;
+            _clienteService = clienteService;
             _userManager = userManager;
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
@@ -40,7 +44,7 @@ namespace ProyectoStilosoft.Controllers
             _usuarioService = usuarioService;
             _context = context;
         }
-
+   
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -48,13 +52,13 @@ namespace ProyectoStilosoft.Controllers
             //var listaUsuarios = await _userManager.Users.Include(c=>c.Cliente).ToListAsync();            
             return View(listaUsuarios);
         }
-
+   
         [HttpGet]
         public IActionResult Registrar()
         {
             return View();
         }
-
+     
         [HttpPost]
         public async Task<IActionResult> Registrar(UsuarioViewModel usuarioViewModel)
         {
@@ -64,7 +68,7 @@ namespace ProyectoStilosoft.Controllers
                 {
                     UserName = usuarioViewModel.Email,
                     Email = usuarioViewModel.Email
-
+                    
                 };
 
                 try
@@ -73,7 +77,7 @@ namespace ProyectoStilosoft.Controllers
                     if (resultado.Succeeded)
                     {
                         var usuario = await _userManager.FindByEmailAsync(usuarioViewModel.Email);
-                        await _userManager.AddToRoleAsync(usuario, "cliente");
+                        await _userManager.AddToRoleAsync(usuario, "Client");
                         Cliente cliente = new()
                         {
                             ClienteId = usuario.Id,
@@ -81,16 +85,16 @@ namespace ProyectoStilosoft.Controllers
                             Apellido = usuarioViewModel.Apellido,
                             Numero = usuarioViewModel.Numero,
                             Documento = usuarioViewModel.Documento,
-                            Estado = true
+                            Estado = true                            
                         };
-                        //await _clienteService.GuardarCliente(cliente);
+                        await _clienteService.GuardarCliente(cliente);
                         TempData["Accion"] = "Registrar";
                         TempData["Mensaje"] = "Usuario registrado correctamente";
                         return RedirectToAction("login", "Usuarios");
-                    }
-                    TempData["Accion"] = "Error";
-                    TempData["Mensaje"] = "Ingresaste un valor inválido";
-                    return View(usuarioViewModel);
+                    }                    
+                      TempData["Accion"] = "Error";
+                      TempData["Mensaje"] = "Ingresaste un valor inválido";
+                      return View(usuarioViewModel);
                 }
                 catch (Exception)
                 {
@@ -121,14 +125,14 @@ namespace ProyectoStilosoft.Controllers
                     var usuario = await _userManager.FindByEmailAsync(loginViewModel.Email);
                     var rol = await _userManager.GetRolesAsync(usuario);
 
-                    if (rol.Contains("Admin") || rol.Contains("Asistente"))
+                    if (rol.Contains("Administrador"))
                     {
-                        return RedirectToAction("index", "Usuarios");
+                        return RedirectToAction("index", "Clientes");
                     }
                     else if (rol.Contains("Cliente"))
                     {
-                        //var cliente = await _clienteService.ObtenerClientePorId(usuario.Id);
-                        //_httpContextAccessor.HttpContext.Session.SetString(SesionNombre, cliente.Nombre);
+                        var cliente = await _clienteService.ObtenerClientePorId(usuario.Id);
+                        _httpContextAccessor.HttpContext.Session.SetString(SesionNombre, cliente.Nombre);
                         return RedirectToAction("index", "Landing");
                     }
                     return RedirectToAction("index", "Usuarios");
@@ -141,7 +145,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return View(loginViewModel);
         }
-
+  
         [HttpGet]
         public async Task<IActionResult> CrearUsuario()
         {
@@ -151,7 +155,7 @@ namespace ProyectoStilosoft.Controllers
 
             return View();
         }
-
+     
         [HttpPost]
         public async Task<IActionResult> CrearUsuario(CrearUsuarioViewModel crearUsuarioViewModel)
         {
@@ -162,7 +166,7 @@ namespace ProyectoStilosoft.Controllers
                     UserName = crearUsuarioViewModel.Email,
                     Email = crearUsuarioViewModel.Email
                 };
-
+             
                 try
                 {
                     //Corregir error 
@@ -171,7 +175,7 @@ namespace ProyectoStilosoft.Controllers
                     var resultado = await _userManager.CreateAsync(identityUser, crearUsuarioViewModel.Password);
                     if (resultado.Succeeded)
                     {
-                        var usuario = await _userManager.FindByEmailAsync(crearUsuarioViewModel.Email);
+                        var usuario = await _userManager.FindByEmailAsync(crearUsuarioViewModel.Email);                       
                         await _userManager.AddToRoleAsync(usuario, crearUsuarioViewModel.Rol);
                         Usuario usuario1 = new()
                         {
@@ -194,8 +198,8 @@ namespace ProyectoStilosoft.Controllers
                                 Numero = crearUsuarioViewModel.Numero,
                                 Estado = true
                             };
-
-                            //await _clienteService.GuardarCliente(cliente);
+                           
+                            await _clienteService.GuardarCliente(cliente);
                         }
                         await _usuarioService.GuardarUsuario(usuario1);
                         TempData["Accion"] = "Crear";
@@ -220,7 +224,7 @@ namespace ProyectoStilosoft.Controllers
         }
         [HttpGet]
         public async Task<IActionResult> Editar(string id, IdentityUser identityUser)
-        {
+        {           
             if (id != null)
             {
                 var listaRoles = await _roleManager.Roles.Where(r => r.Name != "Admin").ToListAsync();
@@ -243,20 +247,20 @@ namespace ProyectoStilosoft.Controllers
             return RedirectToAction("index");
         }
         [HttpPost]
-   /*public async Task<IActionResult> Editar(UsuarioDto usuarioDto, IdentityUser identityUser, string id)
+        public async Task<IActionResult> Editar(UsuarioDto usuarioDto, IdentityUser identityUser, string id)
         {
             if (ModelState.IsValid)
-            {
-                Usuario usuario1 = new()
-                {
-                    UsuarioId = usuarioDto.UsuarioId,
-                    Nombre = usuarioDto.Nombre,
-                    Apellido = usuarioDto.Apellido,
-                    Documento = usuarioDto.Documento,
-                    Numero = usuarioDto.Numero,
-                    Estado = usuarioDto.Estado,
-                    Rol = usuarioDto.Rol
-                };
+            {           
+                    Usuario usuario1 = new()
+                    {
+                        UsuarioId = usuarioDto.UsuarioId,
+                        Nombre = usuarioDto.Nombre,
+                        Apellido = usuarioDto.Apellido,
+                        Documento = usuarioDto.Documento,
+                        Numero = usuarioDto.Numero,
+                        Estado = usuarioDto.Estado,
+                        Rol = usuarioDto.Rol
+                    };
                 
                 try
                 {
@@ -273,50 +277,50 @@ namespace ProyectoStilosoft.Controllers
                         };
                         if (!ClienteExists(cliente.ClienteId))
                         {
-                            await _clienteService.GuardarCliente(cliente);
+                            await _clienteService.GuardarCliente(cliente);                                               
                         }
-                        await _clienteService.EditarCliente(cliente);
-                    }
-                    if (usuario1.Rol != "Cliente")
-                    {
+                        await _clienteService.EditarCliente(cliente);                             
+                    }                           
+                        if (usuario1.Rol != "Cliente")
+                      {
                         Cliente cliente = new()
                         {
                             ClienteId = usuario1.UsuarioId
                         };
                         if (!ClienteExists(cliente.ClienteId))
-                        {
+                        {                     
                             await _usuarioService.EditarUsuario(usuario1);
                             TempData["Accion"] = "Editar";
                             TempData["Mensaje"] = "Usuario editado correctamente";
                             return RedirectToAction("index");
                         }
                         await _clienteService.EliminarCliente(id);
-                    }
-
+                      }
+                        
                     var usuario = await _userManager.FindByIdAsync(id);
                     var rol = await _userManager.GetRolesAsync(usuario);
 
-                    await _userManager.RemoveFromRolesAsync(usuario, rol);
-                    await _userManager.AddToRoleAsync(usuario, usuarioDto.Rol);
-
+                        await _userManager.RemoveFromRolesAsync(usuario, rol);
+                        await _userManager.AddToRoleAsync(usuario, usuarioDto.Rol);
+                                                       
                     await _usuarioService.EditarUsuario(usuario1);
                     TempData["Accion"] = "Editar";
                     TempData["Mensaje"] = "Usuario editado correctamente";
                     return RedirectToAction("index");
                 }
-                catch (Exception)
-                {
+                    catch (Exception)
+                    {
 
                     TempData["Accion"] = "Error";
                     TempData["Mensaje"] = "Ingresaste un valor inválido";
                     return RedirectToAction("index");
-                }
-
+                   }
+                
             }
             TempData["Accion"] = "Error";
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return RedirectToAction("index");
-        }*/
+        }       
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> EditarEstado(string id)
@@ -376,7 +380,7 @@ namespace ProyectoStilosoft.Controllers
                     MailMessage mensaje = new();
                     mensaje.To.Add(olvidePasswordDto.Email); //destinatario
                     mensaje.Subject = "Recuperar contraseña";
-
+                    
                     mensaje.Body = passwordresetLink;
                     mensaje.IsBodyHtml = false;
                     mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
@@ -388,8 +392,7 @@ namespace ProyectoStilosoft.Controllers
                     smtpClient.Send(mensaje);
                     return View("OlvidePasswordConfirmacion");
 
-                }
-                else
+                }else
                 {
                     return View(olvidePasswordDto);
                 }
@@ -443,12 +446,12 @@ namespace ProyectoStilosoft.Controllers
         public async Task<IActionResult> CerrarSesion()
         {
             await _signInManager.SignOutAsync();
-            _httpContextAccessor.HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Landing");
+            //_httpContextAccessor.HttpContext.Session.Clear();
+            return RedirectToAction("login", "Usuarios");
         }
-        /*private bool ClienteExists(string id)
+        private bool ClienteExists(string id)
         {
-            //return _context.Cliente.Any(e => e.ClienteId == id);
-        }*/
+            return _context.clientes.Any(e => e.ClienteId == id);
+        }
     }
 }

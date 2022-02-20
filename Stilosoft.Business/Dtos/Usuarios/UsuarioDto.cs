@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Stilosoft.Business.Dtos.Usuarios
 {
-    public class UsuarioDto
+   public class UsuarioDto
     {
         public string UsuarioId { get; set; }
         public string Nombre { get; set; }
@@ -19,7 +19,7 @@ namespace Stilosoft.Business.Dtos.Usuarios
         [DisplayName("Número")]
         [Required(ErrorMessage = "El número es obligatorio")]
         [Column(TypeName = "nvarchar(10)")]
-        public string Numero { get; set; }
+        public string Numero { get; set; }    
         [DisplayName("Documento")]
         [Required(ErrorMessage = "El documento es obligatorio")]
         [Column(TypeName = "nvarchar(15)")]
