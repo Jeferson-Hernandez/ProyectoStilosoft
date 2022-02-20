@@ -1,0 +1,88 @@
+﻿@model IEnumerable<Stilosoft.Model.Entities.Empleado>
+
+@{
+    ViewData["Title"] = "Empleado";
+}
+<hr>
+<section class="content pt-3 pl-3 pr-3">
+    <p>
+        <a asp-action="Crear" asp-controller="Empleados" class="btn btn-success"> Crear empleado</a>
+    </p>
+    <table class="table table-bordered" id="tabla">
+        <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Documento</th>
+                <th>Edad</th>
+                <th>Detalle</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Apellidos)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Documento)
+                    </td>
+                    <td>
+                        @( DateTime.Now.Year - item.FechaNacimiento.Year )
+                    </td>
+                    <td>
+                        Detalle
+                    </td>
+                    <td>
+                        @if (item.Estado == true)
+                        {
+                            <form asp-action="EditarEstado" asp-route-id="">
+                                <button type="submit"><i class="fas fa-toggle-on"></i></button>
+                            </form>
+                        }
+                        else if (item.Estado == false)
+                        {
+                            <form asp-action="EditarEstado" asp-route-id="">
+                                <button type="submit"><i class="fas fa-toggle-off"></i></button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+@section Scripts{
+
+    <script src="~/js/tabla.js"></script>
+    <script src="~/js/modals.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
+                  alertify.alert('Guardar estilista', '@TempData["Mensaje"]', function () { alertify.success('Estilista guardado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]'});
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
+        alertify.alert('Editar estilista', '@TempData["Mensaje"]', function () { alertify.success('Estilista editado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Eliminar")) { <text>
+        alertify.alert('Eliminar estilista', '@TempData["Mensaje"]', function () { alertify.error('Estilista eliminado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
+        alertify.success('Estado cambiado correctamente.');
+                 </text>
+        }
+    </script>
+
+}
