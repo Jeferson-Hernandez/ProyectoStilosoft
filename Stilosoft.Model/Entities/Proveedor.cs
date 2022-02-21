@@ -30,9 +30,14 @@ namespace Stilosoft.Model.Entities
         public string Direccion { get; set; }
 
         [DisplayName("Celular")]
+        [Required(ErrorMessage = "El celualr es obligatorio")]
         [Column(TypeName = "nvarchar(10)")]
         public string Celular { get; set; }
 
+        [DisplayName ("Contacto")]
+        [Required(ErrorMessage = "El nombre del contacto es obligatorio")]
+        [Column(TypeName ="nvarchar(50)")]
+        public string Contacto { get; set; }
         [Required]
         public bool Estado { get; set; }
     }

@@ -162,16 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c5f3d7c8-3797-42a0-bb5c-3a50ee5fe2bd",
+                            ConcurrencyStamp = "315d5284-f24a-47b5-8caf-45ded7dcaee8",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPL0l7P4fBtPshvRFeHiTMl+1Nz8hLU71cmhj/J6V8are8vZc+VfdtHhgDjRwcCs8A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGPy64dtIywcu3bvWy+nluTYt14Gg5IbBrdsOK7QkSstmEViFr1upQgKl0Nlvv4nqA==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "915599cb-028f-4f18-8399-9fab6ff526d8",
+                            SecurityStamp = "15459afc-f85f-41ad-9e4f-ac9d1e9b3475",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -440,7 +440,12 @@ namespace Stilosoft.Model.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Celular")
+                        .IsRequired()
                         .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Contacto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
