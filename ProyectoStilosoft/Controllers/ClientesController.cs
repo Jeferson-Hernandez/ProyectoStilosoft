@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Business.Dtos.Clientes;
 using Stilosoft.Model.Entities;
-using Stilosoft.ViewModels.Usuarios;
+using ProyectoStilosoft.ViewModels.Usuarios;
 using System;
 using System.Collections.Generic;
 using System.Linq;

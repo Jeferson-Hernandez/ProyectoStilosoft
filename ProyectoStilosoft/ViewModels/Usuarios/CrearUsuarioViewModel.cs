@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stilosoft.ViewModels.Usuarios
+namespace ProyectoStilosoft.ViewModels.Usuarios
 {
     public class CrearUsuarioViewModel
     {
