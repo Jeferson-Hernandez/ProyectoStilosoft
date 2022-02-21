@@ -24,8 +24,6 @@ namespace ProyectoStilosoft.ViewModels.Empleados
 
     public class EmpleadoServicios
     {
-        public int EmpleadoServicioId { get; set; }
-        public int EmpleadoId { get; set; }
         public int ServicioId { get; set; }
     }
 }

@@ -5,9 +5,10 @@
 }
 <hr />
 <section class="content pt-3 pl-3 pr-3">
-    <div class="row">
-        <div class="col-3">
-            <form asp-action="CrearSolicitud" asp-controller="SolicitudServicio" method="post">
+    <form asp-action="Crear" asp-controller="Empleados" method="post">
+        <div class="row">
+            <div class="col-4">
+
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-group">
                     <label asp-for="Nombre" class="control-label"></label>
@@ -29,24 +30,63 @@
                     <input asp-for="Documento" class="form-control" />
                     <span asp-validation-for="Documento" class="text-danger"></span>
                 </div>
-            </form>
-        </div>
-        <div class="col-9">
-            <div class="row">
-                <div class="col-3">
-                    <h3>Servicios</h3>
-                    <select id="servicio" class="form-control">
-                        <option value="select">Seleccione</option>
-                        @foreach (var item in Model.Servicios)
-                        {
-                            <option duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
-                        }
-                    </select>
+                <div class="col-3 text-right">
+                    <input id="terminarSolicitud" type="submit" value="Crear empleado" class="btn btn-info mt-4 mr-5" />
                 </div>
-                <div class="col-3">
 
+            </div>
+            <div class="col-7">
+                <h2>Servicios</h2>
+                <select id="servicio" class="form-control">
+                    <option value="select">Seleccione</option>
+                    @foreach (var item in Model.Servicios)
+                    {
+                        <option duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
+                    }
+                </select><br />
+                <div class="form-group">
+                    <button id="agregarServicioBtn" onclick="agregarServicio()" type="button" class="btn btn-primary">Agregar servicio</button>
                 </div>
+                <br />
+                <h2>Lista de servicios</h2>
+                <table id="tablaServicios" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Nombre</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table><br />
+                <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt" onclick="eliminarServicio()"></i></button>
             </div>
         </div>
-    </div>
+    </form>
 </section>
+
+<script>
+
+    var totalServicios = 0;
+    var contServicios = 0;
+
+    function agregarServicio(){
+        let servicio = $("#servicio option:selected");
+        let servicioId = $("#servicio option:selected").val();
+        let servicioText = $("#servicio option:selected").text();
+
+        $("#tablaServicios").append(`
+            <tr id="${contServicios}">
+                <td>
+                    <input type="hidden" name="EmpleadoServicios[${contServicios}].ServicioId" value="${servicioId}" />
+                    ${servicioText}
+                </td>
+            </tr>
+            `);
+        contServicios++;
+    }
+
+    function eliminarServicio() {
+        contServicios--;
+        $("#" + contServicios).remove();        
+    }
+</script>
