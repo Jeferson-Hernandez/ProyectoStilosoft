@@ -4,11 +4,11 @@
     ViewData["Title"] = "Crear Empleado";
 }
 <hr />
-<section class="content pt-3 pl-3 pr-3">
-    <form asp-action="Crear" asp-controller="Empleados" method="post">
+<section class="content pt-3 pl-3 pr-3">    
+    <form asp-action="Crear" asp-controller="Empleados" method="post">        
         <div class="row">
-            <div class="col-4">
-
+            <div class="col-4 pr-5">
+                <h3>Empleado</h3>
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-group">
                     <label asp-for="Nombre" class="control-label"></label>
@@ -33,12 +33,10 @@
                 <div class="col-3 text-right">
                     <input id="terminarSolicitud" type="submit" value="Crear empleado" class="btn btn-info mt-4 mr-5" />
                 </div>
-
             </div>
-            <div class="col-7">
-                <h2>Servicios</h2>
+            <div class="col-6 pr-5 pl-5">
+                <h3>Servicios</h3>
                 <select id="servicio" class="form-control">
-                    <option value="select">Seleccione</option>
                     @foreach (var item in Model.Servicios)
                     {
                         <option duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
@@ -64,7 +62,12 @@
     </form>
 </section>
 
+
 <script>
+
+    $(document).ready(function(){
+
+    });
 
     var totalServicios = 0;
     var contServicios = 0;
@@ -83,6 +86,10 @@
             </tr>
             `);
         contServicios++;
+
+        if(contServicios > 5){
+
+        }
     }
 
     function eliminarServicio() {
