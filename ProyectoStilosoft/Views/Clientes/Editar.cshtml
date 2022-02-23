@@ -12,6 +12,7 @@
                 <div asp-validation-summary="ModelOnly"></div>
                 <input type="hidden" asp-for="ClienteId" />
                 <input type="hidden" asp-for="Estado" />
+                <input type="hidden" asp-for="Documento"/>
                 <div class="form-group">
                     <label asp-for="Nombre" class="control-label"></label>
                     <input asp-for="Nombre" class="form-control" />
@@ -27,11 +28,11 @@
                     <input asp-for="Celular" class="form-control" />
                     <span asp-validation-for="Celular" class="text-danger"></span>
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label asp-for="Documento" class="control-label"></label>
                     <input asp-for="Documento" class="form-control" />
                     <span asp-validation-for="Documento" class="text-danger"></span>
-                </div>
+                </div>-->
                 <div class="form-group">
                     <input type="submit" value="Editar" class="btn btn-primary" />
                 </div>

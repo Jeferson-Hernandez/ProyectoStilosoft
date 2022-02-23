@@ -19,7 +19,7 @@ namespace Stilosoft.Controllers
         private readonly IUsuarioService _usuarioService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUsuarioService _usuarioService;
+
         
 
         public ClientesController(IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IUsuarioService usuarioService)
@@ -28,7 +28,7 @@ namespace Stilosoft.Controllers
             _usuarioService = usuarioService;
             _roleManager = roleManager;
             _userManager = userManager;
-            _usuarioService = usuarioService;
+           
         }
         public async Task<IActionResult> Index()
         {
