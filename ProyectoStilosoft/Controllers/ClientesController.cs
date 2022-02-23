@@ -153,7 +153,7 @@ namespace Stilosoft.Controllers
                     ClienteId = cliente.ClienteId,
                     Nombre = cliente.Nombre,
                     Apellido = cliente.Apellido,
-                    Cedula = cliente.Documento,
+                    Documento = cliente.Documento,
                     Celular = cliente.Numero,
                     Estado = cliente.Estado
                 };
@@ -173,7 +173,7 @@ namespace Stilosoft.Controllers
                     ClienteId = clienteDto.ClienteId,
                     Nombre = clienteDto.Nombre,
                     Apellido = clienteDto.Apellido,
-                    Documento = clienteDto.Cedula,
+                    Documento = clienteDto.Documento,
                     Numero = clienteDto.Celular,
                     Estado = clienteDto.Estado
                 };
