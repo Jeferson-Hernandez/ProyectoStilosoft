@@ -21,7 +21,7 @@ namespace Stilosoft.Model.Entities
         public string Apellido { get; set; }
         [Column(TypeName = "nvarchar(10)")]
         public string Numero { get; set; }
-        [DisplayName("Cédula")]
+        [DisplayName("Cédula")] 
         [Column(TypeName = "nvarchar(15)")]
         public string Documento { get; set; }
         public bool Estado { get; set; }
