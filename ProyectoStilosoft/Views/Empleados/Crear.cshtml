@@ -7,45 +7,47 @@
 <section class="content pt-3 pl-3 pr-3">
     <form asp-action="Crear" asp-controller="Empleados" method="post">
         <div class="row">
-            <div class="col-4">
-
-                <div asp-validation-summary="ModelOnly"></div>
+            <div class="col-4 pr-5">
+                <h3>Empleado</h3>
                 <div class="form-group">
                     <label asp-for="Nombre" class="control-label"></label>
-                    <input asp-for="Nombre" class="form-control" />
-                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                    <input asp-for="Nombre" id="nombreForm" maxlength="35" class="form-control" />
+                    <span id="nombre_error_obligatorio" class="text-danger">El nombre es obligatorio</span>
+                    <span id="longitud_nombre_error_obligatorio" class="text-danger">El nombre debe tener entre 3 y 30 caracteres</span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Apellidos" class="control-label"></label>
-                    <input asp-for="Apellidos" class="form-control" />
+                    <input asp-for="Apellidos" id="apellidoForm" class="form-control" />
                     <span asp-validation-for="Apellidos" class="text-danger"></span>
+                    <span id="apellido_error_obligatorio" class="text-danger">El apellido es obligatorio</span>
+                    <span id="longitud_Apellido_error_obligatorio" class="text-danger">El apellido debe tener entre 3 y 30 caracteres</span>
                 </div>
                 <div class="form-group">
                     <label asp-for="FechaNacimiento" class="control-label"></label>
-                    <input type="date" asp-for="FechaNacimiento" class="form-control" />
+                    <input id="date" type="date" asp-for="FechaNacimiento" class="form-control" />
                     <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Documento" class="control-label"></label>
-                    <input asp-for="Documento" class="form-control" />
-                    <span asp-validation-for="Documento" class="text-danger"></span>
+                    <input asp-for="Documento" id="documentoForm" type="number" maxlength="20" class="form-control" />
+                    <span id="documento_error_obligatorio" class="text-danger">El documento es obligatorio</span>
+                    <span id="longitud_Documento_error_obligatorio" class="text-danger">El documento debe tener entre 6 y 15 números</span>
                 </div>
                 <div class="col-3 text-right">
-                    <input id="terminarSolicitud" type="submit" value="Crear empleado" class="btn btn-info mt-4 mr-5" />
+                    <input id="crearEmpleado" type="submit" value="Crear empleado" class="btn btn-info mt-4 mr-5" disabled/>
                 </div>
-
             </div>
-            <div class="col-7">
-                <h2>Servicios</h2>
+            <div class="col-6 pr-5 pl-5">
+                <h3>Servicios</h3>
                 <select id="servicio" class="form-control">
-                    <option value="select">Seleccione</option>
+                    <option value="selecione">Selecione</option>
                     @foreach (var item in Model.Servicios)
                     {
                         <option duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
                     }
                 </select><br />
                 <div class="form-group">
-                    <button id="agregarServicioBtn" onclick="agregarServicio()" type="button" class="btn btn-primary">Agregar servicio</button>
+                    <button id="agregarServicioBtn" onclick="agregarServicio()" type="button" class="btn btn-primary" >Agregar servicio</button>
                 </div>
                 <br />
                 <h2>Lista de servicios</h2>
@@ -58,35 +60,114 @@
                     <tbody>
                     </tbody>
                 </table><br />
-                <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt" onclick="eliminarServicio()"></i></button>
+                <button type="button" class="btn btn-danger" onclick="eliminarServicio()"><i class="fas fa-trash-alt"></i> Eliminar servicio</button>
             </div>
         </div>
-    </form>
+    </form><br />
 </section>
 
-<script>
+@section Scripts{
 
+    <script>
+        $(document).ready(function () {
+            let conteo = 0;
+
+            $("#nombre_error_obligatorio").hide();
+            $("#longitud_nombre_error_obligatorio").hide();
+            $("#apellido_error_obligatorio").hide();
+            $("#longitud_Apellido_error_obligatorio").hide();
+            $("#documento_error_obligatorio").hide();
+            $("#longitud_Documento_error_obligatorio").hide();
+
+            $("#nombreForm").keyup(function () {
+                let nombre = $("#nombreForm").val();
+
+                if (nombre == '' || nombre == null) {
+                    $("#nombre_error_obligatorio").show();
+                    $("#longitud_nombre_error_obligatorio").hide();
+                } else if (nombre.length < 3 || nombre.length > 30) {
+                    $("#nombre_error_obligatorio").hide();
+                    $("#longitud_nombre_error_obligatorio").show();
+                } else {
+                    $("#nombre_error_obligatorio").hide();
+                    $("#longitud_nombre_error_obligatorio").hide();
+                }
+            });
+
+            $("#apellidoForm").keyup(function () {
+                let apellido = $("#apellidoForm").val();
+
+                if (apellido == '' || apellido == null) {
+                    $("#apellido_error_obligatorio").show();
+                    $("#longitud_Apellido_error_obligatorio").hide();
+                } else if (apellido.length < 3 || apellido.length > 30) {
+                    $("#apellido_error_obligatorio").hide();
+                    $("#longitud_Apellido_error_obligatorio").show();
+                } else {
+                    $("#apellido_error_obligatorio").hide();
+                    $("#longitud_Apellido_error_obligatorio").hide();
+                }
+            });
+
+            $("#documentoForm").keyup(function () {
+                let documento = $("#documentoForm").val();
+
+                if (documento == '' || documento == null) {
+                    $("#documento_error_obligatorio").show();
+                    $("#longitud_Documento_error_obligatorio").hide();
+                } else if (documento.length < 6 || documento.length > 15) {
+                    $("#documento_error_obligatorio").hide();
+                    $("#longitud_Documento_error_obligatorio").show();
+                } else {
+                    $("#documento_error_obligatorio").hide();
+                    $("#longitud_Documento_error_obligatorio").hide();
+                }
+            });
+        });
+    </script>
+}
+<script>
     var totalServicios = 0;
     var contServicios = 0;
 
-    function agregarServicio(){
+    function agregarServicio() {
         let servicio = $("#servicio option:selected");
         let servicioId = $("#servicio option:selected").val();
         let servicioText = $("#servicio option:selected").text();
 
-        $("#tablaServicios").append(`
+        if (servicioText != '' && servicioText != 'Selecione') {
+            $("#tablaServicios").append(`
             <tr id="${contServicios}">
                 <td>
-                    <input type="hidden" name="EmpleadoServicios[${contServicios}].ServicioId" value="${servicioId}" />
+                    <input type="hidden" id="servicio${contServicios}" name="EmpleadoServicios[${contServicios}].ServicioId" value="${servicioId}" />
                     ${servicioText}
                 </td>
             </tr>
             `);
-        contServicios++;
+            contServicios++;
+
+            $("#servicio option[value='" + servicioId + "']").hide();
+        }
+        if (contServicios > 4) {
+            $("#agregarServicioBtn").prop("disabled", true);
+        }
+        if (contServicios => 1) {
+            $("#crearEmpleado").prop("disabled", false);
+        }
     }
 
     function eliminarServicio() {
         contServicios--;
-        $("#" + contServicios).remove();        
+        let servicioId = $("#servicio" + contServicios).val();
+        $("#servicio option[value='" + servicioId + "']").show();
+        $("#" + contServicios).remove();
+        if (contServicios < 5) {
+            $("#agregarServicioBtn").prop("disabled", false);
+        }
+        if (contServicios == 0) {
+            $("#crearEmpleado").prop("disabled", true);
+        }
     }
+
+    document.getElementById('date').valueAsDate = new Date();
 </script>
