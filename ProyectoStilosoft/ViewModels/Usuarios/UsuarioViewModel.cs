@@ -18,7 +18,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         public string Apellido { get; set; }
         [DisplayName("Celular")]
-        [Required(ErrorMessage = "El Numero es obligatorio")]
+        [Required(ErrorMessage = "El número es obligatorio")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Ingrese valores numéricos")]
         [StringLength(10, ErrorMessage = "Máximo 10 caracteres")]
         public string Numero { get; set; }
