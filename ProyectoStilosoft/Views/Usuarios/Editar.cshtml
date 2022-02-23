@@ -32,11 +32,22 @@
                     <input asp-for="Documento" class="form-control" />
                     <span asp-validation-for="Documento" class="text-danger"></span>
                 </div>
-               
+
                 <div class="form-group">
                     <label asp-for="Rol" class="control-label"></label>
-                    <select id="ListaRoles" asp-items="ViewBag.Roles" asp-for="Rol" class="form-control"></select>
+                    <input asp-for="Rol" class="form-control" readonly="readonly"/>
                     <span asp-validation-for="Rol" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Documento" class="control-label"></label>
+                    <input asp-for="Documento" class="form-control" />
+                    <span asp-validation-for="Documento" class="text-danger"></span>
+                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                                                <a asp-action="ResetearPassword" class="text-danger">Cambiar contraseña</a>
+         
+                    </div>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="Editar" class="btn btn-primary" />

@@ -16,13 +16,15 @@ namespace Stilosoft.Controllers
     public class ClientesController : Controller
     {
         private readonly IClienteService _clienteService;
+        private readonly IUsuarioService _usuarioService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         
 
-        public ClientesController(IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public ClientesController(IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IUsuarioService usuarioService)
         {
             _clienteService = clienteService;
+            _usuarioService = usuarioService;
             _roleManager = roleManager;
             _userManager = userManager;            
         }
@@ -63,6 +65,17 @@ namespace Stilosoft.Controllers
                             Documento = usuarioViewModel.Documento,
                             Estado = true
                         };
+                        Usuario usuario1 = new()
+                        {
+                            UsuarioId = usuario.Id,
+                            Nombre = usuarioViewModel.Nombre,
+                            Apellido = usuarioViewModel.Apellido,
+                            Numero = usuarioViewModel.Numero,
+                            Documento = usuarioViewModel.Documento,
+                            Rol = "Cliente",                    
+                            Estado = true
+                        };
+                        await _usuarioService.GuardarUsuario(usuario1);
                         await _clienteService.GuardarCliente(cliente);
                         TempData["Accion"] = "Registrar";
                         TempData["Mensaje"] = "Cliente registrado correctamente";
