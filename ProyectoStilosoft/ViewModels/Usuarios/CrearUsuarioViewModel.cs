@@ -6,15 +6,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Stilosoft.ViewModels.Usuarios
+namespace ProyectoStilosoft.ViewModels.Usuarios
 {
     public class CrearUsuarioViewModel
     {
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
         public string Nombre { get; set; }
         [Required(ErrorMessage = "El apellido es obligatorio")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         public string Apellido { get; set; }
         [DisplayName("Celular")]
@@ -29,9 +29,11 @@ namespace Stilosoft.ViewModels.Usuarios
         public string Documento { get; set; }
         [Required(ErrorMessage = "El email es obligatorio")]
         [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "Correo electrónico incorrecto")]
+        [StringLength(70, ErrorMessage = "Máximo 70 caracteres")]
         public string Email { get; set; }
         [DisplayName("Contraseña")]
         [Required(ErrorMessage = "La contraseña es obligatoria")]
+        [StringLength(20, ErrorMessage = "Máximo 20 caracteres")]
         public string Password { get; set; }
         [Required(ErrorMessage = "El rol es obligatorio")]
         public string Rol { get; set; }

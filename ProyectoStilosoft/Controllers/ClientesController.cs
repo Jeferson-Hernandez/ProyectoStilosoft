@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Business.Dtos.Clientes;
 using Stilosoft.Model.Entities;
-using Stilosoft.ViewModels.Usuarios;
+using ProyectoStilosoft.ViewModels.Usuarios;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +16,19 @@ namespace Stilosoft.Controllers
     public class ClientesController : Controller
     {
         private readonly IClienteService _clienteService;
+        private readonly IUsuarioService _usuarioService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
+
         
 
-        public ClientesController(IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public ClientesController(IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IUsuarioService usuarioService)
         {
             _clienteService = clienteService;
+            _usuarioService = usuarioService;
             _roleManager = roleManager;
-            _userManager = userManager;            
+            _userManager = userManager;
+           
         }
         public async Task<IActionResult> Index()
         {
@@ -63,6 +67,17 @@ namespace Stilosoft.Controllers
                             Documento = usuarioViewModel.Documento,
                             Estado = true
                         };
+                        Usuario usuario1 = new()
+                        {
+                            UsuarioId = usuario.Id,
+                            Nombre = usuarioViewModel.Nombre,
+                            Apellido = usuarioViewModel.Apellido,
+                            Numero = usuarioViewModel.Numero,
+                            Documento = usuarioViewModel.Documento,
+                            Rol = "Cliente",                    
+                            Estado = true
+                        };
+                        await _usuarioService.GuardarUsuario(usuario1);
                         await _clienteService.GuardarCliente(cliente);
                         TempData["Accion"] = "Registrar";
                         TempData["Mensaje"] = "Cliente registrado correctamente";
@@ -147,7 +162,7 @@ namespace Stilosoft.Controllers
                     ClienteId = cliente.ClienteId,
                     Nombre = cliente.Nombre,
                     Apellido = cliente.Apellido,
-                    Cedula = cliente.Documento,
+                    Documento = cliente.Documento,
                     Celular = cliente.Numero,
                     Estado = cliente.Estado
                 };
@@ -167,7 +182,7 @@ namespace Stilosoft.Controllers
                     ClienteId = clienteDto.ClienteId,
                     Nombre = clienteDto.Nombre,
                     Apellido = clienteDto.Apellido,
-                    Documento = clienteDto.Cedula,
+                    Documento = clienteDto.Documento,
                     Numero = clienteDto.Celular,
                     Estado = clienteDto.Estado
                 };

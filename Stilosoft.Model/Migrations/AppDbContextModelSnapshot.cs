@@ -162,16 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "315d5284-f24a-47b5-8caf-45ded7dcaee8",
+                            ConcurrencyStamp = "7426b679-a37e-4a95-bd46-d46fa7de96b4",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGPy64dtIywcu3bvWy+nluTYt14Gg5IbBrdsOK7QkSstmEViFr1upQgKl0Nlvv4nqA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMIuIqbd8nlOmGpfLnurcwR7LK6S2mEvwhtl55vRjjVlg8YukCsT4bJfFeiZkwLWrQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "15459afc-f85f-41ad-9e4f-ac9d1e9b3475",
+                            SecurityStamp = "d8c1728d-3466-4abc-a537-5e2c189ee6a9",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
