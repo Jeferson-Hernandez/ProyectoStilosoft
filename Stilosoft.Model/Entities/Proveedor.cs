@@ -16,7 +16,7 @@ namespace Stilosoft.Model.Entities
 
         [DisplayName("Nit")]
         [Required(ErrorMessage = "El nit es obligatorio")]
-        [Column(TypeName = "nvarchar(10)")]
+        [Column(TypeName = "nvarchar(12)")]
         public string Nit { get; set; }
 
         [DisplayName("Proveedor")]
@@ -24,9 +24,9 @@ namespace Stilosoft.Model.Entities
         [Column(TypeName = "nvarchar(50)")]
         public string Nombre { get; set; }
 
-        [DisplayName("Direccion")]
+        [DisplayName("Dirección")]
         [Required(ErrorMessage = "La direccion es obligatoria")]
-        [Column(TypeName = "nvarchar(50)")]
+        [Column(TypeName = "nvarchar(25)")]
         public string Direccion { get; set; }
 
         [DisplayName("Celular")]
