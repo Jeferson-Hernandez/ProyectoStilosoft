@@ -18,13 +18,15 @@ namespace Stilosoft.Controllers
         private readonly IClienteService _clienteService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUsuarioService _usuarioService;
         
 
-        public ClientesController(IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public ClientesController(IClienteService clienteService, IUsuarioService usuarioService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
             _clienteService = clienteService;
             _roleManager = roleManager;
-            _userManager = userManager;            
+            _userManager = userManager;
+            _usuarioService = usuarioService;
         }
         public async Task<IActionResult> Index()
         {
@@ -63,7 +65,11 @@ namespace Stilosoft.Controllers
                             Documento = usuarioViewModel.Documento,
                             Estado = true
                         };
-                        await _clienteService.GuardarCliente(cliente);
+                      
+
+
+                 
+                    await _clienteService.GuardarCliente(cliente);
                         TempData["Accion"] = "Registrar";
                         TempData["Mensaje"] = "Cliente registrado correctamente";
                         return RedirectToAction("index");
