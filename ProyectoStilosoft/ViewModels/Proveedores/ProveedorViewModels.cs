@@ -20,7 +20,7 @@ namespace ProyectoStilosoft.ViewModels.Proveedores
         [DisplayName("Proveedor")]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(50, ErrorMessage = "Máximo 50 caracteres")]
-        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres válidos")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ. ]+$", ErrorMessage = "Ingrese caracteres válidos")]
         public string Nombre { get; set; }
 
         [DisplayName("Dirección")]

@@ -82,9 +82,9 @@ namespace Stilosoft.Model.Migrations
                 {
                     ProveedorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nit = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    Nit = table.Column<string>(type: "nvarchar(12)", nullable: false),
                     Nombre = table.Column<string>(type: "nvarchar(50)", nullable: false),
-                    Direccion = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Direccion = table.Column<string>(type: "nvarchar(25)", nullable: false),
                     Celular = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Contacto = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
@@ -362,7 +362,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "7426b679-a37e-4a95-bd46-d46fa7de96b4", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEMIuIqbd8nlOmGpfLnurcwR7LK6S2mEvwhtl55vRjjVlg8YukCsT4bJfFeiZkwLWrQ==", "1234567890", false, "d8c1728d-3466-4abc-a537-5e2c189ee6a9", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "efc13a1d-8872-4501-9f28-050e0e60acfd", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAENU3Lya8H5VkRWrauBmYzxWZOq5wptLBkVSmPixd5cqjGXYlV97lXunjWcMfbvIKPA==", "1234567890", false, "0bddc2c8-9bf9-4671-bf59-b7446308aa7d", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",
