@@ -13,7 +13,7 @@ namespace ProyectoStilosoft.ViewModels.Servicios
         [DisplayName("Servicio")]
         [Required(ErrorMessage = "El servicio es obligatorio")]
         [StringLength(25, ErrorMessage = "Máximo 25 caracteres")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
         public string Nombre { get; set; }
         [DisplayName("Duración")]
         [Required(ErrorMessage = "La duración es obligatoria")]
