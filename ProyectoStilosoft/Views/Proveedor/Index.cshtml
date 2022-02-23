@@ -23,6 +23,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Celular)
                 </th>
+                 <th>
+                    @Html.DisplayNameFor(model => model.Contacto)
+                </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Estado)
                 </th>
@@ -46,6 +49,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Celular)
+                    </td>
+                     <td>
+                        @Html.DisplayFor(modelItem => item.Contacto)
                     </td>
                     <td>
                         @if (item.Estado == true)
