@@ -22,7 +22,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="FechaNacimiento" class="control-label"></label>
-                    <input type="date" asp-for="FechaNacimiento" class="form-control" />
+                    <input id="date" type="date" asp-for="FechaNacimiento" class="form-control" />
                     <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -37,6 +37,7 @@
             <div class="col-6 pr-5 pl-5">
                 <h3>Servicios</h3>
                 <select id="servicio" class="form-control">
+                    <option value="selecione">Selecione</option>
                     @foreach (var item in Model.Servicios)
                     {
                         <option duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
@@ -56,7 +57,7 @@
                     <tbody>
                     </tbody>
                 </table><br />
-                <button type="button" class="btn btn-danger"><i class="fas fa-trash-alt" onclick="eliminarServicio()"></i></button>
+                <button type="button" class="btn btn-danger" onclick="eliminarServicio()"><i class="fas fa-trash-alt" ></i> Eliminar servicio</button>
             </div>
         </div>
     </form>
@@ -65,9 +66,7 @@
 
 <script>
 
-    $(document).ready(function(){
-
-    });
+    
 
     var totalServicios = 0;
     var contServicios = 0;
@@ -77,16 +76,20 @@
         let servicioId = $("#servicio option:selected").val();
         let servicioText = $("#servicio option:selected").text();
 
-        $("#tablaServicios").append(`
+        if (servicioText!='' && servicioText!='Selecione') {
+            $("#tablaServicios").append(`
             <tr id="${contServicios}">
                 <td>
-                    <input type="hidden" name="EmpleadoServicios[${contServicios}].ServicioId" value="${servicioId}" />
+                    <input type="hidden" id="servicio${contServicios}" name="EmpleadoServicios[${contServicios}].ServicioId" value="${servicioId}" />
                     ${servicioText}
                 </td>
             </tr>
             `);
-        contServicios++;
+            contServicios++;
 
+            $("#servicio option[value='" + servicioId + "']").hide();
+            Reset($("#servicio"));
+        }
         if(contServicios > 5){
 
         }
@@ -94,6 +97,10 @@
 
     function eliminarServicio() {
         contServicios--;
-        $("#" + contServicios).remove();        
+        let servicioId = $("#servicio" + contServicios).val();
+        $("#servicio option[value='" + servicioId + "']").show();
+        $("#" + contServicios).remove();
     }
+
+    document.getElementById('date').valueAsDate = new Date();
 </script>
