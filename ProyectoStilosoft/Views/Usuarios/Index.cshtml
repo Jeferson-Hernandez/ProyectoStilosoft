@@ -1,0 +1,117 @@
+﻿@model IEnumerable<Stilosoft.Model.Entities.Usuario>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<br />
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1">
+            <a asp-action="index" class="btn btn-secondary btn-lg">Usuarios</a>
+        </div>
+    </div>
+</div>
+<hr>
+<section class="content">
+    <table class="table" id="tabla">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Apellido)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Numero)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Documento)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IdentityUser.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rol)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Estado)
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellido)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Documento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdentityUser.Email)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Rol)
+                </th>
+                <td>
+                    @if (item.Estado == true)
+                    {
+                        <form asp-action="EditarEstado" asp-route-id="@item.UsuarioId">
+                            <button type="submit"><i class="fas fa-toggle-on"></i></button>
+                        </form>
+                    }
+                    else if (item.Estado == false)
+                    {
+                        <form asp-action="EditarEstado" asp-route-id="@item.UsuarioId">
+                            <button type="submit"><i class="fas fa-toggle-off"></i></button>
+                        </form>
+                    }
+                </td>
+                <td>
+                    <a onclick="mostrarModalS('@Url.Action("Editar","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Editar usuario')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</section>
+<br />
+@section Scripts{
+
+    <script src="~/js/tabla.js"></script>
+    <script src="~/js/modals.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
+                  alertify.alert('Guardar usuario', '@TempData["Mensaje"]', function () { alertify.success('Usuario guardado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]', function () {});
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Eliminar")) { <text>
+        alertify.alert('Eliminar Usuario', '@TempData["Mensaje"]', function () { alertify.error('Usuario eliminado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
+        alertify.alert('Editar estilista', '@TempData["Mensaje"]', function () { alertify.success('Estilista editado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
+        alertify.success('Estado cambiado correctamente.');
+                 </text>
+        }
+    </script>
+}

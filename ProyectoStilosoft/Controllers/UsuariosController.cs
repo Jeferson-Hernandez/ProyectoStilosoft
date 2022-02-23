@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.Entities;
-using Stilosoft.ViewModels.Usuarios;
+using ProyectoStilosoft.ViewModels.Usuarios;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -257,6 +257,7 @@ namespace Stilosoft.Controllers
                         Estado = usuarioDto.Estado,
                         Rol = usuarioDto.Rol
                     };
+                
                 try
                 {
                     if (usuario1.Rol == "Cliente")
