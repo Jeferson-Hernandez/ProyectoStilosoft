@@ -11,10 +11,10 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
     {
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
         public string Nombre { get; set; }
         [Required(ErrorMessage = "El apellido es obligatorio")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         public string Apellido { get; set; }
         [DisplayName("Celular")]
