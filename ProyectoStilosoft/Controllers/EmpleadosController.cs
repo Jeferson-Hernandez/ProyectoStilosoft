@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoStilosoft.ViewModels.Empleados;
@@ -17,12 +18,16 @@ namespace ProyectoStilosoft.Controllers
         private readonly AppDbContext _context;
         private readonly IEmpleadoService _empleado;
         private readonly IServicioService _servicio;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public EmpleadosController(AppDbContext context, IEmpleadoService empleado, IServicioService servicio)
+        public EmpleadosController(AppDbContext context, IEmpleadoService empleado, IServicioService servicio, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _empleado = empleado;
             _servicio = servicio;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
         public async Task<IActionResult> Index()
         {
@@ -38,7 +43,7 @@ namespace ProyectoStilosoft.Controllers
         }
 
         [HttpPost]
-        public IActionResult Crear(EmpleadoViewModel serviciosEmpleado)
+        public async Task<IActionResult> Crear(EmpleadoViewModel serviciosEmpleado)
         {
             if (ModelState.IsValid)
             {
@@ -46,31 +51,46 @@ namespace ProyectoStilosoft.Controllers
                 {
                     try
                     {
-                        Empleado empleado = new()
+                        IdentityUser identityUser = new()
                         {
-                            Nombre = serviciosEmpleado.Nombre,
-                            Apellidos = serviciosEmpleado.Apellidos,
-                            Documento = serviciosEmpleado.Documento,
-                            FechaNacimiento = serviciosEmpleado.FechaNacimiento.Date,
-                            Estado = true
+                            UserName = serviciosEmpleado.Email,
+                            Email = serviciosEmpleado.Email
                         };
-                        _context.Add(empleado);
-                        _context.SaveChanges();
 
-                        if (serviciosEmpleado.EmpleadoServicios.Count() > 0)
+                        var resultado = await _userManager.CreateAsync(identityUser, serviciosEmpleado.Password);
+                        if (resultado.Succeeded)
                         {
-                            foreach (var servicios in serviciosEmpleado.EmpleadoServicios)
+
+                            var usuario = await _userManager.FindByEmailAsync(serviciosEmpleado.Email);
+                            await _userManager.AddToRoleAsync(usuario, "Empleado");
+                            Empleado empleado = new()
                             {
-                                DetalleEmpleadoServicios detalleEmpleado = new()
-                                {
-                                    EmpleadoId = empleado.EmpleadoId,
-                                    ServicioId = servicios.ServicioId
-                                };
-                                _context.Add(detalleEmpleado);
-                            }
+                                Nombre = serviciosEmpleado.Nombre,
+                                Apellidos = serviciosEmpleado.Apellidos,
+                                Documento = serviciosEmpleado.Documento,
+                                FechaNacimiento = serviciosEmpleado.FechaNacimiento.Date,
+                                Estado = true
+                            };
+                            _context.Add(empleado);
                             _context.SaveChanges();
+
+                            if (serviciosEmpleado.EmpleadoServicios.Count() > 0)
+                            {
+                                foreach (var servicios in serviciosEmpleado.EmpleadoServicios)
+                                {
+                                    DetalleEmpleadoServicios detalleEmpleado = new()
+                                    {
+                                        EmpleadoId = empleado.EmpleadoId,
+                                        ServicioId = servicios.ServicioId
+                                    };
+                                    _context.Add(detalleEmpleado);
+                                }
+                                _context.SaveChanges();
+                            }
+                            transaction.Commit();
                         }
-                        transaction.Commit();
+
+                        
                     }
                     catch (Exception)
                     {

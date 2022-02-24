@@ -33,6 +33,14 @@
                     <span id="documento_error_obligatorio" class="text-danger">El documento es obligatorio</span>
                     <span id="longitud_Documento_error_obligatorio" class="text-danger">El documento debe tener entre 6 y 15 números</span>
                 </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input type="password" asp-for="Password" class="form-control" />
+                </div>
                 <div class="col-3 text-right">
                     <input id="crearEmpleado" type="submit" value="Crear empleado" class="btn btn-info mt-4 mr-5" disabled/>
                 </div>
