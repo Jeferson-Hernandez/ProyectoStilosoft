@@ -147,13 +147,14 @@
             contServicios++;
 
             $("#servicio option[value='" + servicioId + "']").hide();
-        }
-        if (contServicios > 4) {
+
+            if (contServicios > 20) {
             $("#agregarServicioBtn").prop("disabled", true);
-        }
-        if (contServicios => 1) {
-            $("#crearEmpleado").prop("disabled", false);
-        }
+            }
+            if (contServicios => 1) {
+                $("#crearEmpleado").prop("disabled", false);
+            }
+        }        
     }
 
     function eliminarServicio() {

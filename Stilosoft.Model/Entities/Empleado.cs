@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -11,8 +12,8 @@ namespace Stilosoft.Model.Entities
 {
     public class Empleado
     {
-        [Key]
-        public int EmpleadoId { get; set; }
+        [Key, ForeignKey("IdentityUser")]
+        public string EmpleadoId { get; set; }
         [DisplayName("Empleado")]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [Column(TypeName = "nvarchar(50)")]
@@ -29,6 +30,7 @@ namespace Stilosoft.Model.Entities
         public string Documento { get; set; }
         public bool Estado { get; set; }
 
+        public virtual IdentityUser IdentityUser { get; set; }
         public virtual List<DetalleCitaServicios> DetalleCitaServicios { get; set; }
         public virtual List<DetalleEmpleadoServicios> DetalleEmpleadoServicios { get; set; }
     }

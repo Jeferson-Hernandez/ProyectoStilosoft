@@ -12,7 +12,7 @@ namespace Stilosoft.Model.Entities
         [Key]
         public int CitaServicioId { get; set; }
         public int CitaId { get; set; }
-        public int EmpleadoId { get; set; }
+        public string EmpleadoId { get; set; }
         public int ServicioId { get; set; }
 
         public virtual Cita Cita { get; set; }
