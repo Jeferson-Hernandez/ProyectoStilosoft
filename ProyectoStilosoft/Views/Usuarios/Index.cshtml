@@ -41,6 +41,9 @@
                 <th>
                     Acciones
                 </th>
+                <th>
+                    Cambiar contraseña
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -81,6 +84,9 @@
                 </td>
                 <td>
                     <a onclick="mostrarModalS('@Url.Action("Editar","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Editar usuario')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                </td>
+                <td>
+                    <a onclick="mostrarModalS('@Url.Action("ResetPassword","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Cambiar contraseña')" class="btn btn-dark"><i class="fa fa-lock"></i></a>
                 </td>
             </tr>
             }
