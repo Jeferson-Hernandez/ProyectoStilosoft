@@ -2,4 +2,54 @@
 
 @{
     ViewData["Title"] = "Detalle Empleado";
+    Layout = null;
+}
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-4">
+            Empleado <br />
+            <ul>
+                @foreach (var item in Model)
+                {
+                    <li>@Html.DisplayFor(modelItem => item.Empleado.Nombre)</li>
+                    <li>@Html.DisplayFor(modelItem => item.Empleado.Apellidos)</li>
+                    <li>@Html.DisplayFor(modelItem => item.Empleado.Documento)</li>
+                }
+            </ul>
+        </div>
+        <div class="col-4">
+            Servicios <br />
+            <ul>
+                @foreach (var item in Model)
+                {
+                    <li>@Html.DisplayFor(modelItem => item.Servicio.Nombre)</li>
+                }
+            </ul>
+        </div>
+    </div>                
+</section>
+
+
+@section Scripts{
+    <script src="~/js/modals.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
+        alertify.alert('Agregar producto', '@TempData["Mensaje"]', function () { alertify.success('Producto agregado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]'});
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
+        alertify.alert('Editar producto', '@TempData["Mensaje"]', function () { alertify.success('Producto editado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Eliminar")) { <text>
+        alertify.alert('Eliminar producto', '@TempData["Mensaje"]', function () { alertify.error('Prodcuto eliminado'); });
+                 </text>
+        }
+    </script>
 }

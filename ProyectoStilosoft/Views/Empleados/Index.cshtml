@@ -36,7 +36,7 @@
                         @( DateTime.Now.Year - item.FechaNacimiento.Year )
                     </td>
                     <td>
-                        <a onclick="mostrarModalG('@Url.Action("CrearDetalle","Compras", new {}, Context.Request.Scheme)', 'Agregar producto a la compra')" class="btn btn-info"><i class="fas fa-plus"></i></a>
+                        <a onclick="mostrarModalG('@Url.Action("DetalleEmpleado","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Detalle empleado servicios')" class="btn btn-info"><i class="fas fa-plus"></i></a>
                     </td>
                     <td>
                         @if (item.Estado == true)
