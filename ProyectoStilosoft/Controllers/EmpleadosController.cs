@@ -65,6 +65,7 @@ namespace ProyectoStilosoft.Controllers
                             await _userManager.AddToRoleAsync(usuario, "Empleado");
                             Empleado empleado = new()
                             {
+                                EmpleadoId = usuario.Id,
                                 Nombre = serviciosEmpleado.Nombre,
                                 Apellidos = serviciosEmpleado.Apellidos,
                                 Documento = serviciosEmpleado.Documento,
@@ -89,8 +90,6 @@ namespace ProyectoStilosoft.Controllers
                             }
                             transaction.Commit();
                         }
-
-                        
                     }
                     catch (Exception)
                     {
@@ -101,7 +100,7 @@ namespace ProyectoStilosoft.Controllers
                     }
                 }
                 TempData["Accion"] = "Crear";
-                TempData["Mensaje"] = "Empleado creada correctamente";
+                TempData["Mensaje"] = "Empleado creado correctamente";
                 return RedirectToAction("index");
             }
             else
@@ -110,6 +109,11 @@ namespace ProyectoStilosoft.Controllers
                 TempData["Mensaje"] = "Ingresaste un valor inválido";
                 return RedirectToAction("index");
             }
+        }
+
+        public async Task<IActionResult> DetalleEmpleado()
+        {
+            return View(await _empleado.ObtenerListaServiciosEmpleado());
         }
     }
 }
