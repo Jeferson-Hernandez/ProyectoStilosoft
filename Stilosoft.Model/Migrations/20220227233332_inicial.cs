@@ -69,6 +69,7 @@ namespace Stilosoft.Model.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Direccion = table.Column<string>(type: "nvarchar(25)", nullable: false),
                     Celular = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    Correo = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Contacto = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -367,7 +368,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "818aec65-6858-4715-9e83-25804d2f2b6f", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAECLT4GPecKZCbV1WC2V8slp8px8mfVdMBBXrzicRTvXvWQV/CEd7AjVM2GbvxNvykw==", "1234567890", false, "ede21964-3047-4bce-93cb-7eb0a791951d", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "82fdcc4f-554e-4636-9adc-bc0a330613b0", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEEl6orSyBThWqs533AUjn2A7spMKl4jI9zBMlh51e6mqP8DPZ6mvPWBMDWSmtjUEWQ==", "1234567890", false, "628621fa-a82d-428d-9404-cac5cd72f44c", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",

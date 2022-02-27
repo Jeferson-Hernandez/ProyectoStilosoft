@@ -23,7 +23,10 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Celular)
                 </th>
-                 <th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Correo)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Contacto)
                 </th>
                 <th>
@@ -37,40 +40,43 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nit)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Direccion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Celular)
-                    </td>
-                     <td>
-                        @Html.DisplayFor(modelItem => item.Contacto)
-                    </td>
-                    <td>
-                        @if (item.Estado == true)
-                        {
-                            <form asp-action="EditarEstado" asp-route-id="@item.ProveedorId">
-                                <button type="submit"><i class="fas fa-toggle-on"></i></button>
-                            </form>
-                        }
-                        else if (item.Estado == false)
-                        {
-                            <form asp-action="EditarEstado" asp-route-id="@item.ProveedorId">
-                                <button type="submit"><i class="fas fa-toggle-off"></i></button>
-                            </form>
-                        }
-                    </td>
-                    <td>
-                        <a onclick="mostrarModalS('@Url.Action("Editar","Proveedor", new {id = item.ProveedorId}, Context.Request.Scheme)', 'Editar proveedor')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Direccion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Celular)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Correo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contacto)
+                </td>
+                <td>
+                    @if (item.Estado == true)
+                    {
+                        <form asp-action="EditarEstado" asp-route-id="@item.ProveedorId">
+                            <button type="submit"><i class="fas fa-toggle-on"></i></button>
+                        </form>
+                    }
+                    else if (item.Estado == false)
+                    {
+                        <form asp-action="EditarEstado" asp-route-id="@item.ProveedorId">
+                            <button type="submit"><i class="fas fa-toggle-off"></i></button>
+                        </form>
+                    }
+                </td>
+                <td>
+                    <a onclick="mostrarModalS('@Url.Action("Editar","Proveedor", new {id = item.ProveedorId}, Context.Request.Scheme)', 'Editar proveedor')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
