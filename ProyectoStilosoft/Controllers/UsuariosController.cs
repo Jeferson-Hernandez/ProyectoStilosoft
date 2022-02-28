@@ -158,7 +158,7 @@ namespace Stilosoft.Controllers
         [HttpGet]
         public async Task<IActionResult> CrearUsuario()
         {
-            //var listaRoles = await _roleManager.Roles.ToListAsync();
+             //var listaRoles = await _roleManager.Roles.ToListAsync();
             var listaRoles = await _roleManager.Roles.Where(r => r.Name != "Admin").ToListAsync();
             ViewBag.Roles = new SelectList(listaRoles, "Name", "Name");
 
@@ -468,17 +468,32 @@ namespace Stilosoft.Controllers
                 //buscamos el usuario
                 var usuario = await _userManager.FindByIdAsync(id);
                 var token = await _userManager.GeneratePasswordResetTokenAsync(usuario);            
-             
-                if (usuario != null)
+             try
                 {
-                    //se resetea el password
-                    var result = await _userManager.ResetPasswordAsync(usuario, token, cambiarPassWord.Password);
-                   
+                    if (usuario != null)
+                    {
+                        //se resetea el password
+                        var result = await _userManager.ResetPasswordAsync(usuario, token, cambiarPassWord.Password);
+
+                    }
+                    TempData["Accion"] = "Cambiar contraseña";
+                    TempData["Mensaje"] = "Usuario cambio de contraseña correctamente";                    
+                    return RedirectToAction("index");
                 }
-                return RedirectToAction("index");
+                catch
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "Ingresaste algun valor no valido";
+                    return RedirectToAction("index");
+                }
+               
             }
+            TempData["Accion"] = "Error";
+            TempData["Mensaje"] = "Ingresaste algun valor no valido";
             return RedirectToAction("index");
         }
+
+       
 
         private bool ClienteExists(string id)
         {

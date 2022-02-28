@@ -114,5 +114,9 @@
         alertify.success('Estado cambiado correctamente.');
                  </text>
         }
+         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Cambiar contraseña")) { <text>
+        alertify.alert('Cambiar contraseña', '@TempData["Mensaje"]', function () { alertify.success('Usuario cambio de contraseña'); });
+                 </text>
+        }
     </script>
 }
