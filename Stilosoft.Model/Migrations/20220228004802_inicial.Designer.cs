@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220225143922_inicial")]
+    [Migration("20220228004802_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,7 +60,7 @@ namespace Stilosoft.Model.Migrations
                             Id = "c7b013f0-5201-4317-abd8-c211f91b7330",
                             ConcurrencyStamp = "2",
                             Name = "Cliente",
-                            NormalizedName = "Client"
+                            NormalizedName = "Cliente"
                         },
                         new
                         {
@@ -164,16 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "818aec65-6858-4715-9e83-25804d2f2b6f",
+                            ConcurrencyStamp = "92681ef7-e3e7-4492-a8f7-65dfe85b707a",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECLT4GPecKZCbV1WC2V8slp8px8mfVdMBBXrzicRTvXvWQV/CEd7AjVM2GbvxNvykw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFslw7rGvZKufn+eH/UfqzZysodLOOhs6BRoh6rti8768RgmFyE6Pi/tX8IXJC+0Lg==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ede21964-3047-4bce-93cb-7eb0a791951d",
+                            SecurityStamp = "1dc6cbff-ed7e-408d-8b78-ca9ecd0d3b19",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
