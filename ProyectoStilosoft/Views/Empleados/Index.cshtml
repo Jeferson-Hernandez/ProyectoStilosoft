@@ -37,7 +37,7 @@
                     </td>
                     <td>
                         <a onclick="mostrarModalS('@Url.Action("DetalleEmpleado","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Empleado servicios')" class="btn btn-info"><i class="fas fa-cut"></i></a>
-                        -|- <a onclick="mostrarModalS('@Url.Action("EditarEmpleado","Empleados", new {}, Context.Request.Scheme)', 'Editar empleado')" class="btn btn-dark"><i class="fas fa-edit"></i></a>                        
+                        -|- <a onclick="mostrarModalG('@Url.Action("Editar","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Editar empleado')" class="btn btn-dark"><i class="fas fa-edit"></i></a>                        
                     </td>
                     <td>
                         @if (item.Estado == true)

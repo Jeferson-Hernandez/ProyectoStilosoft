@@ -110,6 +110,28 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> Editar(string id)
+        {
+            if (id == null)
+            {
+                TempData["Accion"] = "Error";
+                TempData["Mensaje"] = "Error";
+                return RedirectToAction("index");
+            }
+            Empleado empleado = await _empleado.ObtenerEmpleadoPorId(id);
+            EmpleadoViewModel empleadoViewModel = new()
+            {
+                EmpleadoId = empleado.EmpleadoId,
+                Nombre = empleado.Nombre,
+                Apellidos = empleado.Apellidos,
+                FechaNacimiento = empleado.FechaNacimiento,
+                Documento = empleado.Documento
+            };
+            empleadoViewModel.Servicios = await _servicio.ObtenerListaServiciosEstado();
+
+            return View(empleadoViewModel);
+        }
 
         public async Task<IActionResult> DetalleEmpleado(string id)
         {
