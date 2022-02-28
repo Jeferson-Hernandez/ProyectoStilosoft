@@ -115,5 +115,29 @@ namespace ProyectoStilosoft.Controllers
         {
             return View(await _empleado.ObtenerListaServiciosEmpleado());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarEstado(string id)
+        {
+            Empleado empleado = await _empleado.ObtenerEmpleadoPorId(id);
+            if (empleado.Estado == true)
+                empleado.Estado = false;
+            else if (empleado.Estado == false)
+                empleado.Estado = true;
+
+            try
+            {
+                await _empleado.EditarEmpleado(empleado);
+                TempData["Accion"] = "EditarEstado";
+                TempData["Mensaje"] = "Estado editado correctamente";
+                return RedirectToAction("index");
+            }
+            catch (Exception)
+            {
+                TempData["Accion"] = "Error";
+                TempData["Mensaje"] = "Ingresaste un valor inválido";
+                return RedirectToAction("index");
+            }
+        }
     }
 }

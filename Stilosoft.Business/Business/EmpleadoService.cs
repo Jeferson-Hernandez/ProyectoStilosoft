@@ -32,6 +32,15 @@ namespace Stilosoft.Business.Business
         {
             return await _context.empleados.Where(s => s.Estado == true).ToListAsync();
         }
+        public async Task<Empleado> ObtenerEmpleadoPorId(string id)
+        {
+            return await _context.empleados.FirstOrDefaultAsync(s => s.EmpleadoId == id);
+        }
+        public async Task EditarEmpleado(Empleado empleado)
+        {
+            _context.Update(empleado);
+            await _context.SaveChangesAsync();
+        }
 
         //Detalle empleado servicios
         public async Task<IEnumerable<DetalleEmpleadoServicios>> ObtenerListaServiciosEmpleado()

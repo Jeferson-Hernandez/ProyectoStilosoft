@@ -8,23 +8,12 @@
 
 <section class="content">
     <div class="row">
-        <div class="col-4">
-            Empleado <br />
-            <ul>
-                @foreach (var item in Model)
-                {
-                    <li>@Html.DisplayFor(modelItem => item.Empleado.Nombre)</li>
-                    <li>@Html.DisplayFor(modelItem => item.Empleado.Apellidos)</li>
-                    <li>@Html.DisplayFor(modelItem => item.Empleado.Documento)</li>
-                }
-            </ul>
-        </div>
-        <div class="col-4">
+        <div class="col-12">
             Servicios <br />
             <ul>
                 @foreach (var item in Model)
                 {
-                    <li>@Html.DisplayFor(modelItem => item.Servicio.Nombre)</li>
+                <li>@Html.DisplayFor(modelItem => item.Servicio.Nombre) | Duración: @Html.DisplayFor(modelItem => item.Servicio.Duracion) min | Valor: $@Html.DisplayFor(modelItem => item.Servicio.Costo)</li>
                 }
             </ul>
         </div>

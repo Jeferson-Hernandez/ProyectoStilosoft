@@ -15,7 +15,7 @@
                 <th>Apellidos</th>
                 <th>Documento</th>
                 <th>Edad</th>
-                <th>Detalle</th>
+                <th>Servicios | Editar</th>
                 <th>Estado</th>
             </tr>
         </thead>
@@ -36,19 +36,20 @@
                         @( DateTime.Now.Year - item.FechaNacimiento.Year )
                     </td>
                     <td>
-                        <a onclick="mostrarModalG('@Url.Action("DetalleEmpleado","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Detalle empleado servicios')" class="btn btn-info"><i class="fas fa-plus"></i></a>
+                        <a onclick="mostrarModalS('@Url.Action("DetalleEmpleado","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Empleado servicios')" class="btn btn-info"><i class="fas fa-cut"></i></a>
+                        -|- <a onclick="mostrarModalS('@Url.Action("EditarEmpleado","Empleados", new {}, Context.Request.Scheme)', 'Editar empleado')" class="btn btn-dark"><i class="fas fa-edit"></i></a>                        
                     </td>
                     <td>
                         @if (item.Estado == true)
                         {
-                            <form asp-action="EditarEstado" asp-route-id="">
-                                <button type="submit"><i class="fas fa-toggle-on"></i></button>
+                            <form asp-action="EditarEstado" asp-route-id="@item.EmpleadoId">
+                                <button type="submit" class="btn"><i class="fas fa-toggle-on"></i></button>
                             </form>
                         }
                         else if (item.Estado == false)
                         {
-                            <form asp-action="EditarEstado" asp-route-id="">
-                                <button type="submit"><i class="fas fa-toggle-off"></i></button>
+                            <form asp-action="EditarEstado" asp-route-id="@item.EmpleadoId">
+                                <button type="submit" class="btn"><i class="fas fa-toggle-off"></i></button>
                             </form>
                         }
                     </td>
