@@ -158,9 +158,17 @@ namespace Stilosoft.Controllers
         [HttpGet]
         public async Task<IActionResult> CrearUsuario()
         {
-             //var listaRoles = await _roleManager.Roles.ToListAsync();
-            var listaRoles = await _roleManager.Roles.Where(r => r.Name != "Admin").ToListAsync();
-            ViewBag.Roles = new SelectList(listaRoles, "Name", "Name");
+            //var listaRoles = await _roleManager.Roles.ToListAsync();
+            var usuario = await _context.usuarios.Include(u => u.IdentityUser).ToListAsync();
+            if (!AdminDosExists(usuario.ToString()))
+            {
+                var listaRoles = await _roleManager.Roles.Where(r => r.Name != "Empleado").ToListAsync();
+                ViewBag.Roles = new SelectList(listaRoles, "Name", "Name");
+                return View();
+
+            };
+            var listaRolesDos = await _roleManager.Roles.Where(r => r.Name != "Empleado").Where(a => a.Name != "Administrador").ToListAsync(); 
+            ViewBag.Roles = new SelectList(listaRolesDos, "Name", "Name");
 
             return View();
         }
@@ -492,12 +500,14 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste algun valor no valido";
             return RedirectToAction("index");
         }
-
-       
-
+      
         private bool ClienteExists(string id)
         {
             return _context.clientes.Any(e => e.ClienteId == id);
+        }
+        private bool AdminDosExists(string rol)
+        {
+            return _context.usuarios.Any(e => e.Rol == "Administrador");
         }
 
         [HttpGet]
