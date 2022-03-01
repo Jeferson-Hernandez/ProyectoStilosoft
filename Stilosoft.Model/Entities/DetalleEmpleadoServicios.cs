@@ -11,7 +11,7 @@ namespace Stilosoft.Model.Entities
     {
         [Key]
         public int EmpleadoServicioId { get; set; }
-        public int EmpleadoId { get; set; }
+        public string EmpleadoId { get; set; }
         public int ServicioId { get; set; }
 
         public virtual Empleado Empleado { get; set; }

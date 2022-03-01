@@ -9,7 +9,7 @@ namespace ProyectoStilosoft.ViewModels.Empleados
 {
     public class EmpleadoViewModel
     {
-        public int EmpleadoId { get; set; }
+        public string EmpleadoId { get; set; }
         [Required(ErrorMessage = "El nombre es obligatorio")]
         public string Nombre { get; set; }
         [Required(ErrorMessage = "Los apellidos son obligatorios")]
@@ -18,6 +18,8 @@ namespace ProyectoStilosoft.ViewModels.Empleados
         public DateTime FechaNacimiento { get; set; }
         [Required(ErrorMessage = "El documento es obligatorio")]
         public string Documento { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public List<Servicio> Servicios { get; set; }
         public List<EmpleadoServicios> EmpleadoServicios { get; set; }
     }

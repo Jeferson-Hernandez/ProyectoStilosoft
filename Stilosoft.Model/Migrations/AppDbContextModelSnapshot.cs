@@ -162,16 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "efc13a1d-8872-4501-9f28-050e0e60acfd",
+                            ConcurrencyStamp = "818aec65-6858-4715-9e83-25804d2f2b6f",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENU3Lya8H5VkRWrauBmYzxWZOq5wptLBkVSmPixd5cqjGXYlV97lXunjWcMfbvIKPA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECLT4GPecKZCbV1WC2V8slp8px8mfVdMBBXrzicRTvXvWQV/CEd7AjVM2GbvxNvykw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0bddc2c8-9bf9-4671-bf59-b7446308aa7d",
+                            SecurityStamp = "ede21964-3047-4bce-93cb-7eb0a791951d",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -331,8 +331,8 @@ namespace Stilosoft.Model.Migrations
                     b.Property<int>("CitaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmpleadoId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ServicioId")
                         .HasColumnType("int");
@@ -355,8 +355,8 @@ namespace Stilosoft.Model.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmpleadoId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("ServicioId")
                         .HasColumnType("int");
@@ -372,10 +372,8 @@ namespace Stilosoft.Model.Migrations
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Empleado", b =>
                 {
-                    b.Property<int>("EmpleadoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<string>("EmpleadoId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Apellidos")
                         .IsRequired()
@@ -613,9 +611,7 @@ namespace Stilosoft.Model.Migrations
 
                     b.HasOne("Stilosoft.Model.Entities.Empleado", "Empleado")
                         .WithMany("DetalleCitaServicios")
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmpleadoId");
 
                     b.HasOne("Stilosoft.Model.Entities.Servicio", "Servicio")
                         .WithMany("DetalleCitaServicios")
@@ -634,9 +630,7 @@ namespace Stilosoft.Model.Migrations
                 {
                     b.HasOne("Stilosoft.Model.Entities.Empleado", "Empleado")
                         .WithMany("DetalleEmpleadoServicios")
-                        .HasForeignKey("EmpleadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmpleadoId");
 
                     b.HasOne("Stilosoft.Model.Entities.Servicio", "Servicio")
                         .WithMany("DetalleEmpleadoServicios")
@@ -647,6 +641,17 @@ namespace Stilosoft.Model.Migrations
                     b.Navigation("Empleado");
 
                     b.Navigation("Servicio");
+                });
+
+            modelBuilder.Entity("Stilosoft.Model.Entities.Empleado", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityUser");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Usuario", b =>
