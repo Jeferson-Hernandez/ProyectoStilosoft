@@ -145,6 +145,12 @@ namespace ProyectoStilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (DocumentoExists(empleadoEditarViewModel.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index");
+                }
                 foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
                 {
                     if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))

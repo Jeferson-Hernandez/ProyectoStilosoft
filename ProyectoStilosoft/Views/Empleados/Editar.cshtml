@@ -126,4 +126,17 @@
             $("#crearEmpleado").prop("disabled", true);
         }
     }
+
+    document.getElementById('fechaNacimiento').addEventListener('change', () => {
+        let fecha = document.getElementById('fechaNacimiento').value;
+        let fechaInput = new Date(fecha);
+        let fechaActual = new Date();
+        let edad = fechaActual.getFullYear() - fechaInput.getFullYear()
+        console.log(`edad: ${fechaActual.getFullYear() - fechaInput.getFullYear()}`)
+        if (edad < 18 || edad > 100) {
+            document.querySelector('#grupo__fechaNacimiento .formulario__input-error').classList.add('formulario__input-error-activo');
+        } else {
+            document.querySelector('#grupo__fechaNacimiento .formulario__input-error').classList.remove('formulario__input-error-activo');
+        }
+    });
 </script>

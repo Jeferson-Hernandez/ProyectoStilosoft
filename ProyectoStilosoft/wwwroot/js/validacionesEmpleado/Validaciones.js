@@ -25,9 +25,6 @@ const validarFormulario = (e) => {
         case "apellidos":
             validarCampo(expresiones.apellidos, e.target, 'apellidos');
             break;
-        case "fechaNacimiento":
-            console.log('');
-            break;
         case "documento":
             validarCampo(expresiones.documento, e.target, 'documento');
             break;
@@ -64,3 +61,4 @@ formulario.addEventListener('submit', (e) => {
         e.preventDefault();
     }
 });
+

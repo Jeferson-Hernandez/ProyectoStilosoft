@@ -25,8 +25,8 @@
                 </div>
                 <div class="form-group" id="grupo__fechaNacimiento">
                     <label asp-for="FechaNacimiento" class="control-label"></label>
-                    <input type="date" asp-for="FechaNacimiento" id="fechaNacimiento" name="fechaNacimiento" class="form-control" />
-                    <p class="formulario__input-error">La fecha debe ser mayor a los 18 años</p>
+                    <input type="date" asp-for="FechaNacimiento" min="1970-01-01" id="fechaNacimiento" name="fechaNacimiento" class="form-control" />
+                    <p class="formulario__input-error">La fecha de nacimiento debe ser mayor a los 18 años</p>
                 </div>
                 <div class="form-group" id="grupo__documento">
                     <label asp-for="Documento" class="control-label"></label>
@@ -119,13 +119,25 @@
         let servicioId = $("#servicio" + contServicios).val();
         $("#servicio option[value='" + servicioId + "']").show();
         $("#" + contServicios).remove();
-        if (contServicios < 5) {
+        if (contServicios < 20) {
             $("#agregarServicioBtn").prop("disabled", false);
         }
         if (contServicios == 0) {
             $("#crearEmpleado").prop("disabled", true);
         }
     }
+    document.getElementById('fechaNacimiento').addEventListener('change', () => {
+        let fecha = document.getElementById('fechaNacimiento').value;
+        let fechaInput = new Date(fecha);
+        let fechaActual = new Date();
+        let edad = fechaActual.getFullYear() - fechaInput.getFullYear()
+        console.log(`edad: ${fechaActual.getFullYear() - fechaInput.getFullYear()}`)
+        if (edad < 18 || edad > 100) {
+            document.querySelector('#grupo__fechaNacimiento .formulario__input-error').classList.add('formulario__input-error-activo');
+        } else {
+            document.querySelector('#grupo__fechaNacimiento .formulario__input-error').classList.remove('formulario__input-error-activo');
+        }
+    });
 
     document.getElementById('fechaNacimiento').valueAsDate = new Date();
 </script>
