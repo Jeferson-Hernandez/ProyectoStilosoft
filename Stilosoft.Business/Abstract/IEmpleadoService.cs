@@ -9,10 +9,12 @@ namespace Stilosoft.Business.Abstract
 {
     public interface IEmpleadoService
     {
-        Task<IEnumerable<DetalleEmpleadoServicios>> ObtenerListaServiciosEmpleado();
+        Task<IEnumerable<DetalleEmpleadoServicios>> ObtenerListaServiciosEmpleado(string id);
         Task GuardarEmpleado(Empleado empleado);
         Task<IEnumerable<Empleado>> ObtenerListaEmpleados();
         Task<Empleado> ObtenerEmpleadoPorId(string id);
         Task EditarEmpleado(Empleado empleado);
+        Task<List<DetalleEmpleadoServicios>> ListaEmpleadoServicios(string id);
+        Task EliminarEmpleadoServicio(int id);
     }
 }

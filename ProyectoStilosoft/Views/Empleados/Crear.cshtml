@@ -3,6 +3,10 @@
 @{
     ViewData["Title"] = "Crear Empleado";
 }
+
+@section Styles{
+    <link href="~/css/ValidacionesCSS/Validaciones.css" rel="stylesheet" />
+}
 <hr />
 <section class="content pt-3 pl-3 pr-3">
     <form asp-action="Crear" asp-controller="Empleados" method="post" id="formulario">
@@ -14,9 +18,9 @@
                     <input asp-for="Nombre" id="nombre" name="nombre" class="form-control" />
                     <p class="formulario__input-error">El nombre tiene que ser de 3 a 30 dígitos y solo puede contener letras</p>
                 </div>
-                <div class="form-group" id="grupo__apellido">
+                <div class="form-group" id="grupo__apellidos">
                     <label asp-for="Apellidos" class="control-label"></label>
-                    <input asp-for="Apellidos" id="apellido" name="apellido" class="form-control" />
+                    <input asp-for="Apellidos" id="apellidos" name="apellidos" class="form-control" />
                     <p class="formulario__input-error">El apellido tiene que ser de 3 a 30 dígitos y solo puede contener letras</p>
                 </div>
                 <div class="form-group" id="grupo__fechaNacimiento">
@@ -26,12 +30,12 @@
                 </div>
                 <div class="form-group" id="grupo__documento">
                     <label asp-for="Documento" class="control-label"></label>
-                    <input asp-for="Documento" type="number" id="documento" name="documento" class="form-control" />
+                    <input asp-for="Documento" type="text" id="documento" name="documento" class="form-control" />
                     <p class="formulario__input-error">El documento tiene que ser de 6 a 15 dígitos y solo puede contener números</p>
                 </div>
                 <div class="form-group" id="grupo__email">
                     <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" id="email" name="email" class="form-control" />
+                    <input asp-for="Email" id="email" name="email" class="form-control" placeholder="Correo@hotmail.com"/>
                     <p class="formulario__input-error">El email solo puede contener letras, números, puntos, guiones y guion bajo</p>
                 </div>
                 <div class="form-group" id="grupo__password">
@@ -39,26 +43,26 @@
                     <input type="password" asp-for="Password" id="password" name="password" class="form-control" />
                     <p class="formulario__input-error">La contraseña tiene que ser de 6 a 30 dígitos</p>
                 </div>
-                <div id="formulario__mensaje">
+                <div id="formulario__mensaje" class="formulario__mensaje">
                     <p><b>Error:</b> Rellene el formulario correctamente</p>
                 </div>
                 <br />
-                <div class="col-5 text-right">
+                <div class="form-group">
                     <button id="crearEmpleado" type="submit" class="btn btn-info mt-4 mr-5">Crear empleado</button>
                 </div>
             </div>
             <div class="col-6 pr-5 pl-5">
                 <h3>Servicios</h3>
                 <select id="servicio" class="form-control">
-                    <option value="selecione">Selecione</option>
+                    <option value="seleccione">Seleccione</option>
                     @foreach (var item in Model.Servicios)
                     {
                         <option duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
                     }
                 </select><br />
-                <div class="form-group">
-                    <button id="agregarServicioBtn" onclick="agregarServicio()" type="button" class="btn btn-primary" >Agregar servicio</button>
-                </div>
+                    <div class="form-group">
+                        <button id="agregarServicioBtn" onclick="agregarServicio()" type="button" class="btn btn-primary" >Agregar servicio</button>
+                    </div>
                 <br />
                 <h2>Lista de servicios</h2>
                 <table id="tablaServicios" class="table table-bordered">
@@ -78,63 +82,6 @@
 <script src="~/js/validacionesEmpleado/Validaciones.js"></script>
 @section Scripts{
 
-    <script>
-        $(document).ready(function () {
-            let conteo = 0;
-
-            $("#nombre_error_obligatorio").hide();
-            $("#longitud_nombre_error_obligatorio").hide();
-            $("#apellido_error_obligatorio").hide();
-            $("#longitud_Apellido_error_obligatorio").hide();
-            $("#documento_error_obligatorio").hide();
-            $("#longitud_Documento_error_obligatorio").hide();
-
-            $("#nombreForm").keyup(function () {
-                let nombre = $("#nombreForm").val();
-
-                if (nombre == '' || nombre == null) {
-                    $("#nombre_error_obligatorio").show();
-                    $("#longitud_nombre_error_obligatorio").hide();
-                } else if (nombre.length < 3 || nombre.length > 30) {
-                    $("#nombre_error_obligatorio").hide();
-                    $("#longitud_nombre_error_obligatorio").show();
-                } else {
-                    $("#nombre_error_obligatorio").hide();
-                    $("#longitud_nombre_error_obligatorio").hide();
-                }
-            });
-
-            $("#apellidoForm").keyup(function () {
-                let apellido = $("#apellidoForm").val();
-
-                if (apellido == '' || apellido == null) {
-                    $("#apellido_error_obligatorio").show();
-                    $("#longitud_Apellido_error_obligatorio").hide();
-                } else if (apellido.length < 3 || apellido.length > 30) {
-                    $("#apellido_error_obligatorio").hide();
-                    $("#longitud_Apellido_error_obligatorio").show();
-                } else {
-                    $("#apellido_error_obligatorio").hide();
-                    $("#longitud_Apellido_error_obligatorio").hide();
-                }
-            });
-
-            $("#documentoForm").keyup(function () {
-                let documento = $("#documentoForm").val();
-
-                if (documento == '' || documento == null) {
-                    $("#documento_error_obligatorio").show();
-                    $("#longitud_Documento_error_obligatorio").hide();
-                } else if (documento.length < 6 || documento.length > 15) {
-                    $("#documento_error_obligatorio").hide();
-                    $("#longitud_Documento_error_obligatorio").show();
-                } else {
-                    $("#documento_error_obligatorio").hide();
-                    $("#longitud_Documento_error_obligatorio").hide();
-                }
-            });
-        });
-    </script>
 }
 <script>
     var totalServicios = 0;
@@ -145,7 +92,7 @@
         let servicioId = $("#servicio option:selected").val();
         let servicioText = $("#servicio option:selected").text();
 
-        if (servicioText != '' && servicioText != 'Selecione') {
+        if (servicioText != '' && servicioText != 'Seleccione') {
             $("#tablaServicios").append(`
             <tr id="${contServicios}">
                 <td>
@@ -157,7 +104,7 @@
             contServicios++;
 
             $("#servicio option[value='" + servicioId + "']").hide();
-
+            $("#servicio option:eq(0)").prop('selected', 'selected');
             if (contServicios > 20) {
             $("#agregarServicioBtn").prop("disabled", true);
             }
@@ -180,5 +127,5 @@
         }
     }
 
-    document.getElementById('date').valueAsDate = new Date();
+    document.getElementById('fechaNacimiento').valueAsDate = new Date();
 </script>

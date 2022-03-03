@@ -5,16 +5,12 @@ const expresiones = {
     nombre: /^[a-zA-ZÀ-ÿ\s]{3,30}$/,
     apellidos: /^[a-zA-ZÀ-ÿ\s]{3,30}$/,
     documento: /^\d{6,15}$/,
-    email: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
-    password: /^.{6,30}$/
 }
 
 const campos = {
-    nombre: false,
-    apellidos: false,
-    documento: false,
-    email: false,
-    password: false
+    nombre: true,
+    apellidos: true,
+    documento: true
 }
 
 const validarFormulario = (e) => {
@@ -30,12 +26,6 @@ const validarFormulario = (e) => {
             break;
         case "documento":
             validarCampo(expresiones.documento, e.target, 'documento');
-            break;
-        case "email":
-            validarCampo(expresiones.email, e.target, 'email');
-            break;
-        case "password":
-            validarCampo(expresiones.password, e.target, 'password');
             break;
     }
 }
@@ -56,8 +46,8 @@ inputs.forEach((input) => {
 });
 
 formulario.addEventListener('submit', (e) => {
-    
-    if (campos.nombre && campos.apellidos && campos.documento && campos.email && campos.password) {
+
+    if (campos.nombre && campos.apellidos && campos.documento) {
 
     } else {
         document.getElementById('formulario__mensaje').classList.add('formulario__mensaje-activo');

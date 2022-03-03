@@ -43,9 +43,23 @@ namespace Stilosoft.Business.Business
         }
 
         //Detalle empleado servicios
-        public async Task<IEnumerable<DetalleEmpleadoServicios>> ObtenerListaServiciosEmpleado()
+        public async Task<IEnumerable<DetalleEmpleadoServicios>> ObtenerListaServiciosEmpleado(string id)
         {
-            return await _context.detalleEmpleados.Include(e => e.Empleado).Include(s => s.Servicio).ToListAsync();
+            return await _context.detalleEmpleados.Where(em => em.EmpleadoId == id).Include(e => e.Empleado).Include(s => s.Servicio).ToListAsync();
+        }
+        public async Task<List<DetalleEmpleadoServicios>> ListaEmpleadoServicios(string id)
+        {
+            return await _context.detalleEmpleados.Where(em => em.EmpleadoId == id).Include(e => e.Empleado).Include(s => s.Servicio).ToListAsync();
+        }
+        public async Task<DetalleEmpleadoServicios> ObtenerDetallePorId(int id)
+        {
+            return await _context.detalleEmpleados.FirstOrDefaultAsync(s => s.EmpleadoServicioId == id);
+        }
+        public async Task EliminarEmpleadoServicio(int id)
+        {
+            var EmpleadoServicio = await ObtenerDetallePorId(id);
+            _context.Remove(EmpleadoServicio);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,0 +1,18 @@
+﻿
+.formulario__input-error{
+    color: red;
+    display: none;
+}
+
+.formulario__mensaje {
+    color: red;
+    display: none;
+}
+
+.formulario__input-error-activo {
+    display: block;
+}
+
+.formulario__mensaje-activo{
+    display: block;
+}
