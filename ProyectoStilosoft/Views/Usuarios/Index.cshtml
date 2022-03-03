@@ -51,9 +51,15 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Apellido)
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Numero)
-                    </td>
+                        @if (item.Numero != "0")
+                        {
+                            <td>@Html.DisplayFor(modelItem => item.Numero)</td>
+                        }
+                        else
+                        {
+                              <td>N/A</td>
+                        }
+                    
                     <td>
                         @Html.DisplayFor(modelItem => item.Documento)
                     </td>
@@ -78,7 +84,10 @@
                         }
                     </td>
                     <td>
-                        <a onclick="mostrarModalS('@Url.Action("Editar","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Editar usuario')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        @if (item.Rol != "Empleado")
+                        {
+                            <a onclick="mostrarModalS('@Url.Action("Editar","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Editar usuario')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        }                       
                     </td>
                     <td>
                         <a onclick="mostrarModalS('@Url.Action("ResetPassword","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Cambiar contraseña')" class="btn btn-dark"><i class="fa fa-lock"></i></a>
@@ -107,7 +116,7 @@
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
-        alertify.alert('Editar estilista', '@TempData["Mensaje"]', function () { alertify.success('Estilista editado'); });
+        alertify.alert('Editar Usuario', '@TempData["Mensaje"]', function () { alertify.success('Usuario editado'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
