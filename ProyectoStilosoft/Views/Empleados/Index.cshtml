@@ -15,7 +15,7 @@
                 <th>Apellidos</th>
                 <th>Documento</th>
                 <th>Edad</th>
-                <th>Servicios | Editar</th>
+                <th>Servicios</th>
                 <th>Estado</th>
             </tr>
         </thead>
@@ -36,8 +36,9 @@
                         @( DateTime.Now.Year - item.FechaNacimiento.Year )
                     </td>
                     <td>
-                        <a onclick="mostrarModalS('@Url.Action("DetalleEmpleado","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Empleado servicios')" class="btn btn-info"><i class="fas fa-cut"></i></a>
-                        -|- <a onclick="mostrarModalG('@Url.Action("Editar","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Editar empleado')" class="btn btn-dark"><i class="fas fa-edit"></i></a>                        
+                        <a onclick="mostrarModalS('@Url.Action("DetalleEmpleado","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Empleado servicios')" class="btn btn-info"><i class="fas fa-cut"></i> </a>
+                        -|- <a asp-controller="Empleados" asp-action="Editar" asp-route-id="@item.EmpleadoId" class="btn btn-dark"><i class="fas fa-edit"></i> </a>  
+                        -|- <a onclick="mostrarModalG('@Url.Action("ListaServiciosEmpleado","Empleados", new {id = item.EmpleadoId}, Context.Request.Scheme)', 'Eliminar servicio empleado')" class="btn btn-danger"><i class="fas fa-trash-alt"></i> </a>
                     </td>
                     <td>
                         @if (item.Estado == true)
@@ -65,7 +66,7 @@
     <script src="~/js/modals.js"></script>
     <script>
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
-                  alertify.alert('Guardar estilista', '@TempData["Mensaje"]', function () { alertify.success('Estilista guardado'); });
+                  alertify.alert('Guardar empleado', '@TempData["Mensaje"]', function () { alertify.success('Empleado guardado'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
@@ -73,11 +74,7 @@
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
-        alertify.alert('Editar estilista', '@TempData["Mensaje"]', function () { alertify.success('Estilista editado'); });
-                 </text>
-        }
-        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Eliminar")) { <text>
-        alertify.alert('Eliminar estilista', '@TempData["Mensaje"]', function () { alertify.error('Estilista eliminado'); });
+        alertify.alert('Editar empleado', '@TempData["Mensaje"]', function () { alertify.success('Empleado editado'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>

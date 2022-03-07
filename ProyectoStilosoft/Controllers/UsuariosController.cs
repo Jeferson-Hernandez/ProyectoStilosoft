@@ -73,7 +73,7 @@ namespace Stilosoft.Controllers
                     if (resultado.Succeeded)
                     {
                         var usuario = await _userManager.FindByEmailAsync(usuarioViewModel.Email);
-                        await _userManager.AddToRoleAsync(usuario, "Client");
+                        await _userManager.AddToRoleAsync(usuario, "Cliente");
                         Cliente cliente = new()
                         {
                             ClienteId = usuario.Id,
@@ -83,6 +83,19 @@ namespace Stilosoft.Controllers
                             Documento = usuarioViewModel.Documento,
                             Estado = true                            
                         };
+
+                        Usuario usuario1 = new()
+                        {
+                            UsuarioId = usuario.Id,
+                            Nombre = usuarioViewModel.Nombre,
+                            Apellido = usuarioViewModel.Apellido,
+                            Numero = usuarioViewModel.Numero,
+                            Documento = usuarioViewModel.Documento,
+                            Rol = "Cliente",
+                            Estado = true
+                           
+                        };
+                        await _usuarioService.GuardarUsuario(usuario1);
                         await _clienteService.GuardarCliente(cliente);
                         TempData["Accion"] = "Registrar";
                         TempData["Mensaje"] = "Usuario registrado correctamente";
@@ -146,8 +159,16 @@ namespace Stilosoft.Controllers
         public async Task<IActionResult> CrearUsuario()
         {
             //var listaRoles = await _roleManager.Roles.ToListAsync();
-            var listaRoles = await _roleManager.Roles.Where(r => r.Name != "Admin").ToListAsync();
-            ViewBag.Roles = new SelectList(listaRoles, "Name", "Name");
+            var usuario = await _context.usuarios.Include(u => u.IdentityUser).ToListAsync();
+            if (!AdminDosExists(usuario.ToString()))
+            {
+                var listaRoles = await _roleManager.Roles.Where(r => r.Name != "Empleado").ToListAsync();
+                ViewBag.Roles = new SelectList(listaRoles, "Name", "Name");
+                return View();
+
+            };
+            var listaRolesDos = await _roleManager.Roles.Where(r => r.Name != "Empleado").Where(a => a.Name != "Administrador").ToListAsync(); 
+            ViewBag.Roles = new SelectList(listaRolesDos, "Name", "Name");
 
             return View();
         }
@@ -417,7 +438,7 @@ namespace Stilosoft.Controllers
             if (ModelState.IsValid)
             {
                 //buscamos el usuario
-                var usuario = await _userManager.FindByEmailAsync(resetearPasswordDto.Email);
+                var usuario = await _userManager.FindByEmailAsync(resetearPasswordDto.Email);              
 
                 if (usuario != null)
                 {
@@ -440,16 +461,61 @@ namespace Stilosoft.Controllers
             return View(resetearPasswordDto);
         }
 
+        /// Debe permitir al admin cambiar las contraseñas de los usuarios
+        [HttpGet]
+        public IActionResult ResetPassword(string id, IdentityUser identityUser)
+        {                                 
+            return View();                
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string id, CambiarPasswordDto cambiarPassWord)
+        {
+            if (ModelState.IsValid)
+            {
+                //buscamos el usuario
+                var usuario = await _userManager.FindByIdAsync(id);
+                var token = await _userManager.GeneratePasswordResetTokenAsync(usuario);            
+             try
+                {
+                    if (usuario != null)
+                    {
+                        //se resetea el password
+                        var result = await _userManager.ResetPasswordAsync(usuario, token, cambiarPassWord.Password);
+
+                    }
+                    TempData["Accion"] = "Cambiar contraseña";
+                    TempData["Mensaje"] = "Usuario cambio de contraseña correctamente";                    
+                    return RedirectToAction("index");
+                }
+                catch
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "Ingresaste algun valor no valido";
+                    return RedirectToAction("index");
+                }
+               
+            }
+            TempData["Accion"] = "Error";
+            TempData["Mensaje"] = "Ingresaste algun valor no valido";
+            return RedirectToAction("index");
+        }
+      
+        private bool ClienteExists(string id)
+        {
+            return _context.clientes.Any(e => e.ClienteId == id);
+        }
+        private bool AdminDosExists(string rol)
+        {
+            return _context.usuarios.Any(e => e.Rol == "Administrador");
+        }
+
         [HttpGet]
         public async Task<IActionResult> CerrarSesion()
         {
             await _signInManager.SignOutAsync();
             //_httpContextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("login", "Usuarios");
-        }
-        private bool ClienteExists(string id)
-        {
-            return _context.clientes.Any(e => e.ClienteId == id);
         }
     }
 }

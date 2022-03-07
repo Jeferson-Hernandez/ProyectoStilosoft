@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Stilosoft.Model.Entities.Cita>
+
+@{
+    ViewData["Title"] = "Citas";
+}
+<hr>
+<section class="content pt-3 pl-3 pr-3">
+    <p>
+        <a onclick="mostrarModalG('@Url.Action("Crear","Citas","null",Context.Request.Scheme)','Registrar cita')" class="btn btn-success"> Crear cita</a>
+    </p>
+    <table class="table table-bordered" id="tabla">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cliente.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hora)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Total)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EstadoCita.Nombre)
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cliente.Nombre) @Html.DisplayFor(modelItem => item.Cliente.Apellido)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hora)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstadoCita.Nombre)
+                    </td>
+                    <td>
+                        <a onclick="mostrarModalS('@Url.Action("CitaDetalleEstilistas","Citas", new {id = item.CitaId}, Context.Request.Scheme)', 'Detalle cita')" class="btn btn-dark"><i class="far fa-lightbulb"></i></a>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+@section Scripts{
+
+    <script src="~/js/tabla.js"></script>
+    <script src="~/js/modals.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
+                  alertify.alert('Guardar estilista', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]'});
+                 </text>
+        }
+        
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("AsignarEstilista")) { <text>
+        alertify.success('Estilista asignado correctamente.');
+                 </text>
+        }
+    </script>
+}

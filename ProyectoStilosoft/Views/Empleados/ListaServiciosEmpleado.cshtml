@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Stilosoft.Model.Entities.DetalleEmpleadoServicios>
+
+@{
+    ViewData["Title"] = "Empleado servicios";
+    Layout = null;
+}
+<hr>
+<section class="content pt-3 pl-3 pr-3">
+    <table class="table table-bordered" id="tabla">
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Duración</th>
+                <th>Costo</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Servicio.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Servicio.Duracion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Servicio.Costo)
+                    </td>
+                    <td>
+                        <form asp-controller="Empleados" asp-action="EliminarEmpleadoServicio" asp-route-id="@item.EmpleadoServicioId" class="d-inline">
+                            <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+@section Scripts{
+
+    <script src="~/js/tabla.js"></script>
+    <script src="~/js/modals.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
+                  alertify.alert('Guardar empleado', '@TempData["Mensaje"]', function () { alertify.success('Empleado guardado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]'});
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
+        alertify.alert('Editar empleado', '@TempData["Mensaje"]', function () { alertify.success('Empleado editado'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
+        alertify.success('Estado cambiado correctamente.');
+                 </text>
+        }
+    </script>
+
+}
