@@ -38,6 +38,8 @@ namespace ProyectoStilosoft.Controllers
 
             ViewBag.Clientes = new SelectList(cliente, "ClienteId", "DatosCliente");
             ViewBag.Empleados = new SelectList(await _empleado.ObtenerListaEmpleadosEstado(), "EmpleadoId", "Nombre");
+
+            return View();
         }
     }
 }
