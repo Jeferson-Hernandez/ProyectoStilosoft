@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Stilosoft.Model.DAL;
 
 namespace Stilosoft.Controllers
 {
@@ -19,16 +20,18 @@ namespace Stilosoft.Controllers
         private readonly IUsuarioService _usuarioService;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly AppDbContext _context;
 
-        
 
-        public ClientesController(IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IUsuarioService usuarioService)
+
+        public ClientesController(AppDbContext context, IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IUsuarioService usuarioService)
         {
             _clienteService = clienteService;
             _usuarioService = usuarioService;
             _roleManager = roleManager;
             _userManager = userManager;
-           
+            _context = context;
+
         }
         public async Task<IActionResult> Index()
         {
@@ -42,7 +45,7 @@ namespace Stilosoft.Controllers
         [HttpPost]
         public async Task<IActionResult> Crear(UsuarioViewModel usuarioViewModel)
         {
-            
+
             if (ModelState.IsValid)
             {
                 IdentityUser identityUser = new()
@@ -50,6 +53,12 @@ namespace Stilosoft.Controllers
                     UserName = usuarioViewModel.Email,
                     Email = usuarioViewModel.Email
                 };
+                if (DocumentoExists(usuarioViewModel.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index");
+                }
 
                 try
                 {
@@ -74,7 +83,7 @@ namespace Stilosoft.Controllers
                             Apellido = usuarioViewModel.Apellido,
                             Numero = usuarioViewModel.Numero,
                             Documento = usuarioViewModel.Documento,
-                            Rol = "Cliente",                    
+                            Rol = "Cliente",
                             Estado = true
                         };
                         await _usuarioService.GuardarUsuario(usuario1);
@@ -84,7 +93,7 @@ namespace Stilosoft.Controllers
                         return RedirectToAction("index");
                     }
                     TempData["Accion"] = "Error";
-                    TempData["Mensaje"] = "Ingresaste un valor inválido";
+                    TempData["Mensaje"] = "El correo ya existe";
                     return RedirectToAction("index");
                 }
                 catch (Exception)
@@ -204,5 +213,10 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return RedirectToAction("index");
         }
+        private bool DocumentoExists(string documento)
+        {
+            return _context.usuarios.Any(d => d.Documento == documento);
+        }
     }
+
 }
