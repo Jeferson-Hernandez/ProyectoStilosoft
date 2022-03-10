@@ -66,6 +66,12 @@ namespace Stilosoft.Controllers
                     Email = usuarioViewModel.Email
                     
                 };
+                if (DocumentoExists(usuarioViewModel.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index");
+                }
 
                 try
                 {
@@ -105,6 +111,11 @@ namespace Stilosoft.Controllers
                       TempData["Mensaje"] = "Ingresaste un valor inválido";
                       return View(usuarioViewModel);
                 }
+               // catch(EmailTokenProvider e)
+                //{
+                //    TempData["Accion"] = "Error";
+                  //  TempData["Mensaje"] = "Ingresaste un valor inválido" + e;
+                //}
                 catch (Exception)
                 {
                     TempData["Accion"] = "Error";
@@ -128,6 +139,7 @@ namespace Stilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
+               
                 var resultado = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RecordarMe, false);
                 if (resultado.Succeeded)
                 {
@@ -183,7 +195,13 @@ namespace Stilosoft.Controllers
                     UserName = crearUsuarioViewModel.Email,
                     Email = crearUsuarioViewModel.Email
                 };
-             
+                if (DocumentoExists(crearUsuarioViewModel.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index");
+                }
+
                 try
                 {
                     //Corregir error 
@@ -516,6 +534,10 @@ namespace Stilosoft.Controllers
             await _signInManager.SignOutAsync();
             //_httpContextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("login", "Usuarios");
+        }
+        private bool DocumentoExists(string documento)
+        {
+            return _context.usuarios.Any(d => d.Documento == documento);
         }
     }
 }

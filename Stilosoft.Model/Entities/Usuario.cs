@@ -25,7 +25,7 @@ namespace Stilosoft.Model.Entities
         [Column(TypeName = "nvarchar(10)")]
         public string Numero { get; set; }
         [DisplayName("Cédula")]
-        [Required(ErrorMessage = "La Cédula es obligatoria")]
+        [Required(ErrorMessage = "La cédula es obligatoria")]
         [Column(TypeName = "nvarchar(15)")]
         public string Documento { get; set; }
         public string Rol { get; set; }

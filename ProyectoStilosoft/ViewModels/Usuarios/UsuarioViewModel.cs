@@ -9,6 +9,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
 {
     public class UsuarioViewModel
     {
+
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
@@ -18,7 +19,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         public string Apellido { get; set; }
         [DisplayName("Celular")]
-        [Required(ErrorMessage = "El Numero es obligatorio")]
+        [Required(ErrorMessage = "El número es obligatorio")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Ingrese valores numéricos")]
         [StringLength(10, ErrorMessage = "Máximo 10 caracteres")]
         public string Numero { get; set; }
@@ -27,6 +28,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [RegularExpression("^[0-9]*$", ErrorMessage = "Ingrese valores numéricos")]
         [StringLength(10, ErrorMessage = "Máximo 10 caracteres")]
         public string Documento { get; set; }
+        [DisplayName("Correo")]
         [Required(ErrorMessage = "El email es obligatorio")]
         [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "Correo electrónico incorrecto")]
         [StringLength(70, ErrorMessage = "Máximo 70 caracteres")]
