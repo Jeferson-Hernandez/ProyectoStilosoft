@@ -16,15 +16,17 @@ namespace ProyectoStilosoft.Controllers
     public class EmpleadosController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IUsuarioService _usuarioService;
         private readonly IEmpleadoService _empleado;
         private readonly IServicioService _servicio;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public EmpleadosController(AppDbContext context, IEmpleadoService empleado, IServicioService servicio, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public EmpleadosController(AppDbContext context, IEmpleadoService empleado, IServicioService servicio, IUsuarioService usuarioService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _empleado = empleado;
+            _usuarioService = usuarioService;
             _servicio = servicio;
             _userManager = userManager;
             _roleManager = roleManager;
@@ -78,6 +80,19 @@ namespace ProyectoStilosoft.Controllers
                                 FechaNacimiento = serviciosEmpleado.FechaNacimiento.Date,
                                 Estado = true
                             };
+
+                            Usuario usuario1 = new()
+                            {
+                                UsuarioId = usuario.Id,
+                                Nombre = serviciosEmpleado.Nombre,
+                                Apellido = serviciosEmpleado.Apellidos,
+                                Numero = "0",
+                                Documento = serviciosEmpleado.Documento,
+                                Rol = "Empleado",
+                                Estado = true
+                            };
+
+                            await _usuarioService.GuardarUsuario(usuario1);
                             _context.Add(empleado);
                             _context.SaveChanges();
 
