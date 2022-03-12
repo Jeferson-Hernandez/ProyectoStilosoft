@@ -162,16 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "818aec65-6858-4715-9e83-25804d2f2b6f",
+                            ConcurrencyStamp = "82fdcc4f-554e-4636-9adc-bc0a330613b0",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECLT4GPecKZCbV1WC2V8slp8px8mfVdMBBXrzicRTvXvWQV/CEd7AjVM2GbvxNvykw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEEl6orSyBThWqs533AUjn2A7spMKl4jI9zBMlh51e6mqP8DPZ6mvPWBMDWSmtjUEWQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ede21964-3047-4bce-93cb-7eb0a791951d",
+                            SecurityStamp = "628621fa-a82d-428d-9404-cac5cd72f44c",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -442,6 +442,10 @@ namespace Stilosoft.Model.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Contacto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Correo")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
