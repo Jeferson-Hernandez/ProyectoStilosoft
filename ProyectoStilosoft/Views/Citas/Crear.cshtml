@@ -1,5 +1,86 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ProyectoStilosoft.ViewModels.Citas.CitasCrearViewModel
+
 @{
+    ViewData["Title"] = "Crear cita";
 }
+
+<div class="container-fluid">
+    <br />
+    <form asp-action="CrearSolicitud" asp-controller="SolicitudServicio" method="post">
+        
+        <div class="row">
+            <div class="col-8">
+                <div class="row">
+                    <div class="form-group col-xs-6 pl-2">
+                        <h3>Cliente</h3>
+                        <select asp-items="ViewBag.Clientes" asp-for="ClienteId" class="form-control "></select>
+                        <span asp-validation-for="ClienteId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-xs-2 pl-2">
+                        <h3> Fecha</h3>
+                        <input value="" type="date" asp-for="Fecha" id="fechaHora" class="form-control" />
+                    </div>
+                    <div class="form-group col-xs-2 pl-2">
+                        <h3> Hora</h3>
+                        <input value="" type="time" asp-for="Hora" id="fechaHora" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 text-right">
+                <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-info mt-4 mr-5" />
+            </div>
+        </div>
+        <hr />
+        <h3 class="text">Seleccione los servicios</h3>
+        <br />
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                    <div class="form-group col-xs-4 pl-2">
+                        <h3>Servicio</h3>
+                        <select id="servicio" class="form-control">
+                            <option value="select">Seleccione</option>
+                            @foreach (var item in Model.Servicios)
+                            {
+                                <option duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-xs-4 pl-2">
+                        <h3>Valor servicio</h3>
+                        <input type="number" placeholder="Valor servicio" class="form-control" id="valorServicio" />
+                    </div>
+                    <div class="form-group col-xs-4 pl-2">
+                        <h3>Estilista</h3>
+                        <select asp-items="ViewBag.Estilistas" class="form-control" id="estilistaSolicitud"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-7">
+                <h2>Lista de servicios</h2>
+                <input type="hidden" id="listaServicios" />
+                <table id="tablaServicios" class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <td>Servicio</td>
+                            <td>Duración</td>
+                            <td>Estilista</td>
+                            <td>Valor</td>
+                            <td>Eliminar</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                <h4>Total: <span id="totalServicios"></span></h4>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        <hr />        
+    </form>
+</div>

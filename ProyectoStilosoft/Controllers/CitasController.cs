@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProyectoStilosoft.ViewModels.Citas;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.DAL;
+using Stilosoft.Model.Entities;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,9 +39,11 @@ namespace ProyectoStilosoft.Controllers
             }).ToListAsync();
 
             ViewBag.Clientes = new SelectList(cliente, "ClienteId", "DatosCliente");
-            ViewBag.Empleados = new SelectList(await _empleado.ObtenerListaEmpleadosEstado(), "EmpleadoId", "Nombre");
 
-            return View();
+            CitasCrearViewModel cita = new();
+            cita.Servicios = await _servicio.ObtenerListaServiciosEstado();
+
+            return View(cita);
         }
     }
 }

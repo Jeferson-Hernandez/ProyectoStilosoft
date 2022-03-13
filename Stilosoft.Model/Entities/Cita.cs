@@ -27,6 +27,6 @@ namespace Stilosoft.Model.Entities
 
         public virtual EstadoCita EstadoCita { get; set; }
         public virtual Cliente Cliente { get; set; }
-        public virtual List<DetalleCitaServicios> DetalleCitaServicios { get; set; }
+        public virtual DetalleCitaServicios DetalleCitaServicios { get; set; }
     }
 }
