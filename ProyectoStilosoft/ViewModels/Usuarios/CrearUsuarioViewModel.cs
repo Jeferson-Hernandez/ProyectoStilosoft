@@ -11,6 +11,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
     public class CrearUsuarioViewModel
     {
         [DisplayName("Nombres *")]
+        [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
         public string Nombre { get; set; }

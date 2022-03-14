@@ -14,6 +14,8 @@ using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Stilosoft.Model.DAL;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Stilosoft.Controllers
 {
@@ -58,8 +60,17 @@ namespace Stilosoft.Controllers
         [HttpPost]
         public async Task<IActionResult> Registrar(UsuarioViewModel usuarioViewModel)
         {
+            var response = Request.Form["g-recaptcha-response"];
+            string secretKey = "6LcQEdoeAAAAAMOdBpmlaZFoSLWdXboAc7UOiAWm";
+            var client = new System.Net.WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+
+            var status = (bool)obj.SelectToken("success");
+            ViewBag.Message = status ? "Google reCaptcha validation success" : "Google reCaptcha validation failed";
+        
             if (ModelState.IsValid)
-            {
+            {               
                 IdentityUser identityUser = new()
                 {
                     UserName = usuarioViewModel.Email,
@@ -70,8 +81,8 @@ namespace Stilosoft.Controllers
                 {
                     TempData["Accion"] = "Error";
                     TempData["Mensaje"] = "El documento ya se encuentra registrado";
-                    return RedirectToAction("index");
-                }
+                    return RedirectToAction("login", "Usuarios");
+                }         
 
                 try
                 {
@@ -100,22 +111,17 @@ namespace Stilosoft.Controllers
                             Rol = "Cliente",
                             Estado = true
                            
-                        };
+                        };                      
                         await _usuarioService.GuardarUsuario(usuario1);
                         await _clienteService.GuardarCliente(cliente);
                         TempData["Accion"] = "Registrar";
                         TempData["Mensaje"] = "Usuario registrado correctamente";
                         return RedirectToAction("login", "Usuarios");
-                    }                    
-                      TempData["Accion"] = "Error";
-                      TempData["Mensaje"] = "Ingresaste un valor inválido";
-                      return View(usuarioViewModel);
-                }
-               // catch(EmailTokenProvider e)
-                //{
-                //    TempData["Accion"] = "Error";
-                  //  TempData["Mensaje"] = "Ingresaste un valor inválido" + e;
-                //}
+                    }
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El correo ya existe";
+                    return RedirectToAction("login", "Usuarios");
+                }               
                 catch (Exception)
                 {
                     TempData["Accion"] = "Error";
