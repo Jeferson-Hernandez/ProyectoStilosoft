@@ -79,6 +79,11 @@ namespace Stilosoft.Model.DAL
                 {
                     EstadoCitaId = 3,
                     Nombre = "Finalizada"
+                },
+                new EstadoCita
+                {
+                    EstadoCitaId = 4,
+                    Nombre = "Cancelada"
                 }
                 );
         }

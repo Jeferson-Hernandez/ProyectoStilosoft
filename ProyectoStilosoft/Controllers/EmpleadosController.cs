@@ -285,6 +285,16 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
+        [HttpPost]
+        public IActionResult obtenerEmpleados(int servicioId)
+        {
+            return Json(_context.detalleEmpleados.Include(em => em.Empleado).Include(se => se.Servicio)
+                .Where(s => s.ServicioId == servicioId).Where(es => es.Empleado.Estado == true).Select(e => new
+            {
+                EmpleadoId = e.EmpleadoId,
+                EmpleadoNombre = e.Empleado.Nombre
+            }).ToList());
+        }
 
         private bool DocumentoExists(string documento)
         {

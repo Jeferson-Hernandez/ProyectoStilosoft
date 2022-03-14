@@ -34,7 +34,13 @@ namespace ProyectoStilosoft.ViewModels.Proveedores
         [RegularExpression("^[0-9]*$", ErrorMessage = "Ingrese valores numéricos")]
         public string Celular { get; set; }
 
-        [DisplayName("Contacto *")]
+        [DisplayName("Correo")]
+        [Required(ErrorMessage = "El Correo es obligatorio")]
+        [StringLength(50, ErrorMessage = "Máximo 50 caracteres")]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "Correo electrónico incorrecto")]
+        public string Correo { get; set; }
+
+        [DisplayName("Contacto")]
         [Required(ErrorMessage = "El correo es obligatorio")]
         [StringLength(50, ErrorMessage = "Máximo 50 caracteres")]
         [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres válidos")]
