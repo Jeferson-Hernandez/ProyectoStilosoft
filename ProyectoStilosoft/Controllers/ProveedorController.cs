@@ -40,6 +40,7 @@ namespace ProyectoStilosoft.Controllers
                     Nombre = proveedorViewModels.Nombre,
                     Direccion = proveedorViewModels.Direccion,
                     Celular = proveedorViewModels.Celular,
+                    Correo = proveedorViewModels.Correo,
                     Contacto = proveedorViewModels.Contacto,
                     Estado = true
                 };
@@ -85,6 +86,7 @@ namespace ProyectoStilosoft.Controllers
                 Nombre = proveedor.Nombre,
                 Direccion = proveedor.Direccion,
                 Celular = proveedor.Celular,
+                Correo = proveedor.Correo,
                 Contacto = proveedor.Contacto,
                 Estado = proveedor.Estado,
             };
@@ -102,6 +104,7 @@ namespace ProyectoStilosoft.Controllers
                     Nombre = proveedorViewModels.Nombre,
                     Direccion = proveedorViewModels.Direccion,
                     Celular = proveedorViewModels.Celular,
+                    Correo = proveedorViewModels.Correo,
                     Contacto = proveedorViewModels.Contacto,
                     Estado = proveedorViewModels.Estado
                 };

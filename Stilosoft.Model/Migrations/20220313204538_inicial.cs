@@ -69,6 +69,7 @@ namespace Stilosoft.Model.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Direccion = table.Column<string>(type: "nvarchar(25)", nullable: false),
                     Celular = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    Correo = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Contacto = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -367,7 +368,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "12f460eb-4f4f-4664-ae3c-406de5f70747", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEOHfw5qwb008YmR9rbOZt1Rh35eMf8Ay7sgy+CZUqscOn2iXNuLJN34H0eEVA8JecQ==", "1234567890", false, "393bf2bf-4d7e-4b7d-9038-eb544a53c68a", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "f2fb480f-300b-4c5a-bbc5-68f2fa80ae9c", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAECxCNJAdL1NXVpt91hXfqOjmNBf2UGN6sS5twXoRGzQMJxgaab3+cdGKcJI/ABSn+A==", "1234567890", false, "b2cea70a-e8d2-41f0-ac91-0eff43498e4f", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",
@@ -436,7 +437,8 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_detalleCitas_CitaId",
                 table: "detalleCitas",
-                column: "CitaId");
+                column: "CitaId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_detalleCitas_EmpleadoId",

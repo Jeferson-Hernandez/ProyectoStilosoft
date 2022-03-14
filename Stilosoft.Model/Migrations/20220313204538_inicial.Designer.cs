@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220303194940_inicial")]
+    [Migration("20220313204538_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,16 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "12f460eb-4f4f-4664-ae3c-406de5f70747",
+                            ConcurrencyStamp = "f2fb480f-300b-4c5a-bbc5-68f2fa80ae9c",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOHfw5qwb008YmR9rbOZt1Rh35eMf8Ay7sgy+CZUqscOn2iXNuLJN34H0eEVA8JecQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECxCNJAdL1NXVpt91hXfqOjmNBf2UGN6sS5twXoRGzQMJxgaab3+cdGKcJI/ABSn+A==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "393bf2bf-4d7e-4b7d-9038-eb544a53c68a",
+                            SecurityStamp = "b2cea70a-e8d2-41f0-ac91-0eff43498e4f",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -341,7 +341,8 @@ namespace Stilosoft.Model.Migrations
 
                     b.HasKey("CitaServicioId");
 
-                    b.HasIndex("CitaId");
+                    b.HasIndex("CitaId")
+                        .IsUnique();
 
                     b.HasIndex("EmpleadoId");
 
@@ -444,6 +445,10 @@ namespace Stilosoft.Model.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Contacto")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Correo")
                         .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
@@ -606,8 +611,8 @@ namespace Stilosoft.Model.Migrations
             modelBuilder.Entity("Stilosoft.Model.Entities.DetalleCitaServicios", b =>
                 {
                     b.HasOne("Stilosoft.Model.Entities.Cita", "Cita")
-                        .WithMany("DetalleCitaServicios")
-                        .HasForeignKey("CitaId")
+                        .WithOne("DetalleCitaServicios")
+                        .HasForeignKey("Stilosoft.Model.Entities.DetalleCitaServicios", "CitaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

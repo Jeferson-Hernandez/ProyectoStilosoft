@@ -6,7 +6,8 @@
 <hr>
 <section class="content pt-3 pl-3 pr-3">
     <p>
-        <a onclick="mostrarModalG('@Url.Action("Crear","Citas","null",Context.Request.Scheme)','Registrar cita')" class="btn btn-success"> Crear cita</a>
+        @*<a onclick="mostrarModalG('@Url.Action("Crear","Citas","null",Context.Request.Scheme)','Registrar cita')" class="btn btn-success"> Crear cita</a>*@
+        <a asp-action="Crear" asp-controller="Citas" class="btn btn-success"> Crear cita</a>
     </p>
     <table class="table table-bordered" id="tabla">
         <thead>
@@ -50,10 +51,29 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.EstadoCita.Nombre)
                     </td>
+                    @if(item.EstadoCitaId == 1)
+                    {
                     <td>
-                        <a onclick="mostrarModalS('@Url.Action("CitaDetalleEstilistas","Citas", new {id = item.CitaId}, Context.Request.Scheme)', 'Detalle cita')" class="btn btn-dark"><i class="far fa-lightbulb"></i></a>
-                        
+                        <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="2" class="btn btn-primary"><i class="fas fa-spinner"></i></a>
+                        -|- <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="3" class="btn btn-success"><i class="fas fa-check-circle"></i></a>
+                        -|- <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="4" class="btn btn-danger"><i class="fas fa-times-circle"></i></a>
                     </td>
+                    }else if(item.EstadoCitaId == 2)
+                    {
+                    <td>
+                        <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="3" class="btn btn-success"><i class="fas fa-check-circle"></i></a>
+                    </td>
+                    }else if(item.EstadoCitaId == 3)
+                    {
+                    <td>
+                        Cita finalizada
+                    </td>
+                    }else if (item.EstadoCitaId == 4)
+                    {
+                    <td>
+                        Cita cancelada
+                    </td>
+                    }
                 </tr>
             }
         </tbody>
@@ -66,16 +86,15 @@
     <script src="~/js/modals.js"></script>
     <script>
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
-                  alertify.alert('Guardar estilista', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
+                  alertify.alert('Crear cita', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
         alertify.alert('Error', '@TempData["Mensaje"]'});
                  </text>
         }
-        
-        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("AsignarEstilista")) { <text>
-        alertify.success('Estilista asignado correctamente.');
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
+        alertify.success('Estado cambiado correctamente.');
                  </text>
         }
     </script>
