@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<hr>
+<section class="content pt-3 pl-3 pr-3">
+    <p>
+        <a asp-action="index" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de ventas</a>
+
+        <a asp-action="gpastel" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de servicios</a>
+
+        <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
+    </p>
+    <table class="table table-bordered" id="tabla">
+        <thead>
+            <tr>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</section>
+<div id="container"></div>
+
+@section Scripts{
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+
+    <script src="~/js/columna.js"></script>
+
+}
