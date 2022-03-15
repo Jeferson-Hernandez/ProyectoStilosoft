@@ -21,7 +21,7 @@ namespace Stilosoft.Business.Business
 
         public async Task<IEnumerable<Cita>> ObtenerListaCitas()
         {
-            return await _context.citas.Include(c => c.Cliente).Include(e => e.EstadoCita).ToListAsync();
+            return await _context.citas.Include(c => c.Cliente).Include(e => e.EstadoCita).Include(d => d.DetalleCitaServicios).ToListAsync();
         }
         public async Task<Cita> ObtenerCitaPorId(int id)
         {
@@ -30,6 +30,11 @@ namespace Stilosoft.Business.Business
         public async Task GuardarCita(Cita cita)
         {
             _context.Add(cita);
+            await _context.SaveChangesAsync();
+        }
+        public async Task EditarCita(Cita cita)
+        {
+            _context.Update(cita);
             await _context.SaveChangesAsync();
         }
     }

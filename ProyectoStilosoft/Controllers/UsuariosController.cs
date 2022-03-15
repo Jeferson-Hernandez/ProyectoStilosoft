@@ -28,6 +28,7 @@ namespace Stilosoft.Controllers
         private readonly IUsuarioService _usuarioService;
         private readonly AppDbContext _context;
         const string SesionNombre = "_Nombre";
+        const string SesionId = "_ClienteId";
 
         public UsuariosController(IClienteService clienteService, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUsuarioService usuarioService, AppDbContext context)
         {
@@ -142,6 +143,7 @@ namespace Stilosoft.Controllers
                     {
                         var cliente = await _clienteService.ObtenerClientePorId(usuario.Id);
                         _httpContextAccessor.HttpContext.Session.SetString(SesionNombre, cliente.Nombre);
+                        _httpContextAccessor.HttpContext.Session.SetString(SesionId, cliente.ClienteId);
                         return RedirectToAction("index", "Landing");
                     }
                     return RedirectToAction("index", "Usuarios");

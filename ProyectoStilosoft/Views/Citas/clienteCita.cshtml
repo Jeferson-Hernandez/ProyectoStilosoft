@@ -1,0 +1,115 @@
+﻿@model ProyectoStilosoft.ViewModels.Citas.CitasCrearViewModel
+
+@{
+    ViewData["Title"] = "Crear cita";
+    Layout = null;
+}
+<link href="~/lib/jquery-timepicker/jquery.timepicker.css" rel="stylesheet" />
+<link href="~/lib/jquery-ui-1.13.1/jquery-ui.css" rel="stylesheet" />
+@section Styles{
+
+
+}
+<div class="container-fluid">
+    <form asp-action="clienteCita" asp-controller="Citas" method="post">
+        <input type="hidden" asp-for="Total" id="totalCita" />
+        <input type="hidden" asp-for="ClienteId" id="totalCita" />
+        <h3 class="text">Datos de la cita</h3>
+        <br />
+        <div class="row">
+            <div class="col-3">
+                <div class="form-group">
+                    <h5>Servicio</h5>
+                    <select asp-for="ServicioId" id="servicio" class="form-control">
+                        <option value="seleccione">Seleccione</option>
+                        @foreach (var item in Model.Servicios)
+                        {
+                            <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group ">
+                    <h5>Empleados</h5>
+                    <select asp-for="EmpleadoId" class="form-control" id="empleadoDropdown">
+                    </select>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <h5> Fecha</h5>
+                    <input asp-for="Fecha" id="datepicker" class="datepicker form-control" />
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <h5> Hora</h5>
+                    <input asp-for="Hora" id="timepicker" class="timepicker form-control" />
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-info mt-4 mr-5" />
+            </div><br /><br /><br /><br />
+        </div>
+    </form>
+</div>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script src="~/lib/jquery-timepicker/jquery.timepicker.js"></script>
+<script src="~/lib/jquery-ui-1.13.1/jquery-ui.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        
+        $(function () {
+            $('input.timepicker').timepicker({
+                timeFormat: 'h:mm p',
+                interval: 30,
+                minTime: '10',
+                maxTime: '6:00pm',
+                defaultTime: '10',
+                startTime: '10:00',
+                dynamic: true,
+                dropdown: true,
+                scrollbar: true
+            });
+        });
+        $(function () {
+            $("input.datepicker").datepicker({
+                minDate: -0, maxDate: "+1M"
+            });
+        });
+    });
+</script>
+<script>
+    $("#servicio").change(function () {
+        let valorSeleccionado = $(this).val();
+        let servicio = $("#servicio option:selected");
+        $('#totalCita').val(servicio.attr("precio"))
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/Empleados/obtenerEmpleados',
+            data: { servicioId: valorSeleccionado },
+            success:
+                function (respuesta) {
+                    let opciones = '<option value="0">Seleccione</option>';
+                    for (let i = 0; i < respuesta.length; i++) {
+                        opciones += '<option value="' + respuesta[i].empleadoId + '">' + respuesta[i].empleadoNombre + '</option>';
+                    }
+                    $("#empleadoDropdown").html(opciones);
+                },
+            error:
+                function (respuesta) {
+                    alert('Algo salió mal, recarge la página nuevamente ');
+                }
+        });
+    })
+</script>
+
+@section Scripts{
+
+}

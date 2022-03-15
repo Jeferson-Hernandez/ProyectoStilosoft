@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220312154007_inicial")]
+    [Migration("20220315003036_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,16 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f6cb31a8-fba1-4a52-b19f-e611ffd9e1e1",
+                            ConcurrencyStamp = "b2e11189-d58f-4a48-ad14-301ca737e640",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGyvpIKKV3FOvp4Nn+1ePkArjI1fUC6ufiLvV6xMrtlpmCt7dqhcV3uu1URbc3q8lA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELGTogMKQej3S0dt3cIo0MGxzFwkCh8ITZ0KQ72FFyUiK5FYdx9/gpCSsthshRWBTw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a39d79e5-9593-4c7c-974b-e35e87213b41",
+                            SecurityStamp = "829db9de-8063-40fb-b9da-20ced0401c30",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -279,8 +279,9 @@ namespace Stilosoft.Model.Migrations
                     b.Property<int>("EstadoCitaId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("Date");
+                    b.Property<string>("Fecha")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Hora")
                         .IsRequired()
@@ -341,7 +342,8 @@ namespace Stilosoft.Model.Migrations
 
                     b.HasKey("CitaServicioId");
 
-                    b.HasIndex("CitaId");
+                    b.HasIndex("CitaId")
+                        .IsUnique();
 
                     b.HasIndex("EmpleadoId");
 
@@ -429,6 +431,11 @@ namespace Stilosoft.Model.Migrations
                         {
                             EstadoCitaId = 3,
                             Nombre = "Finalizada"
+                        },
+                        new
+                        {
+                            EstadoCitaId = 4,
+                            Nombre = "Cancelada"
                         });
                 });
 
@@ -610,8 +617,8 @@ namespace Stilosoft.Model.Migrations
             modelBuilder.Entity("Stilosoft.Model.Entities.DetalleCitaServicios", b =>
                 {
                     b.HasOne("Stilosoft.Model.Entities.Cita", "Cita")
-                        .WithMany("DetalleCitaServicios")
-                        .HasForeignKey("CitaId")
+                        .WithOne("DetalleCitaServicios")
+                        .HasForeignKey("Stilosoft.Model.Entities.DetalleCitaServicios", "CitaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
