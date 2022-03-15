@@ -368,11 +368,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-<<<<<<< HEAD:Stilosoft.Model/Migrations/20220310185558_inicial.cs
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "6f00e11e-83ad-4298-b71e-0ecb89720d9c", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAED8I6Xjq/yg2cXXcU0auCx+VIK4iWShp35STwUtjR4nK1ZdIMxfSR1wBGACEql/ybA==", "1234567890", false, "d16233c4-c73c-47df-80f8-1a2239e41c91", false, "admin@gmail.com" });
-=======
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "f2fb480f-300b-4c5a-bbc5-68f2fa80ae9c", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAECxCNJAdL1NXVpt91hXfqOjmNBf2UGN6sS5twXoRGzQMJxgaab3+cdGKcJI/ABSn+A==", "1234567890", false, "b2cea70a-e8d2-41f0-ac91-0eff43498e4f", false, "admin@gmail.com" });
->>>>>>> master:Stilosoft.Model/Migrations/20220313204538_inicial.cs
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "c42cc419-fde3-4ca1-bf36-a4062a1ee237", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAELuFnrVqLDEtbm2qPT9D23HOHgL68GIverkiVioNDvtJABhX913ALlhcXK6DBTCM6g==", "1234567890", false, "f09cdc5d-f3a4-46ec-8095-7ea203d9d61f", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",
@@ -381,7 +377,8 @@ namespace Stilosoft.Model.Migrations
                 {
                     { 1, "Confirmada" },
                     { 2, "En curso" },
-                    { 3, "Finalizada" }
+                    { 3, "Finalizada" },
+                    { 4, "Cancelada" }
                 });
 
             migrationBuilder.InsertData(

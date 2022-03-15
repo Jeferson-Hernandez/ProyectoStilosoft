@@ -162,27 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-<<<<<<< HEAD
-                            ConcurrencyStamp = "6f00e11e-83ad-4298-b71e-0ecb89720d9c",
-=======
-                            ConcurrencyStamp = "f2fb480f-300b-4c5a-bbc5-68f2fa80ae9c",
->>>>>>> master
+                            ConcurrencyStamp = "c42cc419-fde3-4ca1-bf36-a4062a1ee237",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-<<<<<<< HEAD
-                            PasswordHash = "AQAAAAEAACcQAAAAED8I6Xjq/yg2cXXcU0auCx+VIK4iWShp35STwUtjR4nK1ZdIMxfSR1wBGACEql/ybA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELuFnrVqLDEtbm2qPT9D23HOHgL68GIverkiVioNDvtJABhX913ALlhcXK6DBTCM6g==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d16233c4-c73c-47df-80f8-1a2239e41c91",
-=======
-                            PasswordHash = "AQAAAAEAACcQAAAAECxCNJAdL1NXVpt91hXfqOjmNBf2UGN6sS5twXoRGzQMJxgaab3+cdGKcJI/ABSn+A==",
-                            PhoneNumber = "1234567890",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "b2cea70a-e8d2-41f0-ac91-0eff43498e4f",
->>>>>>> master
+                            SecurityStamp = "f09cdc5d-f3a4-46ec-8095-7ea203d9d61f",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -439,6 +428,11 @@ namespace Stilosoft.Model.Migrations
                         {
                             EstadoCitaId = 3,
                             Nombre = "Finalizada"
+                        },
+                        new
+                        {
+                            EstadoCitaId = 4,
+                            Nombre = "Cancelada"
                         });
                 });
 
