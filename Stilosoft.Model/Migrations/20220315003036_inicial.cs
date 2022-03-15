@@ -274,7 +274,7 @@ namespace Stilosoft.Model.Migrations
                     CitaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClienteId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Fecha = table.Column<DateTime>(type: "Date", nullable: false),
+                    Fecha = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Hora = table.Column<string>(type: "nvarchar(20)", nullable: false),
                     Total = table.Column<long>(type: "bigint", nullable: false),
                     EstadoCitaId = table.Column<int>(type: "int", nullable: false)
@@ -368,7 +368,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "f2fb480f-300b-4c5a-bbc5-68f2fa80ae9c", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAECxCNJAdL1NXVpt91hXfqOjmNBf2UGN6sS5twXoRGzQMJxgaab3+cdGKcJI/ABSn+A==", "1234567890", false, "b2cea70a-e8d2-41f0-ac91-0eff43498e4f", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "b2e11189-d58f-4a48-ad14-301ca737e640", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAELGTogMKQej3S0dt3cIo0MGxzFwkCh8ITZ0KQ72FFyUiK5FYdx9/gpCSsthshRWBTw==", "1234567890", false, "829db9de-8063-40fb-b9da-20ced0401c30", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",
@@ -377,7 +377,8 @@ namespace Stilosoft.Model.Migrations
                 {
                     { 1, "Confirmada" },
                     { 2, "En curso" },
-                    { 3, "Finalizada" }
+                    { 3, "Finalizada" },
+                    { 4, "Cancelada" }
                 });
 
             migrationBuilder.InsertData(

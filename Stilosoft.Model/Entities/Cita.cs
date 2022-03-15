@@ -15,9 +15,8 @@ namespace Stilosoft.Model.Entities
         [ForeignKey("Cliente")]
         public string ClienteId { get; set; }
         [Required(ErrorMessage = "La fecha es obligatoria")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        [Column(TypeName = "Date")]
-        public DateTime Fecha { get; set; }
+        [Column(TypeName = "nvarchar(10)")]
+        public string Fecha { get; set; }
         [Required(ErrorMessage = "La hora es obligatoria")]
         [Column(TypeName = "nvarchar(20)")]
         public string Hora { get; set; }

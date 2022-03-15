@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220313204538_inicial")]
+    [Migration("20220315003036_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,16 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f2fb480f-300b-4c5a-bbc5-68f2fa80ae9c",
+                            ConcurrencyStamp = "b2e11189-d58f-4a48-ad14-301ca737e640",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECxCNJAdL1NXVpt91hXfqOjmNBf2UGN6sS5twXoRGzQMJxgaab3+cdGKcJI/ABSn+A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELGTogMKQej3S0dt3cIo0MGxzFwkCh8ITZ0KQ72FFyUiK5FYdx9/gpCSsthshRWBTw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b2cea70a-e8d2-41f0-ac91-0eff43498e4f",
+                            SecurityStamp = "829db9de-8063-40fb-b9da-20ced0401c30",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -279,8 +279,9 @@ namespace Stilosoft.Model.Migrations
                     b.Property<int>("EstadoCitaId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Fecha")
-                        .HasColumnType("Date");
+                    b.Property<string>("Fecha")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Hora")
                         .IsRequired()
@@ -430,6 +431,11 @@ namespace Stilosoft.Model.Migrations
                         {
                             EstadoCitaId = 3,
                             Nombre = "Finalizada"
+                        },
+                        new
+                        {
+                            EstadoCitaId = 4,
+                            Nombre = "Cancelada"
                         });
                 });
 
