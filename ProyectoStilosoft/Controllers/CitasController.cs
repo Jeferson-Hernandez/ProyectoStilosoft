@@ -94,6 +94,60 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index");
         }
+        [HttpGet]
+        public async Task<IActionResult> clienteCita(string id)
+        {
+            CitasCrearViewModel cita = new();
+            cita.ClienteId = id;
+            cita.Servicios = await _servicio.ObtenerListaServiciosEstado();
+            return View(cita);
+        }
+        public async Task<IActionResult> clienteCita(CitasCrearViewModel citaDatos)
+        {
+            if (ModelState.IsValid)
+            {
+                using (var transaction = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        Cita cita = new()
+                        {
+                            ClienteId = citaDatos.ClienteId,
+                            Fecha = citaDatos.Fecha,
+                            Hora = citaDatos.Hora,
+                            Total = citaDatos.Total,
+                            EstadoCitaId = 1
+                        };
+                        _context.Add(cita);
+                        await _context.SaveChangesAsync();
+
+                        DetalleCitaServicios citaServicio = new()
+                        {
+                            CitaId = cita.CitaId,
+                            EmpleadoId = citaDatos.EmpleadoId,
+                            ServicioId = citaDatos.ServicioId
+                        };
+                        _context.Add(citaServicio);
+                        await _context.SaveChangesAsync();
+
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        TempData["Accion"] = "Error";
+                        TempData["Mensaje"] = "No se pudo completar la operación";
+                        return RedirectToAction("index");
+                    }
+                }
+                TempData["Accion"] = "Crear";
+                TempData["Mensaje"] = "Cita creada correctamente";
+                return RedirectToAction("index");
+            }
+            TempData["Accion"] = "Error";
+            TempData["Mensaje"] = "Se ingresó un valor inválido";
+            return RedirectToAction("index");
+        }
         public async Task<IActionResult> citaEstados(int citaId, int estadoId)
         {
             try

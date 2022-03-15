@@ -22,3 +22,15 @@ mostrarModalS = (url, title) => {
         }
     })
 }
+
+mostrarModalXl = (url, title) => {
+    $.ajax({
+        type: 'GET',
+        url: url,
+        success: function (res) {
+            $('#form-modal-xl .modal-body').html(res)
+            $('#form-modal-xl .modal-title').html(title)
+            $('#form-modal-xl').modal('show');
+        }
+    })
+}

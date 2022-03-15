@@ -7,7 +7,7 @@ namespace ProyectoStilosoft.ViewModels.Citas
     public class CitasCrearViewModel
     {
         public string ClienteId { get; set; }
-        public DateTime Fecha { get; set; }
+        public string Fecha { get; set; }
         public string Hora { get; set; }
         public long Total { get; set; }
         public string EmpleadoId { get; set; }
