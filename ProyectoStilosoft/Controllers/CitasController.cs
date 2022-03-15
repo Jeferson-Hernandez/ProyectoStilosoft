@@ -95,10 +95,9 @@ namespace ProyectoStilosoft.Controllers
             return RedirectToAction("index");
         }
         [HttpGet]
-        public async Task<IActionResult> clienteCita(string id)
+        public async Task<IActionResult> clienteCita()
         {
             CitasCrearViewModel cita = new();
-            cita.ClienteId = id;
             cita.Servicios = await _servicio.ObtenerListaServiciosEstado();
             return View(cita);
         }
@@ -106,6 +105,12 @@ namespace ProyectoStilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (citaDatos.ClienteId == null)
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "No se pudo completar la operación";
+                    return RedirectToAction("Index", "Landing");
+                }
                 using (var transaction = _context.Database.BeginTransaction())
                 {
                     try
@@ -137,16 +142,16 @@ namespace ProyectoStilosoft.Controllers
                         transaction.Rollback();
                         TempData["Accion"] = "Error";
                         TempData["Mensaje"] = "No se pudo completar la operación";
-                        return RedirectToAction("index");
+                        return RedirectToAction("index","Landing");
                     }
                 }
                 TempData["Accion"] = "Crear";
                 TempData["Mensaje"] = "Cita creada correctamente";
-                return RedirectToAction("index");
+                return RedirectToAction("index", "Landing");
             }
             TempData["Accion"] = "Error";
             TempData["Mensaje"] = "Se ingresó un valor inválido";
-            return RedirectToAction("index");
+            return RedirectToAction("index","Landing");
         }
         public async Task<IActionResult> citaEstados(int citaId, int estadoId)
         {
