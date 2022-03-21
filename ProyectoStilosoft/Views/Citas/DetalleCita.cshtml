@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Stilosoft.Model.Entities.DetalleCitaServicios>
+
+@{
+    ViewData["Title"] = "Detalle Cita";
+    Layout = null;
+}
+
+
+<section class="content">
+    <div class="row">
+        <div class="col-12">
+            Información de la cita <br />
+            <ul>
+                @foreach (var item in Model)
+                {
+                <li>
+                    Empleado: @Html.DisplayFor(modelItem => item.Empleado.Nombre) @Html.DisplayFor(modelItem => item.Empleado.Apellidos) | Servicio: @Html.DisplayFor(modelItem => item.Servicio.Nombre)
+                    <br />Fecha: @Html.DisplayFor(modelItem => item.Cita.Fecha) | Duración: @Html.DisplayFor(modelItem => item.Servicio.Duracion) min | Valor: $@Html.DisplayFor(modelItem => item.Servicio.Costo)
+                </li>                    
+                }
+            </ul>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts{
+    <script src="~/js/modals.js"></script>
+}

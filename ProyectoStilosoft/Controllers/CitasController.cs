@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ProyectoStilosoft.ViewModels.Citas;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.DAL;
 using Stilosoft.Model.Entities;
 using System;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
@@ -17,13 +20,17 @@ namespace ProyectoStilosoft.Controllers
         private readonly ICitaService _cita;
         private readonly IServicioService _servicio;
         private readonly IEmpleadoService _empleado;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IConfiguration _configuration;
 
-        public CitasController(AppDbContext context, ICitaService citaService, IServicioService servicio, IEmpleadoService empleado)
+        public CitasController(AppDbContext context, ICitaService citaService, IServicioService servicio, IEmpleadoService empleado, UserManager<IdentityUser> userManager, IConfiguration configuration)
         {
             _context = context;
             _cita = citaService;
             _servicio = servicio;
             _empleado = empleado;
+            _userManager = userManager;
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> Index()
@@ -76,6 +83,24 @@ namespace ProyectoStilosoft.Controllers
                         _context.Add(citaServicio);
                         await _context.SaveChangesAsync();
 
+                        var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
+
+                        MailMessage mensaje = new();
+                        mensaje.To.Add(usuario.Email); //destinatario
+                        mensaje.Subject = "Cita Stilosoft";
+
+                        mensaje.Body = "<h1> Cita reservada correctamente </h1><br>" +
+                            "<h3> Gracias por confiar en nosotros <h3><br>";
+
+                        mensaje.IsBodyHtml = true;
+                        mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
+                        SmtpClient smtpClient = new("smtp.gmail.com");
+                        smtpClient.Port = 587;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.EnableSsl = true;
+                        smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
+                        smtpClient.Send(mensaje);
+
                         transaction.Commit();
                     }
                     catch (Exception)
@@ -86,6 +111,7 @@ namespace ProyectoStilosoft.Controllers
                         return RedirectToAction("index");
                     }
                 }
+                
                 TempData["Accion"] = "Crear";
                 TempData["Mensaje"] = "Cita creada correctamente";
                 return RedirectToAction("index");
@@ -135,6 +161,24 @@ namespace ProyectoStilosoft.Controllers
                         _context.Add(citaServicio);
                         await _context.SaveChangesAsync();
 
+                        var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
+
+                        MailMessage mensaje = new();
+                        mensaje.To.Add(usuario.Email); //destinatario
+                        mensaje.Subject = "Cita Stilosoft";
+
+                        mensaje.Body = "<h1> Cita reservada correctamente </h1><br>" +
+                            "<h3> Gracias por confiar en nosotros <h3><br>";
+
+                        mensaje.IsBodyHtml = true;
+                        mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
+                        SmtpClient smtpClient = new("smtp.gmail.com");
+                        smtpClient.Port = 587;
+                        smtpClient.UseDefaultCredentials = false;
+                        smtpClient.EnableSsl = true;
+                        smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
+                        smtpClient.Send(mensaje);
+
                         transaction.Commit();
                     }
                     catch (Exception)
@@ -160,6 +204,27 @@ namespace ProyectoStilosoft.Controllers
                 Cita cita = await _cita.ObtenerCitaPorId(citaId);
                 cita.EstadoCitaId = estadoId;
 
+                if ( cita.EstadoCitaId == 4)
+                {
+                    var usuario = await _userManager.FindByIdAsync(cita.ClienteId);
+
+                    MailMessage mensaje = new();
+                    mensaje.To.Add(usuario.Email); //destinatario
+                    mensaje.Subject = "Cita Stilosoft";
+
+                    mensaje.Body = "<h1> Cita cancelada correctamente </h1><br>" +
+                        "<h3> Gracias por confiar en nosotros <h3><br>";
+
+                    mensaje.IsBodyHtml = true;
+                    mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
+                    SmtpClient smtpClient = new("smtp.gmail.com");
+                    smtpClient.Port = 587;
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
+                    smtpClient.Send(mensaje);
+                }
+
                 await _cita.EditarCita(cita);
                 TempData["Accion"] = "EditarEstado";
                 TempData["Mensaje"] = "Estado de la cita editado correctamente";
@@ -171,6 +236,11 @@ namespace ProyectoStilosoft.Controllers
                 TempData["Mensaje"] = "No se pudo completar la operación";
                 return RedirectToAction("index");
             }
+        }
+
+        public async Task<IActionResult> DetalleCita(int id)
+        {
+            return View(await _cita.ObtenerDetalleCita(id));
         }
     }
 }

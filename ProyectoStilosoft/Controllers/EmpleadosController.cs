@@ -225,7 +225,6 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
-
         public async Task<IActionResult> DetalleEmpleado(string id)
         {
             return View(await _empleado.ObtenerListaServiciosEmpleado(id));
