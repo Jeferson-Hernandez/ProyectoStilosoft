@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ProyectoStilosoft.ViewModels.EmpleadoAgenda;
 using ProyectoStilosoft.ViewModels.Empleados;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.DAL;
@@ -294,6 +295,62 @@ namespace ProyectoStilosoft.Controllers
                 EmpleadoId = e.EmpleadoId,
                 EmpleadoNombre = e.Empleado.Nombre
             }).ToList());
+        }
+
+
+        //Empleado agenda
+
+        [HttpGet]
+        public async Task<IActionResult> ListarAgenda()
+        {
+            return View( await _empleado.ObtenerListaAgendaEmpleado());
+        }
+        [HttpGet]
+        public async Task<IActionResult> CrearAgenda()
+        {
+            var empleado = await _context.empleados.Where(e => e.Estado == true).Select(s => new
+            {
+                EmpleadoId = s.EmpleadoId,
+                DatosEmpleado = string.Format("{0} - {1}", s.Nombre , s.Documento)
+            }).ToListAsync();
+
+            ViewBag.Empleados = new SelectList(empleado, "EmpleadoId", "DatosEmpleado");
+
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CrearAgenda(EmpleadoAgendaViewModel empleadoAgenda)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    EmpleadoAgenda agenda = new()
+                    {
+                        EmpleadoId = empleadoAgenda.EmpleadoId,
+                        Fecha = empleadoAgenda.Fecha,
+                        HoraInicio = empleadoAgenda.HoraInicio,
+                        HoraFin = empleadoAgenda.HoraFin
+                    };
+
+                    await _empleado.GuardarEmpleadoAgenda(agenda);
+                    TempData["Accion"] = "Crear";
+                    TempData["Mensaje"] = "Empleado editado correctamente";
+                    return RedirectToAction("ListarAgenda");
+                }
+                catch (Exception)
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "Error realizando la operación";
+                    return RedirectToAction("ListarAgenda");
+                }
+            }
+            else
+            {
+                TempData["Accion"] = "Error";
+                TempData["Mensaje"] = "Error realizando la operación";
+                return RedirectToAction("ListarAgenda");
+            }
         }
 
         private bool DocumentoExists(string documento)

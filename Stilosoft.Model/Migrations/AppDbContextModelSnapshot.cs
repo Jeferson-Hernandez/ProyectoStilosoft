@@ -162,16 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b2e11189-d58f-4a48-ad14-301ca737e640",
+                            ConcurrencyStamp = "4bb18c22-2da3-4626-9f56-bc5716ff2674",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELGTogMKQej3S0dt3cIo0MGxzFwkCh8ITZ0KQ72FFyUiK5FYdx9/gpCSsthshRWBTw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFcrRCTCtTBLnRo4IT8wDDaSqB3EAl6Zz/szHnyOqoOah7NpCsCFGng/vMzyTo09ZA==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "829db9de-8063-40fb-b9da-20ced0401c30",
+                            SecurityStamp = "080faa0e-6105-4ac0-9d56-c2fee538dca3",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -262,6 +262,29 @@ namespace Stilosoft.Model.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Stilosoft.Model.Entities.AgendaOcupada", b =>
+                {
+                    b.Property<int>("AgendaOcupadaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EmpleadoAgendaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HoraFin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HoraInicio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AgendaOcupadaId");
+
+                    b.HasIndex("EmpleadoAgendaId");
+
+                    b.ToTable("agendaOcupadas");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Cita", b =>
@@ -398,6 +421,32 @@ namespace Stilosoft.Model.Migrations
                     b.HasKey("EmpleadoId");
 
                     b.ToTable("empleados");
+                });
+
+            modelBuilder.Entity("Stilosoft.Model.Entities.EmpleadoAgenda", b =>
+                {
+                    b.Property<int>("EmpleadoAgendaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("EmpleadoId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Fecha")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HoraFin")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HoraInicio")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EmpleadoAgendaId");
+
+                    b.HasIndex("EmpleadoId");
+
+                    b.ToTable("empleadoAgendas");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.EstadoCita", b =>
@@ -584,6 +633,17 @@ namespace Stilosoft.Model.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Stilosoft.Model.Entities.AgendaOcupada", b =>
+                {
+                    b.HasOne("Stilosoft.Model.Entities.EmpleadoAgenda", "EmpleadoAgenda")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoAgendaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EmpleadoAgenda");
+                });
+
             modelBuilder.Entity("Stilosoft.Model.Entities.Cita", b =>
                 {
                     b.HasOne("Stilosoft.Model.Entities.Cliente", "Cliente")
@@ -663,6 +723,15 @@ namespace Stilosoft.Model.Migrations
                         .IsRequired();
 
                     b.Navigation("IdentityUser");
+                });
+
+            modelBuilder.Entity("Stilosoft.Model.Entities.EmpleadoAgenda", b =>
+                {
+                    b.HasOne("Stilosoft.Model.Entities.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId");
+
+                    b.Navigation("Empleado");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Usuario", b =>
