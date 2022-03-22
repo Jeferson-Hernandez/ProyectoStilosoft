@@ -162,27 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-<<<<<<< HEAD
-                            ConcurrencyStamp = "c42cc419-fde3-4ca1-bf36-a4062a1ee237",
-=======
-                            ConcurrencyStamp = "b2e11189-d58f-4a48-ad14-301ca737e640",
->>>>>>> master
+                            ConcurrencyStamp = "83b5d91c-54ee-4b61-9114-3923bba50f9d",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-<<<<<<< HEAD
-                            PasswordHash = "AQAAAAEAACcQAAAAELuFnrVqLDEtbm2qPT9D23HOHgL68GIverkiVioNDvtJABhX913ALlhcXK6DBTCM6g==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECiuCFYSMTJItwhWJuGB2tes7jUflaUlRLH5cwp1kkYlTsy30Qws7fAQ315JiCsRYQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f09cdc5d-f3a4-46ec-8095-7ea203d9d61f",
-=======
-                            PasswordHash = "AQAAAAEAACcQAAAAELGTogMKQej3S0dt3cIo0MGxzFwkCh8ITZ0KQ72FFyUiK5FYdx9/gpCSsthshRWBTw==",
-                            PhoneNumber = "1234567890",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "829db9de-8063-40fb-b9da-20ced0401c30",
->>>>>>> master
+                            SecurityStamp = "dc9fa9cd-acb0-4930-a7db-8440324056fd",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });

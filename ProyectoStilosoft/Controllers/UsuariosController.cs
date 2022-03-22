@@ -70,7 +70,7 @@ namespace Stilosoft.Controllers
             var status = (bool)obj.SelectToken("success");
             ViewBag.Message = status ? "Google reCaptcha validation success" : "Google reCaptcha validation failed";
         
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && status)
             {               
                 IdentityUser identityUser = new()
                 {
