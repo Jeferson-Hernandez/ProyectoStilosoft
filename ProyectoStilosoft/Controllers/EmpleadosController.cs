@@ -112,6 +112,12 @@ namespace ProyectoStilosoft.Controllers
                             }
                             transaction.Commit();
                         }
+                        else
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "El correo ingresado ya se encuentra registrado";
+                            return RedirectToAction("index");
+                        }
                     }
                     catch (Exception)
                     {
@@ -327,7 +333,7 @@ namespace ProyectoStilosoft.Controllers
         }
 
         [HttpPost]
-        public bool HorarioDisponible(int empleadoAgendaId, string horaInicio)
+        public bool HorarioDisponible(int empleadoAgendaId, string horaInicio, int duracion)
         {
             var horaDisponible = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Where(f => f.HoraInicio == horaInicio).ToList();
             if (horaDisponible.Count() != 0)
@@ -364,6 +370,13 @@ namespace ProyectoStilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                if (AgendaExists(empleadoAgenda.EmpleadoId, empleadoAgenda.Fecha))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El empleado ya tiene una agenda para esa fecha";
+                    return RedirectToAction("ListarAgenda");
+                }
                 try
                 {
                     EmpleadoAgenda agenda = new()
@@ -394,6 +407,10 @@ namespace ProyectoStilosoft.Controllers
             }
         }
 
+        private bool AgendaExists(string empleadoId, string fecha)
+        {
+            return _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
+        }
         private bool DocumentoExists(string documento)
         {
             return _context.empleados.Any(d => d.Documento == documento);

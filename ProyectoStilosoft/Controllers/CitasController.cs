@@ -83,14 +83,42 @@ namespace ProyectoStilosoft.Controllers
                         _context.Add(citaServicio);
                         await _context.SaveChangesAsync();
 
-                        AgendaOcupada agendaOcupada = new()
+
+                        int contador = 0;
+                        if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
                         {
-                            EmpleadoAgendaId = citaDatos.EmpleadoAgendaId,
-                            HoraInicio = citaDatos.Hora,
-                            HoraFin = citaDatos.Hora                            
-                        };
-                        _context.Add(agendaOcupada);
-                        await _context.SaveChangesAsync();
+                            contador = 1;
+                        }
+                        else if (citaDatos.Duracion > 30 && citaDatos.Duracion <= 60)
+                        {
+                            contador = 2;
+                        }
+                        else if (citaDatos.Duracion > 60 && citaDatos.Duracion <= 90)
+                        {
+                            contador = 3;
+                        }
+
+                        DateTime fechaHoraFin = DateTime.Parse(citaDatos.Hora).AddMinutes(citaDatos.Duracion);
+                        string horaFin = fechaHoraFin.ToString("HH:mm");
+
+                        string citaHora = citaDatos.Hora;
+
+                        for (int i = 0; i < contador; i++)
+                        {
+                            AgendaOcupada agendaOcupada = new()
+                            {
+                                EmpleadoAgendaId = citaDatos.EmpleadoAgendaId,
+                                HoraInicio = citaHora,
+                                HoraFin = horaFin
+                            };
+                            _context.Add(agendaOcupada);
+                            await _context.SaveChangesAsync();
+
+                            DateTime CitaHoraNueva = DateTime.Parse(citaHora).AddMinutes(30);
+                            string CitaHoraString = CitaHoraNueva.ToString("HH:mm");
+                            citaHora = CitaHoraString;
+                        }
+                        /*DateTime horaFin = Convert.ToDateTime(citaDatos.Hora);*/                              
 
                         var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
 
