@@ -43,15 +43,15 @@
     <script>
         $(document).ready(function () {
             $('input.timepicker').timepicker({
-                timeFormat: 'h:mm p',
+                timeFormat: 'H:mm',
                 interval: 30,
-                minTime: '10',
+                minTime: '8',
                 maxTime: '6:00pm',
-                defaultTime: '10',
-                startTime: '10:00',
+                defaultTime: '8',
+                startTime: '08:00',
                 dynamic: false,
                 dropdown: true,
-                scrollbar: true
+                scrollbar: true,
             });
 
             $(function () {

@@ -10,6 +10,7 @@
     <br />
     <form asp-action="Crear" asp-controller="Citas" method="post">
         <input type="hidden" asp-for="Total" id="totalCita" />
+        <input type="hidden" asp-for="EmpleadoAgendaId" id="empleadoAgendaId" />
         <div class="row">
             <div class="col-5">
                 <div class="row">
@@ -44,37 +45,50 @@
                         <h3>Empleados*</h3>
                         <select asp-for="EmpleadoId" class="form-control" id="empleadoDropdown">
                         </select>
+                        <p class="text-danger empleado">Eliga una opción válida</p>
                     </div>
                     <div class=" col-xs-4 pl-2 pr-4">
                         <h3>Fecha*</h3>
                         <input asp-for="Fecha" id="datepicker" class="datepicker form-control" />
+                        <p class="text-danger fecha">El empleado no tiene una agenda para esa fecha</p>
                     </div>
                     <div class=" col-xs-4 pl-2">
                         <h3>Hora*</h3>
                         <input asp-for="Hora" id="timepicker" class="timepicker form-control" />
+                        <p class="text-danger hora">La hora seleccionada ya se encuentra ocupada</p>
                     </div>
                 </div>
+            </div>
+            <div class="col-4">
+                <h3>Agenda ocupada</h3>
+                <ul id="listaAgendaOcupada">
+                </ul>
             </div>
         </div>
     </form>
 </div>
-@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     
     <script>
         $(document).ready(function () {
+            $(".text-danger").hide();
+
             $('input.timepicker').timepicker({
-                timeFormat: 'h:mm p',
+                timeFormat: 'H:mm',
                 interval: 30,
-                minTime: '10',
+                minTime: '8',
                 maxTime: '6:00pm',
-                defaultTime: '10',
-                startTime: '10:00',
+                defaultTime: '8',
+                startTime: '08:00',                
                 dynamic: false,
                 dropdown: true,
-                scrollbar: true
+                scrollbar: true,
+                change: function () {
+                    validarHorario();
+                }
             });
 
             $(function () {
@@ -88,7 +102,7 @@
         $("#servicio").change(function () {
             let valorSeleccionado = $(this).val();
             let servicio = $("#servicio option:selected");
-            $('#totalCita').val(servicio.attr("precio"))
+            $('#totalCita').val(servicio.attr("precio"));
 
             $.ajax({
                 type: 'POST',
@@ -97,7 +111,6 @@
                 data: { servicioId: valorSeleccionado },
                 success:
                     function (respuesta) {
-                        console.log(respuesta)
                         let opciones = '<option value="0">Seleccione</option>';
                         for (let i = 0; i < respuesta.length; i++) {
                             opciones += '<option value="' + respuesta[i].empleadoId + '">' + respuesta[i].empleadoNombre + '</option>';
@@ -110,6 +123,66 @@
                     }
             });
         })
+
+        $("#datepicker").change(function () {
+            let empleado = $("#empleadoDropdown option:selected").val();
+            let fecha = $("#datepicker").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Empleados/ObtenerAgendaId',
+                data: { empleadoId: empleado, fecha: fecha },
+                success:
+                    function (respuesta) {
+                        console.log(respuesta);
+                        $('#empleadoAgendaId').val(respuesta)
+                    },
+                error:
+                    function (respuesta) {
+                        alert('El empleado no tiene agenda para esa fecha');
+                    }
+            });
+
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Empleados/ValidarAgenda',
+                data: { empleadoId: empleado, fecha: fecha },
+                success:
+                    function (respuesta) {
+                        console.log(respuesta)
+                        let opciones = '';
+                        for (let i = 0; i < respuesta.length; i++) {
+                            opciones += '<li>' + respuesta[i].horaInicio + ' ' + respuesta[i].horaFin + '</li>';
+                        }
+                        $("#listaAgendaOcupada").html(opciones);
+                    },
+                error:
+                    function (respuesta) {
+                        console.log(respuesta)
+                    }
+            });
+        })
+
+        function validarHorario() {
+            let empleadoAgendaId = $("#empleadoAgendaId").val();
+            let hora = $("#timepicker").val();
+            console.log(empleadoAgendaId);
+            $.ajax({
+                type: 'POST',
+                url: '/Empleados/HorarioDisponible',
+                data: { empleadoAgendaId: empleadoAgendaId, horaInicio: hora },
+                success:
+                    function (respuesta) {
+                        console.log(respuesta);
+                    },
+                error:
+                    function (respuesta) {
+                        alert('El empleado no tiene agenda para esa fecha');
+                    }
+            });
+        }
     </script>
 
 }

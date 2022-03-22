@@ -285,6 +285,7 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
+        //Validaciones con AJAX
         [HttpPost]
         public IActionResult obtenerEmpleados(int servicioId)
         {
@@ -294,6 +295,47 @@ namespace ProyectoStilosoft.Controllers
                 EmpleadoId = e.EmpleadoId,
                 EmpleadoNombre = e.Empleado.Nombre
             }).ToList());
+        }
+        [HttpPost]
+        public IActionResult ValidarAgenda(string empleadoId, string fecha)
+        {
+            var fechaExiste = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Count();
+
+            if (fechaExiste == 0)
+            {
+                return null;
+            }
+            else
+            {
+                var agendaId = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(em => em.EmpleadoAgendaId).ToList();                
+                return Json(_context.agendaOcupadas.Include(em => em.EmpleadoAgenda).Where(a => a.EmpleadoAgendaId == agendaId[0]).Select(a => new 
+                {
+                    HoraInicio = a.HoraInicio,
+                    HoraFin = a.HoraFin
+                }).ToList());
+            }            
+        }
+        [HttpPost]
+        public int ObtenerAgendaId(string empleadoId, string fecha)
+        {            
+            var agendaId = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(em => em.EmpleadoAgendaId).ToList();
+            if (agendaId.Count() != 0)
+            {
+                return agendaId[0];
+            }
+            return 0;
+        }
+
+        [HttpPost]
+        public bool HorarioDisponible(int empleadoAgendaId, string horaInicio)
+        {
+            var horaDisponible = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Where(f => f.HoraInicio == horaInicio).ToList();
+            if (horaDisponible.Count() != 0)
+            {
+                return false;
+            }
+            return true;
+
         }
 
 

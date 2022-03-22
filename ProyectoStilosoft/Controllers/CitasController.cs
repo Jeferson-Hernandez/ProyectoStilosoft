@@ -83,6 +83,15 @@ namespace ProyectoStilosoft.Controllers
                         _context.Add(citaServicio);
                         await _context.SaveChangesAsync();
 
+                        AgendaOcupada agendaOcupada = new()
+                        {
+                            EmpleadoAgendaId = citaDatos.EmpleadoAgendaId,
+                            HoraInicio = citaDatos.Hora,
+                            HoraFin = citaDatos.Hora                            
+                        };
+                        _context.Add(agendaOcupada);
+                        await _context.SaveChangesAsync();
+
                         var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
 
                         MailMessage mensaje = new();
