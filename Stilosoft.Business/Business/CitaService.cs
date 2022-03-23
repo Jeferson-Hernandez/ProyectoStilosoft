@@ -37,5 +37,9 @@ namespace Stilosoft.Business.Business
             _context.Update(cita);
             await _context.SaveChangesAsync();
         }
+        public async Task<IEnumerable<DetalleCitaServicios>> ObtenerDetalleCita(int id)
+        {
+            return await _context.detalleCitas.Where(em => em.CitaId == id).Include(c => c.Cita).Include(e => e.Empleado).Include(s => s.Servicio).ToListAsync();
+        }
     }
 }

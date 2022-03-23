@@ -25,6 +25,9 @@
                     @Html.DisplayNameFor(model => model.Total)
                 </th>
                 <th>
+                    Detalle
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.EstadoCita.Nombre)
                 </th>
                 <th>
@@ -47,6 +50,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                    <td>
+                        <a onclick="mostrarModalS('@Url.Action("DetalleCita","Citas", new {id = item.CitaId}, Context.Request.Scheme)', 'Detalle cita')" class="btn btn-secondary"><i class="fas fa-info-circle"></i></a>
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.EstadoCita.Nombre)
