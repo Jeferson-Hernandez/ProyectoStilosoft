@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Stilosoft.Model.DAL;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,34 +12,28 @@ namespace ProyectoStilosoft.Controllers
 {
     public class DashboardController : Controller
     {
+        private readonly AppDbContext _context;
+
+        public DashboardController(AppDbContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
+            ViewBag.VentasFinalizadas = _context.citas.Where(e => e.EstadoCitaId == 3).Count();
+            ViewBag.VentasCanceladas = _context.citas.Where(e => e.EstadoCitaId == 4).Count();     
+
             return View();
         }
 
         public IActionResult gpastel()
-        {
+        {        
             return View();
         }
 
         public IActionResult barras()
         {
             return View();
-        }
-        public bool Login()
-        {
-            using (SqlConnection con = new SqlConnection("Data Source = DESKTOP-88LP2EU; Initial catalog = Stilosoft; Integrated Security = True"))
-            {
-                con.Open();
-                SqlCommand cmd = new SqlCommand("CitasFinalizadass", con);
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                cmd.Parameters.AddWithValue("@CitasFinalizadas","Finalizada");              
-
-
-                //Si hay datos retorna true
-                return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
-            }
-        }
+        }     
     }
 }
