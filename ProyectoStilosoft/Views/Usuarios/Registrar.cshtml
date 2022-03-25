@@ -32,7 +32,7 @@
             <div class="card-body register-card-body">
                 <p class="login-box-msg">Registrarse</p>
 
-                <form asp-action="Registrar" method="post">
+                <form asp-action="Registrar" method="post" onsubmit="miFuncion()">
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                     <div class="input-group mb-3">
                         <input asp-for="Nombre" class="form-control" placeholder="Nombre">
@@ -90,13 +90,13 @@
                     <div class="row justify-content-center">
 
                         <!-- /.col -->
+                        <div class="g-recaptcha" data-sitekey="6LcQEdoeAAAAAM-6ytfQUuM8F19cFjqZrtcRK-IV"></div>
                         <div class="col-7">
                             <button type="submit" class="btn btn-primary btn-block">Registrar</button>
                         </div>
                         <!-- /.col -->
                     </div>
                 </form>
-
                 <hr />
                 <a asp-action="Login" class="text-center">Ya tengo una cuenta</a>
             </div>
@@ -110,9 +110,17 @@
     <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+    <!-- reCaptchat -->
+    <script src="https://www.google.com/recaptcha/api.js"></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 </body>
 </html>
 @section Scripts {
-
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>      
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("No soy robot")) { <text>
+        alertify.alert('No soy robot', '@TempData["Mensaje"]', function () {});
+                 </text>
+        }     
+    </script>
 }

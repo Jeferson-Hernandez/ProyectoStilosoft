@@ -14,6 +14,8 @@ using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using Stilosoft.Model.DAL;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Stilosoft.Controllers
 {
@@ -59,14 +61,29 @@ namespace Stilosoft.Controllers
         [HttpPost]
         public async Task<IActionResult> Registrar(UsuarioViewModel usuarioViewModel)
         {
-            if (ModelState.IsValid)
-            {
+            var response = Request.Form["g-recaptcha-response"];
+            string secretKey = "6LcQEdoeAAAAAMOdBpmlaZFoSLWdXboAc7UOiAWm";
+            var client = new System.Net.WebClient();
+            var result = client.DownloadString(string.Format("https://www.google.com/recaptcha/api/siteverify?secret={0}&response={1}", secretKey, response));
+            var obj = JObject.Parse(result);
+
+            var status = (bool)obj.SelectToken("success");
+            ViewBag.Message = status ? "Google reCaptcha validation success" : "Google reCaptcha validation failed";
+        
+            if (ModelState.IsValid && status)
+            {               
                 IdentityUser identityUser = new()
                 {
                     UserName = usuarioViewModel.Email,
                     Email = usuarioViewModel.Email
                     
                 };
+                if (DocumentoExists(usuarioViewModel.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("login", "Usuarios");
+                }         
 
                 try
                 {
@@ -95,17 +112,17 @@ namespace Stilosoft.Controllers
                             Rol = "Cliente",
                             Estado = true
                            
-                        };
+                        };                      
                         await _usuarioService.GuardarUsuario(usuario1);
                         await _clienteService.GuardarCliente(cliente);
                         TempData["Accion"] = "Registrar";
                         TempData["Mensaje"] = "Usuario registrado correctamente";
                         return RedirectToAction("login", "Usuarios");
-                    }                    
-                      TempData["Accion"] = "Error";
-                      TempData["Mensaje"] = "Ingresaste un valor inválido";
-                      return View(usuarioViewModel);
-                }
+                    }
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El correo ya existe";
+                    return RedirectToAction("login", "Usuarios");
+                }               
                 catch (Exception)
                 {
                     TempData["Accion"] = "Error";
@@ -129,6 +146,7 @@ namespace Stilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
+               
                 var resultado = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RecordarMe, false);
                 if (resultado.Succeeded)
                 {
@@ -185,7 +203,13 @@ namespace Stilosoft.Controllers
                     UserName = crearUsuarioViewModel.Email,
                     Email = crearUsuarioViewModel.Email
                 };
-             
+                if (DocumentoExists(crearUsuarioViewModel.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index");
+                }
+
                 try
                 {
                     //Corregir error 
@@ -518,6 +542,10 @@ namespace Stilosoft.Controllers
             await _signInManager.SignOutAsync();
             //_httpContextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("login", "Usuarios");
+        }
+        private bool DocumentoExists(string documento)
+        {
+            return _context.usuarios.Any(d => d.Documento == documento);
         }
     }
 }

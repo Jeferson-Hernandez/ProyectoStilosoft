@@ -413,7 +413,7 @@ namespace ProyectoStilosoft.Controllers
         }
         private bool DocumentoExists(string documento)
         {
-            return _context.empleados.Any(d => d.Documento == documento);
+            return _context.usuarios.Any(d => d.Documento == documento);
         }
         private bool ServicioExists(int servicioId, string empleadoId)
         {
