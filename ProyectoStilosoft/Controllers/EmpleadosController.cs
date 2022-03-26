@@ -335,13 +335,36 @@ namespace ProyectoStilosoft.Controllers
         [HttpPost]
         public bool HorarioDisponible(int empleadoAgendaId, string horaInicio, int duracion)
         {
-            var horaDisponible = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Where(f => f.HoraInicio == horaInicio).ToList();
-            if (horaDisponible.Count() != 0)
+            bool horaDisponibleInicio = false;
+            bool horaDisponibleTreinta = false;
+            bool horaDisponibleSesenta = false;
+
+            if (duracion > 0 && duracion <= 30)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaInicio);
+            }
+            else if (duracion > 30 && duracion <= 60)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaInicio);
+                DateTime convertirHoraInicio = DateTime.Parse(horaInicio).AddMinutes(30);
+                string horaTreintaMin = convertirHoraInicio.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaTreintaMin);
+            }
+            else if (duracion > 60 && duracion <= 90)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaInicio);
+                DateTime convertirHoraInicio = DateTime.Parse(horaInicio).AddMinutes(30);
+                string horaTreintaMin = convertirHoraInicio.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaTreintaMin);
+                DateTime convertirHoraTreinta = DateTime.Parse(horaTreintaMin).AddMinutes(30);
+                string horaSesentaMin = convertirHoraTreinta.ToString("HH:mm");
+            }
+
+            if (horaDisponibleInicio || horaDisponibleTreinta || horaDisponibleSesenta)
             {
                 return false;
             }
             return true;
-
         }
 
 

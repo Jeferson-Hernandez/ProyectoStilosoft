@@ -117,8 +117,7 @@ namespace ProyectoStilosoft.Controllers
                             DateTime CitaHoraNueva = DateTime.Parse(citaHora).AddMinutes(30);
                             string CitaHoraString = CitaHoraNueva.ToString("HH:mm");
                             citaHora = CitaHoraString;
-                        }
-                        /*DateTime horaFin = Convert.ToDateTime(citaDatos.Hora);*/                              
+                        }                            
 
                         var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
 
