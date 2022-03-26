@@ -179,7 +179,9 @@
                 data: { empleadoAgendaId: empleadoAgendaId, horaInicio: hora, duracion: duracion },
                 success:
                     function (respuesta) {
-                        console.log(respuesta);
+                        if (respuesta) {
+                            alert('El horario seleccionado se encuentra disponible');
+                        }
                     },
                 error:
                     function (respuesta) {
