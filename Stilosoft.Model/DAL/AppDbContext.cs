@@ -97,7 +97,6 @@ namespace Stilosoft.Model.DAL
         public DbSet<Servicio> servicios { get; set; }
         public DbSet<EmpleadoNovedad> empleadoNovedades { get; set; }
         public DbSet<AgendaOcupada> agendaOcupadas { get; set; }
-        public DbSet<DetalleCitaServicios> detalleCitas { get; set; }
         public DbSet<DetalleEmpleadoServicios> detalleEmpleados { get; set;}
     }
 }

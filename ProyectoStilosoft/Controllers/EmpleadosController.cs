@@ -313,39 +313,41 @@ namespace ProyectoStilosoft.Controllers
                 {
                     HoraInicio = a.HoraInicio,
                     HoraFin = a.HoraFin
-                }).ToList());
+                }).FirstOrDefault());
             }
-            return Json(_context.empleadoNovedades.Select(a => new
+            return Json(_context.empleados.Select(a => new
             {
                 HoraInicio = "8:00",
                 HoraFin = "20:00"
-            }).ToList());
+            }).FirstOrDefault());
         }
 
         [HttpPost]
-        public bool HorarioDisponible(string empleadoId, string horaInicio, int duracion)
+        public bool HorarioDisponible(string empleadoId, string horaInicio, int duracion, string fecha)
         {
             bool horaDisponibleInicio = false;
             bool horaDisponibleTreinta = false;
             bool horaDisponibleSesenta = false;
+            //bool horaDisponibleNoventa = false;
+            //bool horaDisponibleCientoVeinte = false;
 
             if (duracion > 0 && duracion <= 30)
             {
-                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Any(h => h.HoraInicio == horaInicio);
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
             }
             else if (duracion > 30 && duracion <= 60)
             {
-                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Any(h => h.HoraInicio == horaInicio);
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
                 DateTime convertirHoraInicio = DateTime.Parse(horaInicio).AddMinutes(30);
                 string horaTreintaMin = convertirHoraInicio.ToString("HH:mm");
-                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Any(h => h.HoraInicio == horaTreintaMin);
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaTreintaMin);
             }
             else if (duracion > 60 && duracion <= 90)
             {
-                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Any(h => h.HoraInicio == horaInicio);
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
                 DateTime convertirHoraInicio = DateTime.Parse(horaInicio).AddMinutes(30);
                 string horaTreintaMin = convertirHoraInicio.ToString("HH:mm");
-                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Any(h => h.HoraInicio == horaTreintaMin);
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaTreintaMin);
                 DateTime convertirHoraTreinta = DateTime.Parse(horaTreintaMin).AddMinutes(30);
                 string horaSesentaMin = convertirHoraTreinta.ToString("HH:mm");
             }

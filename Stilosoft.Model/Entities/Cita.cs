@@ -14,6 +14,8 @@ namespace Stilosoft.Model.Entities
         public int CitaId { get; set; }
         [ForeignKey("Cliente")]
         public string ClienteId { get; set; }
+        public string EmpleadoId { get; set; }
+        public int ServicioId { get; set; }
         [Required(ErrorMessage = "La fecha es obligatoria")]
         [Column(TypeName = "nvarchar(10)")]
         public string Fecha { get; set; }
@@ -27,6 +29,7 @@ namespace Stilosoft.Model.Entities
 
         public virtual EstadoCita EstadoCita { get; set; }
         public virtual Cliente Cliente { get; set; }
-        public virtual DetalleCitaServicios DetalleCitaServicios { get; set; }
+        public virtual Empleado Empleado { get; set; }
+        public virtual Servicio Servicio { get; set; }
     }
 }

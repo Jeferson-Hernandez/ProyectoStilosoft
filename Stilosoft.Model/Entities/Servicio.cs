@@ -24,7 +24,6 @@ namespace Stilosoft.Model.Entities
         public long Costo { get; set; }
         public bool Estado { get; set; }
 
-        public virtual List<DetalleCitaServicios> DetalleCitaServicios { get; set; }
         public virtual List<DetalleEmpleadoServicios> DetalleEmpleadoServicios { get; set; }
     }
 }

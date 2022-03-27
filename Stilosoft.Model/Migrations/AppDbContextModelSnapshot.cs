@@ -162,16 +162,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a1be03c5-bfad-4390-9d63-7f47704ba8be",
+                            ConcurrencyStamp = "455d8fce-1d37-4b01-89ee-83f053d1a427",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPTPEHE+xdTRX9Swd3k8v3feHYPX9NcSam3XN6XsYAUZMlQe9C9LDEsAI0cl9yczGQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDkjiS5SaXirRmV6DE8v72lzZt0N/pfQfLUg7ZgBleUOm2wr2dpdRXf020WOjsh/9Q==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "30a118f9-3d0e-42d6-82df-376d0fafbe8f",
+                            SecurityStamp = "6aa34372-4c53-4357-95d2-f54858c79d03",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -274,6 +274,9 @@ namespace Stilosoft.Model.Migrations
                     b.Property<string>("EmpleadoId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Fecha")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("HoraFin")
                         .HasColumnType("nvarchar(max)");
 
@@ -297,6 +300,9 @@ namespace Stilosoft.Model.Migrations
                     b.Property<string>("ClienteId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("EmpleadoId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("EstadoCitaId")
                         .HasColumnType("int");
 
@@ -308,6 +314,9 @@ namespace Stilosoft.Model.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<int>("ServicioId")
+                        .HasColumnType("int");
+
                     b.Property<long>("Total")
                         .HasColumnType("bigint");
 
@@ -315,7 +324,11 @@ namespace Stilosoft.Model.Migrations
 
                     b.HasIndex("ClienteId");
 
+                    b.HasIndex("EmpleadoId");
+
                     b.HasIndex("EstadoCitaId");
+
+                    b.HasIndex("ServicioId");
 
                     b.ToTable("citas");
                 });
@@ -343,34 +356,6 @@ namespace Stilosoft.Model.Migrations
                     b.HasKey("ClienteId");
 
                     b.ToTable("clientes");
-                });
-
-            modelBuilder.Entity("Stilosoft.Model.Entities.DetalleCitaServicios", b =>
-                {
-                    b.Property<int>("CitaServicioId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CitaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EmpleadoId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("ServicioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CitaServicioId");
-
-                    b.HasIndex("CitaId")
-                        .IsUnique();
-
-                    b.HasIndex("EmpleadoId");
-
-                    b.HasIndex("ServicioId");
-
-                    b.ToTable("detalleCitas");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.DetalleEmpleadoServicios", b =>
@@ -648,15 +633,29 @@ namespace Stilosoft.Model.Migrations
                         .WithMany()
                         .HasForeignKey("ClienteId");
 
+                    b.HasOne("Stilosoft.Model.Entities.Empleado", "Empleado")
+                        .WithMany()
+                        .HasForeignKey("EmpleadoId");
+
                     b.HasOne("Stilosoft.Model.Entities.EstadoCita", "EstadoCita")
                         .WithMany()
                         .HasForeignKey("EstadoCitaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Stilosoft.Model.Entities.Servicio", "Servicio")
+                        .WithMany()
+                        .HasForeignKey("ServicioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Cliente");
 
+                    b.Navigation("Empleado");
+
                     b.Navigation("EstadoCita");
+
+                    b.Navigation("Servicio");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Cliente", b =>
@@ -668,31 +667,6 @@ namespace Stilosoft.Model.Migrations
                         .IsRequired();
 
                     b.Navigation("IdentityUser");
-                });
-
-            modelBuilder.Entity("Stilosoft.Model.Entities.DetalleCitaServicios", b =>
-                {
-                    b.HasOne("Stilosoft.Model.Entities.Cita", "Cita")
-                        .WithOne("DetalleCitaServicios")
-                        .HasForeignKey("Stilosoft.Model.Entities.DetalleCitaServicios", "CitaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Stilosoft.Model.Entities.Empleado", "Empleado")
-                        .WithMany("DetalleCitaServicios")
-                        .HasForeignKey("EmpleadoId");
-
-                    b.HasOne("Stilosoft.Model.Entities.Servicio", "Servicio")
-                        .WithMany("DetalleCitaServicios")
-                        .HasForeignKey("ServicioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cita");
-
-                    b.Navigation("Empleado");
-
-                    b.Navigation("Servicio");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.DetalleEmpleadoServicios", b =>
@@ -743,22 +717,13 @@ namespace Stilosoft.Model.Migrations
                     b.Navigation("IdentityUser");
                 });
 
-            modelBuilder.Entity("Stilosoft.Model.Entities.Cita", b =>
-                {
-                    b.Navigation("DetalleCitaServicios");
-                });
-
             modelBuilder.Entity("Stilosoft.Model.Entities.Empleado", b =>
                 {
-                    b.Navigation("DetalleCitaServicios");
-
                     b.Navigation("DetalleEmpleadoServicios");
                 });
 
             modelBuilder.Entity("Stilosoft.Model.Entities.Servicio", b =>
                 {
-                    b.Navigation("DetalleCitaServicios");
-
                     b.Navigation("DetalleEmpleadoServicios");
                 });
 #pragma warning restore 612, 618

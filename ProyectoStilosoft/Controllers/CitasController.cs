@@ -66,6 +66,8 @@ namespace ProyectoStilosoft.Controllers
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
+                            EmpleadoId = citaDatos.EmpleadoId,
+                            ServicioId = citaDatos.ServicioId,
                             Fecha = citaDatos.Fecha,
                             Hora = citaDatos.Hora,
                             Total = citaDatos.Total,
@@ -73,16 +75,6 @@ namespace ProyectoStilosoft.Controllers
                         };
                         _context.Add(cita);
                         await _context.SaveChangesAsync();
-
-                        DetalleCitaServicios citaServicio = new()
-                        {
-                            CitaId = cita.CitaId,
-                            EmpleadoId = citaDatos.EmpleadoId,
-                            ServicioId = citaDatos.ServicioId
-                        };
-                        _context.Add(citaServicio);
-                        await _context.SaveChangesAsync();
-
 
                         int contador = 0;
                         if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
@@ -108,6 +100,7 @@ namespace ProyectoStilosoft.Controllers
                             AgendaOcupada agendaOcupada = new()
                             {
                                 EmpleadoId = citaDatos.EmpleadoId,
+                                Fecha = citaDatos.Fecha,
                                 HoraInicio = citaHora,
                                 HoraFin = horaFin
                             };
@@ -180,21 +173,14 @@ namespace ProyectoStilosoft.Controllers
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
+                            EmpleadoId = citaDatos.EmpleadoId,
+                            ServicioId = citaDatos.ServicioId,
                             Fecha = citaDatos.Fecha,
                             Hora = citaDatos.Hora,
                             Total = citaDatos.Total,
                             EstadoCitaId = 1
                         };
                         _context.Add(cita);
-                        await _context.SaveChangesAsync();
-
-                        DetalleCitaServicios citaServicio = new()
-                        {
-                            CitaId = cita.CitaId,
-                            EmpleadoId = citaDatos.EmpleadoId,
-                            ServicioId = citaDatos.ServicioId
-                        };
-                        _context.Add(citaServicio);
                         await _context.SaveChangesAsync();
 
                         var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
@@ -272,11 +258,6 @@ namespace ProyectoStilosoft.Controllers
                 TempData["Mensaje"] = "No se pudo completar la operación";
                 return RedirectToAction("index");
             }
-        }
-
-        public async Task<IActionResult> DetalleCita(int id)
-        {
-            return View(await _cita.ObtenerDetalleCita(id));
         }
     }
 }

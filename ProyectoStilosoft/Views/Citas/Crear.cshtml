@@ -57,7 +57,7 @@
                     <div class=" col-xs-4 pl-2">
                         <p><b>Hora *</b></p>
                         <input asp-for="Hora" id="timepicker" class="timepicker form-control" />
-                        <p class="text-danger hora">La hora seleccionada ya se encuentra ocupada</p>
+                        <p class="text-danger hora">La hora ya se encuentra ocupada</p>
                     </div>
                 </div>
             </div>
@@ -140,13 +140,13 @@
                     function (respuesta) {
                         console.log(respuesta)
                         let opciones = '';
-                        for (let i = 0; i < respuesta.length; i++) {
-                            opciones += '<li>' + 'Horario de trabajo: ' + respuesta[i].horaInicio + ' a ' + respuesta[i].horaFin + '</li>';
+                        for (let i = 0; i < 1; i++) {
+                            opciones += '<li>' + 'Horario de trabajo: ' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
                         }
                         
-                        $('#timepicker').timepicker('option', 'minTime', respuesta[0].horaInicio);
-                        $('#timepicker').timepicker('option', 'maxTime', respuesta[0].horaFin);
-                        $('#timepicker').timepicker('setTime', respuesta[0].horaInicio);
+                        $('#timepicker').timepicker('option', 'minTime', respuesta.horaInicio);
+                        $('#timepicker').timepicker('option', 'maxTime', respuesta.horaFin);
+                        $('#timepicker').timepicker('setTime', respuesta.horaInicio);
                         $("#listaAgendaOcupada").html(opciones);
                     },
                 error:
@@ -161,11 +161,12 @@
             let hora = $("#timepicker").val();
             let servicio = $("#servicio option:selected");
             let duracion = servicio.attr("duracion");
+            let fecha = $("#datepicker").val();
             
             $.ajax({
                 type: 'POST',
                 url: '/Empleados/HorarioDisponible',
-                data: { empleadoId: empleado, horaInicio: hora, duracion: duracion },
+                data: { empleadoId: empleado, horaInicio: hora, duracion: duracion, fecha: fecha },
                 success:
                     function (respuesta) {
                         if (respuesta) {
