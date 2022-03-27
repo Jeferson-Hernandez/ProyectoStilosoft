@@ -8,12 +8,13 @@ namespace ProyectoStilosoft.ViewModels.EmpleadoAgenda
 {
     public class EmpleadoAgendaViewModel
     {
-        [DisplayName("Empleado")]
+        [DisplayName("Empleado *")]
         public string EmpleadoId { get; set; }
+        [DisplayName("Fecha *")]
         public string Fecha { get; set; }
-        [DisplayName("Hora de inicio")]
+        [DisplayName("Hora de inicio *")]
         public string HoraInicio { get; set; }
-        [DisplayName("Hora final")]
+        [DisplayName("Hora final *")]
         public string HoraFin { get; set; }
     }
 }

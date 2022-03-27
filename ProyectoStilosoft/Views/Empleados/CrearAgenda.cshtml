@@ -1,15 +1,15 @@
 ﻿@model ProyectoStilosoft.ViewModels.EmpleadoAgenda.EmpleadoAgendaViewModel
 
 @{
-    ViewData["Title"] = "Crear cita";
+    ViewData["Title"] = "Empleado novedad";
 }
 
 @section Styles{
 }
-<div class="container-fluid">
+<div class="container justify-content-center">
     <br />
     <form asp-action="CrearAgenda" asp-controller="Empleados" method="post">
-        <h3 class="text">Empleado agenda</h3>
+        <h3 class="text">Empleado novedad</h3>
         <br />
         <div class="row">
             <div class="form-group col-xs-4 pl-2 pr-4">
@@ -21,7 +21,7 @@
                 <label asp-for="Fecha" class="control-label"></label>
                 <input asp-for="Fecha" id="datepicker" class="datepicker form-control" />
             </div>
-            <div class="form-group col-xs-4 pl-2">
+            <div class="form-group col-xs-4 pl-2 pr-4">
                 <label asp-for="HoraInicio" class="control-label"></label>
                 <input asp-for="HoraInicio" id="timepicker" class="timepicker form-control" />
             </div>
@@ -46,7 +46,7 @@
                 timeFormat: 'H:mm',
                 interval: 30,
                 minTime: '8',
-                maxTime: '6:00pm',
+                maxTime: '8:00pm',
                 defaultTime: '8',
                 startTime: '08:00',
                 dynamic: false,

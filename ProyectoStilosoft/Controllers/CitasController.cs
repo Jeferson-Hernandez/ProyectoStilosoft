@@ -107,7 +107,7 @@ namespace ProyectoStilosoft.Controllers
                         {
                             AgendaOcupada agendaOcupada = new()
                             {
-                                EmpleadoAgendaId = citaDatos.EmpleadoAgendaId,
+                                EmpleadoId = citaDatos.EmpleadoId,
                                 HoraInicio = citaHora,
                                 HoraFin = horaFin
                             };

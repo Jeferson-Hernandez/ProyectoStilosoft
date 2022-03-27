@@ -20,7 +20,7 @@ namespace Stilosoft.Business.Abstract
         Task<List<DetalleEmpleadoServicios>> ListaEmpleadoServicios(string id);
         Task EliminarEmpleadoServicio(int id);
         //Empleado agenda
-        Task<IEnumerable<EmpleadoAgenda>> ObtenerListaAgendaEmpleado();
-        Task GuardarEmpleadoAgenda(EmpleadoAgenda empleadoAgenda);
+        Task<IEnumerable<EmpleadoNovedad>> ObtenerListaNovedades();
+        Task GuardarEmpleadoNovedad(EmpleadoNovedad empleadoNovedad);
     }
 }

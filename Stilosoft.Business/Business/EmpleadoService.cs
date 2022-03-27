@@ -63,13 +63,13 @@ namespace Stilosoft.Business.Business
         }
 
         //Empleado agenda 
-        public async Task<IEnumerable<EmpleadoAgenda>> ObtenerListaAgendaEmpleado()
+        public async Task<IEnumerable<EmpleadoNovedad>> ObtenerListaNovedades()
         {
-            return await _context.empleadoAgendas.Include(e => e.Empleado).ToListAsync();
+            return await _context.empleadoNovedades.Include(e => e.Empleado).ToListAsync();
         }
-        public async Task GuardarEmpleadoAgenda(EmpleadoAgenda empleadoAgenda)
+        public async Task GuardarEmpleadoNovedad(EmpleadoNovedad empleadoNovedad)
         {
-            _context.Add(empleadoAgenda);
+            _context.Add(empleadoNovedad);
             await _context.SaveChangesAsync();
         }
     }

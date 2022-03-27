@@ -297,6 +297,27 @@ namespace Stilosoft.Model.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "agendaOcupadas",
+                columns: table => new
+                {
+                    AgendaOcupadaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmpleadoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    HoraInicio = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HoraFin = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_agendaOcupadas", x => x.AgendaOcupadaId);
+                    table.ForeignKey(
+                        name: "FK_agendaOcupadas_empleados_EmpleadoId",
+                        column: x => x.EmpleadoId,
+                        principalTable: "empleados",
+                        principalColumn: "EmpleadoId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "detalleEmpleados",
                 columns: table => new
                 {
@@ -323,10 +344,10 @@ namespace Stilosoft.Model.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "empleadoAgendas",
+                name: "empleadoNovedades",
                 columns: table => new
                 {
-                    EmpleadoAgendaId = table.Column<int>(type: "int", nullable: false)
+                    EmpleadoNovedadId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmpleadoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Fecha = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -335,9 +356,9 @@ namespace Stilosoft.Model.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_empleadoAgendas", x => x.EmpleadoAgendaId);
+                    table.PrimaryKey("PK_empleadoNovedades", x => x.EmpleadoNovedadId);
                     table.ForeignKey(
-                        name: "FK_empleadoAgendas_empleados_EmpleadoId",
+                        name: "FK_empleadoNovedades_empleados_EmpleadoId",
                         column: x => x.EmpleadoId,
                         principalTable: "empleados",
                         principalColumn: "EmpleadoId",
@@ -377,27 +398,6 @@ namespace Stilosoft.Model.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "agendaOcupadas",
-                columns: table => new
-                {
-                    AgendaOcupadaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmpleadoAgendaId = table.Column<int>(type: "int", nullable: false),
-                    HoraInicio = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    HoraFin = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_agendaOcupadas", x => x.AgendaOcupadaId);
-                    table.ForeignKey(
-                        name: "FK_agendaOcupadas_empleadoAgendas_EmpleadoAgendaId",
-                        column: x => x.EmpleadoAgendaId,
-                        principalTable: "empleadoAgendas",
-                        principalColumn: "EmpleadoAgendaId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -411,7 +411,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "4bb18c22-2da3-4626-9f56-bc5716ff2674", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEFcrRCTCtTBLnRo4IT8wDDaSqB3EAl6Zz/szHnyOqoOah7NpCsCFGng/vMzyTo09ZA==", "1234567890", false, "080faa0e-6105-4ac0-9d56-c2fee538dca3", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "a1be03c5-bfad-4390-9d63-7f47704ba8be", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEPTPEHE+xdTRX9Swd3k8v3feHYPX9NcSam3XN6XsYAUZMlQe9C9LDEsAI0cl9yczGQ==", "1234567890", false, "30a118f9-3d0e-42d6-82df-376d0fafbe8f", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",
@@ -430,9 +430,9 @@ namespace Stilosoft.Model.Migrations
                 values: new object[] { "fab4fac1-c546-41de-aebc-a14da6895711", "b74ddd14-6340-4840-95c2-db12554843e5" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_agendaOcupadas_EmpleadoAgendaId",
+                name: "IX_agendaOcupadas_EmpleadoId",
                 table: "agendaOcupadas",
-                column: "EmpleadoAgendaId");
+                column: "EmpleadoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -510,8 +510,8 @@ namespace Stilosoft.Model.Migrations
                 column: "ServicioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_empleadoAgendas_EmpleadoId",
-                table: "empleadoAgendas",
+                name: "IX_empleadoNovedades_EmpleadoId",
+                table: "empleadoNovedades",
                 column: "EmpleadoId");
         }
 
@@ -542,13 +542,13 @@ namespace Stilosoft.Model.Migrations
                 name: "detalleEmpleados");
 
             migrationBuilder.DropTable(
+                name: "empleadoNovedades");
+
+            migrationBuilder.DropTable(
                 name: "proveedors");
 
             migrationBuilder.DropTable(
                 name: "usuarios");
-
-            migrationBuilder.DropTable(
-                name: "empleadoAgendas");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

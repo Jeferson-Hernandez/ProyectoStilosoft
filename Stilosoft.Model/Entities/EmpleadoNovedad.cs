@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Stilosoft.Model.Entities
 {
-    public class EmpleadoAgenda
+    public class EmpleadoNovedad
     {
         [Key]
-        public int EmpleadoAgendaId { get; set; }
+        public int EmpleadoNovedadId { get; set; }
         public string EmpleadoId { get; set; }
         public string Fecha { get; set; }
         [DisplayName("Hora de inicio")]
