@@ -233,7 +233,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index","Landing");
         }
-        public async Task<IActionResult> citaEstados(int citaId, int estadoId)
+        public async Task<IActionResult> citaEstados(int citaId, int estadoId, string empleadoId, string horaInicio)
         {
             try
             {

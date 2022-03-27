@@ -402,6 +402,67 @@ namespace ProyectoStilosoft.Controllers
 
                     await _empleado.GuardarEmpleadoNovedad(novedad);
                     TempData["Accion"] = "Crear";
+                    TempData["Mensaje"] = "Empleado creado correctamente";
+                    return RedirectToAction("ListarAgenda");
+                }
+                catch (Exception)
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "Error realizando la operación";
+                    return RedirectToAction("ListarAgenda");
+                }
+            }
+            else
+            {
+                TempData["Accion"] = "Error";
+                TempData["Mensaje"] = "Error realizando la operación";
+                return RedirectToAction("ListarAgenda");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditarNovedad(int id)
+        {
+            var novedad = await _empleado.ObtenerNovedadPorId(id);
+
+            EmpleadoAgendaEditarViewModel editar = new()
+            {
+                EmpleadoNovedadId = novedad.EmpleadoNovedadId,
+                EmpleadoId = novedad.EmpleadoId,
+                Fecha = novedad.Fecha,
+                HoraFin = novedad.HoraFin,
+                HoraInicio = novedad.HoraInicio
+            };
+
+            var empleado = await _context.empleados.Where(e => e.Estado == true).Select(s => new
+            {
+                EmpleadoId = s.EmpleadoId,
+                DatosEmpleado = string.Format("{0} - {1}", s.Nombre, s.Documento)
+            }).ToListAsync();
+
+            ViewBag.Empleados = new SelectList(empleado, "EmpleadoId", "DatosEmpleado");
+
+            return View(editar);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarNovedad(EmpleadoAgendaEditarViewModel empleadoNovedad)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    EmpleadoNovedad novedad = new()
+                    {
+                        EmpleadoNovedadId = empleadoNovedad.EmpleadoNovedadId,
+                        EmpleadoId = empleadoNovedad.EmpleadoId,
+                        Fecha = empleadoNovedad.Fecha,
+                        HoraFin = empleadoNovedad.HoraFin,
+                        HoraInicio = empleadoNovedad.HoraInicio
+                    };
+
+                    await _empleado.EditarEmpleadoNovedad(novedad);
+                    TempData["Accion"] = "Editar";
                     TempData["Mensaje"] = "Empleado editado correctamente";
                     return RedirectToAction("ListarAgenda");
                 }
