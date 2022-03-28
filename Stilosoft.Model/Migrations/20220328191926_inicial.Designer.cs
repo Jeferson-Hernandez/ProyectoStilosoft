@@ -10,11 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<< HEAD:Stilosoft.Model/Migrations/20220324044946_inicial.Designer.cs
-    [Migration("20220324044946_inicial")]
-=======
-    [Migration("20220327201448_inicial")]
->>>>>>> master:Stilosoft.Model/Migrations/20220327201448_inicial.Designer.cs
+    [Migration("20220328191926_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -168,27 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-<<<<<<< HEAD:Stilosoft.Model/Migrations/20220324044946_inicial.Designer.cs
-                            ConcurrencyStamp = "351802ae-be40-4180-98c2-48a80cef18a5",
-=======
-                            ConcurrencyStamp = "455d8fce-1d37-4b01-89ee-83f053d1a427",
->>>>>>> master:Stilosoft.Model/Migrations/20220327201448_inicial.Designer.cs
+                            ConcurrencyStamp = "8e6be09d-a258-4597-8aee-d1ce305b9be3",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-<<<<<<< HEAD:Stilosoft.Model/Migrations/20220324044946_inicial.Designer.cs
-                            PasswordHash = "AQAAAAEAACcQAAAAEH11NuCN03cbCIYZvrXSSWCx2hf70cKRuKLsodXN+nH7GBM5gMY2LEH+BOmKE0dxLw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPETZENL8RLa8ndUosDyFRBKnYLF6tPitDbfq48bBCuzMcUidYxBf1QU8h6x5ybKnw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a2942095-b633-45d3-9301-0966ae62560a",
-=======
-                            PasswordHash = "AQAAAAEAACcQAAAAEDkjiS5SaXirRmV6DE8v72lzZt0N/pfQfLUg7ZgBleUOm2wr2dpdRXf020WOjsh/9Q==",
-                            PhoneNumber = "1234567890",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "6aa34372-4c53-4357-95d2-f54858c79d03",
->>>>>>> master:Stilosoft.Model/Migrations/20220327201448_inicial.Designer.cs
+                            SecurityStamp = "2d6fc57d-45cc-4984-abc1-eed9194875c7",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });

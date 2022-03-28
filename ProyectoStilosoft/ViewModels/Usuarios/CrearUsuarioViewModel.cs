@@ -39,6 +39,11 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [Required(ErrorMessage = "La contraseña es obligatoria")]
         [StringLength(20, ErrorMessage = "Máximo 20 caracteres")]
         public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar contraseña")]
+        [Compare("Password",
+        ErrorMessage = "Las contraseñas deben coincidir")]
+        public string ConfirmarPassword { get; set; }
         [DisplayName("Rol *")]
         [Required(ErrorMessage = "El rol es obligatorio")]
         public string Rol { get; set; }
