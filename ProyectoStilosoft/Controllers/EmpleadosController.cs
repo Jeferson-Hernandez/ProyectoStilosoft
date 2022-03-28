@@ -167,12 +167,12 @@ namespace ProyectoStilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (DocumentoExists(empleadoEditarViewModel.Documento))
-                {
-                    TempData["Accion"] = "Error";
-                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
-                    return RedirectToAction("index");
-                }
+                //if (DocumentoExists(empleadoEditarViewModel.Documento))
+                //{
+                //    TempData["Accion"] = "Error";
+                //    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                //    return RedirectToAction("index");
+                //}
                 foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
                 {
                     if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))
@@ -314,52 +314,223 @@ namespace ProyectoStilosoft.Controllers
         [HttpPost]
         public IActionResult ValidarAgenda(string empleadoId, string fecha)
         {
-            var fechaExiste = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Count();
+            var novedadExiste = _context.empleadoNovedades.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any();
 
-            if (fechaExiste == 0)
+            if (novedadExiste)
             {
-                return null;
-            }
-            else
-            {
-                var agendaId = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(em => em.EmpleadoAgendaId).ToList();                
-                return Json(_context.agendaOcupadas.Include(em => em.EmpleadoAgenda).Where(a => a.EmpleadoAgendaId == agendaId[0]).Select(a => new 
+                return Json(_context.empleadoNovedades.Where(a => a.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(a => new
                 {
                     HoraInicio = a.HoraInicio,
                     HoraFin = a.HoraFin
-                }).ToList());
-            }            
-        }
-        [HttpPost]
-        public int ObtenerAgendaId(string empleadoId, string fecha)
-        {            
-            var agendaId = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(em => em.EmpleadoAgendaId).ToList();
-            if (agendaId.Count() != 0)
-            {
-                return agendaId[0];
+                }).FirstOrDefault());
             }
-            return 0;
+            return Json(_context.empleados.Select(a => new
+            {
+                HoraInicio = "8:00",
+                HoraFin = "20:00"
+            }).FirstOrDefault());
         }
 
         [HttpPost]
-        public bool HorarioDisponible(int empleadoAgendaId, string horaInicio, int duracion)
+        public bool HorarioDisponible(string empleadoId, string horaInicio, int duracion, string fecha)
         {
-            var horaDisponible = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Where(f => f.HoraInicio == horaInicio).ToList();
-            if (horaDisponible.Count() != 0)
+            bool horaDisponibleInicio = false;
+            bool horaDisponibleTreinta = false;
+            bool horaDisponibleSesenta = false;
+            bool horaDisponibleNoventa = false;
+            bool horaDisponibleCientoVeinte = false;
+            bool horaDisponibleCientoCincuenta = false;
+            bool horaDisponibleCientoOchenta = false;
+            bool horaDisponibleDocientosDiez = false;
+            bool horaDisponibleDocientosCuarenta = false;
+
+            if (duracion > 0 && duracion <= 30)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+            }
+            else if (duracion > 30 && duracion <= 60)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");                
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+            else if (duracion > 60 && duracion <= 90)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime sesenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = sesenta.ToString("HH:mm");
+                horaDisponibleSesenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+            else if (duracion > 90 && duracion <= 120)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime sesenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = sesenta.ToString("HH:mm");
+                horaDisponibleSesenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime noventa = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = noventa.ToString("HH:mm");
+                horaDisponibleNoventa = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+            else if (duracion > 120 && duracion <= 150)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime sesenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = sesenta.ToString("HH:mm");
+                horaDisponibleSesenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime noventa = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = noventa.ToString("HH:mm");
+                horaDisponibleNoventa = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoVeinte = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoVeinte.ToString("HH:mm");
+                horaDisponibleCientoVeinte = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+            else if (duracion > 150 && duracion <= 180)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime sesenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = sesenta.ToString("HH:mm");
+                horaDisponibleSesenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime noventa = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = noventa.ToString("HH:mm");
+                horaDisponibleNoventa = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoVeinte = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoVeinte.ToString("HH:mm");
+                horaDisponibleCientoVeinte = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoCincuenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoCincuenta.ToString("HH:mm");
+                horaDisponibleCientoCincuenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+            else if (duracion > 180 && duracion <= 210)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime sesenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = sesenta.ToString("HH:mm");
+                horaDisponibleSesenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime noventa = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = noventa.ToString("HH:mm");
+                horaDisponibleNoventa = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoVeinte = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoVeinte.ToString("HH:mm");
+                horaDisponibleCientoVeinte = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoCincuenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoCincuenta.ToString("HH:mm");
+                horaDisponibleCientoCincuenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoOchenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoOchenta.ToString("HH:mm");
+                horaDisponibleCientoOchenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+            else if (duracion > 210 && duracion <= 240)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime sesenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = sesenta.ToString("HH:mm");
+                horaDisponibleSesenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime noventa = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = noventa.ToString("HH:mm");
+                horaDisponibleNoventa = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoVeinte = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoVeinte.ToString("HH:mm");
+                horaDisponibleCientoVeinte = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoCincuenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoCincuenta.ToString("HH:mm");
+                horaDisponibleCientoCincuenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoOchenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoOchenta.ToString("HH:mm");
+                horaDisponibleCientoOchenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime doscientosDiez = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = doscientosDiez.ToString("HH:mm");
+                horaDisponibleDocientosDiez = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+            else if (duracion > 240 && duracion <= 270)
+            {
+                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == horaInicio);
+                DateTime treinta = DateTime.Parse(horaInicio).AddMinutes(30);//Se agrega 30 min al valor inicial y se prueba
+                string hora = treinta.ToString("HH:mm");
+                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime sesenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = sesenta.ToString("HH:mm");
+                horaDisponibleSesenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime noventa = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = noventa.ToString("HH:mm");
+                horaDisponibleNoventa = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoVeinte = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoVeinte.ToString("HH:mm");
+                horaDisponibleCientoVeinte = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoCincuenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoCincuenta.ToString("HH:mm");
+                horaDisponibleCientoCincuenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime cientoOchenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = cientoOchenta.ToString("HH:mm");
+                horaDisponibleCientoOchenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime doscientosDiez = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = doscientosDiez.ToString("HH:mm");
+                horaDisponibleDocientosDiez = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+
+                DateTime doscientosCuarenta = DateTime.Parse(hora).AddMinutes(30); //Se agrega otros 30 minutos al valor anterior
+                hora = doscientosCuarenta.ToString("HH:mm");
+                horaDisponibleDocientosCuarenta = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == hora);
+            }
+
+            if (horaDisponibleInicio || horaDisponibleTreinta || horaDisponibleSesenta || horaDisponibleNoventa || horaDisponibleCientoVeinte || horaDisponibleCientoCincuenta || horaDisponibleCientoOchenta || horaDisponibleDocientosDiez || horaDisponibleDocientosCuarenta)
             {
                 return false;
             }
             return true;
-
         }
 
 
-        //Empleado agenda
+        //Empleado novedades
 
         [HttpGet]
         public async Task<IActionResult> ListarAgenda()
         {
-            return View( await _empleado.ObtenerListaAgendaEmpleado());
+            return View(await _empleado.ObtenerListaNovedades());
         }
         [HttpGet]
         public async Task<IActionResult> CrearAgenda()
@@ -375,29 +546,90 @@ namespace ProyectoStilosoft.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CrearAgenda(EmpleadoAgendaViewModel empleadoAgenda)
+        public async Task<IActionResult> CrearAgenda(EmpleadoAgendaViewModel empleadoNovedad)
         {
             if (ModelState.IsValid)
             {
 
-                if (AgendaExists(empleadoAgenda.EmpleadoId, empleadoAgenda.Fecha))
+                if (NovedadExists(empleadoNovedad.EmpleadoId, empleadoNovedad.Fecha))
                 {
                     TempData["Accion"] = "Error";
-                    TempData["Mensaje"] = "El empleado ya tiene una agenda para esa fecha";
+                    TempData["Mensaje"] = "El empleado ya tiene una novedad para esa fecha";
                     return RedirectToAction("ListarAgenda");
                 }
                 try
                 {
-                    EmpleadoAgenda agenda = new()
+                    EmpleadoNovedad novedad = new()
                     {
-                        EmpleadoId = empleadoAgenda.EmpleadoId,
-                        Fecha = empleadoAgenda.Fecha,
-                        HoraInicio = empleadoAgenda.HoraInicio,
-                        HoraFin = empleadoAgenda.HoraFin
+                        EmpleadoId = empleadoNovedad.EmpleadoId,
+                        Fecha = empleadoNovedad.Fecha,
+                        HoraInicio = empleadoNovedad.HoraInicio,
+                        HoraFin = empleadoNovedad.HoraFin
                     };
 
-                    await _empleado.GuardarEmpleadoAgenda(agenda);
+                    await _empleado.GuardarEmpleadoNovedad(novedad);
                     TempData["Accion"] = "Crear";
+                    TempData["Mensaje"] = "Empleado creado correctamente";
+                    return RedirectToAction("ListarAgenda");
+                }
+                catch (Exception)
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "Error realizando la operación";
+                    return RedirectToAction("ListarAgenda");
+                }
+            }
+            else
+            {
+                TempData["Accion"] = "Error";
+                TempData["Mensaje"] = "Error realizando la operación";
+                return RedirectToAction("ListarAgenda");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditarNovedad(int id)
+        {
+            var novedad = await _empleado.ObtenerNovedadPorId(id);
+
+            EmpleadoAgendaEditarViewModel editar = new()
+            {
+                EmpleadoNovedadId = novedad.EmpleadoNovedadId,
+                EmpleadoId = novedad.EmpleadoId,
+                Fecha = novedad.Fecha,
+                HoraFin = novedad.HoraFin,
+                HoraInicio = novedad.HoraInicio
+            };
+
+            var empleado = await _context.empleados.Where(e => e.Estado == true).Select(s => new
+            {
+                EmpleadoId = s.EmpleadoId,
+                DatosEmpleado = string.Format("{0} - {1}", s.Nombre, s.Documento)
+            }).ToListAsync();
+
+            ViewBag.Empleados = new SelectList(empleado, "EmpleadoId", "DatosEmpleado");
+
+            return View(editar);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarNovedad(EmpleadoAgendaEditarViewModel empleadoNovedad)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    EmpleadoNovedad novedad = new()
+                    {
+                        EmpleadoNovedadId = empleadoNovedad.EmpleadoNovedadId,
+                        EmpleadoId = empleadoNovedad.EmpleadoId,
+                        Fecha = empleadoNovedad.Fecha,
+                        HoraFin = empleadoNovedad.HoraFin,
+                        HoraInicio = empleadoNovedad.HoraInicio
+                    };
+
+                    await _empleado.EditarEmpleadoNovedad(novedad);
+                    TempData["Accion"] = "Editar";
                     TempData["Mensaje"] = "Empleado editado correctamente";
                     return RedirectToAction("ListarAgenda");
                 }
@@ -416,9 +648,9 @@ namespace ProyectoStilosoft.Controllers
             }
         }
 
-        private bool AgendaExists(string empleadoId, string fecha)
+        private bool NovedadExists(string empleadoId, string fecha)
         {
-            return _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
+            return _context.empleadoNovedades.Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
         }
         private bool DocumentoExists(string documento)
         {

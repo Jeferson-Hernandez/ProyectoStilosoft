@@ -1,12 +1,12 @@
-﻿@model IEnumerable<Stilosoft.Model.Entities.EmpleadoAgenda>
+﻿@model IEnumerable<Stilosoft.Model.Entities.EmpleadoNovedad>
 
 @{
-    ViewData["Title"] = "Empleado agenda";
+    ViewData["Title"] = "Empleado novedad";
 }
 <hr />
 <section class="content pt-3 pl-3 pr-3">
     <p>
-        <a asp-action="CrearAgenda" asp-controller="Empleados" class="btn btn-success"> Registrar agenda</a>
+        <a asp-action="CrearAgenda" asp-controller="Empleados" class="btn btn-success"> Crear novedad</a>
     </p>
     <table class="table table-bordered" id="tabla">
         <thead>
@@ -45,7 +45,7 @@
                         @Html.DisplayFor(modelItem => item.HoraFin)
                     </td>
                     <td>
-                        <a class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a class="btn btn-dark" asp-action="EditarNovedad" asp-controller="Empleados" asp-route-id="@item.EmpleadoNovedadId"><i class="fas fa-pencil-alt"></i></a>
                     </td>
                 </tr>
             }

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.ViewModels.EmpleadoAgenda
 {
-    public class EmpleadoAgendaViewModel
+    public class EmpleadoAgendaEditarViewModel
     {
+        public int EmpleadoNovedadId { get; set; }
         [DisplayName("Empleado *")]
         public string EmpleadoId { get; set; }
         [DisplayName("Fecha *")]

@@ -6,23 +6,24 @@
 
 @section Styles{
 }
-<div class="container-fluid">
-    <br />
+<br />
+<div class="container justify-content-center">    
     <form asp-action="Crear" asp-controller="Citas" method="post">
         <input type="hidden" asp-for="Total" id="totalCita" />
-        <input type="hidden" asp-for="EmpleadoAgendaId" id="empleadoAgendaId" />
         <input type="hidden" asp-for="Duracion" id="duracion" />
+        <h3 class="text">Crear cita</h3>
+        <br />
         <div class="row">
             <div class="col-5">
                 <div class="row">
                     <div class="form-group col-xs-6 pl-2">
-                        <h3>Cliente*</h3>
+                        <p><b>Cliente *</b></p>
                         <select asp-items="ViewBag.Clientes" asp-for="ClienteId" class="form-control "></select>
                         <span asp-validation-for="ClienteId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
-            <div class="col-3 text-right">
+            <div class="col-7 text-right">
                 <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-info mt-4 mr-5" />
             </div>
         </div>
@@ -30,38 +31,38 @@
         <h3 class="text">Datos de la cita</h3>
         <br />
         <div class="row">
-            <div class="col-8">
+            <div class="col-9">
                 <div class="row">
                     <div class="form-group col-xs-4 pl-2 pr-4">
-                        <h3>Servicio*</h3>
+                        <p><b>Servicio *</b></p>
                         <select asp-for="ServicioId" id="servicio" class="form-control">
                             <option value="seleccione">Seleccione</option>
                             @foreach (var item in Model.Servicios)
                             {
-                                <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
+                                <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre + @item.Duracion min</option>
                             }
                         </select>
                     </div>
                     <div class="form-group col-xs-4 pl-2 pr-4">
-                        <h3>Empleados*</h3>
+                        <p><b>Empleados *</b></p>
                         <select asp-for="EmpleadoId" class="form-control" id="empleadoDropdown">
                         </select>
                         <p class="text-danger empleado">Eliga una opción válida</p>
                     </div>
                     <div class=" col-xs-4 pl-2 pr-4">
-                        <h3>Fecha*</h3>
+                        <p><b>Fecha *</b></p>
                         <input asp-for="Fecha" id="datepicker" class="datepicker form-control" />
                         <p class="text-danger fecha">El empleado no tiene una agenda para esa fecha</p>
                     </div>
                     <div class=" col-xs-4 pl-2">
-                        <h3>Hora*</h3>
+                        <p><b>Hora *</b></p>
                         <input asp-for="Hora" id="timepicker" class="timepicker form-control" />
-                        <p class="text-danger hora">La hora seleccionada ya se encuentra ocupada</p>
+                        <p class="text-danger hora">La hora ya se encuentra ocupada</p>
                     </div>
                 </div>
             </div>
-            <div class="col-4">
-                <h3>Agenda ocupada</h3>
+            <div class="col-3">
+                <h3>Horario de trabajo</h3>
                 <ul id="listaAgendaOcupada">
                 </ul>
             </div>
@@ -80,9 +81,9 @@
             $('input.timepicker').timepicker({
                 timeFormat: 'H:mm',
                 interval: 30,
-                minTime: '8',
-                maxTime: '6:00pm',
-                defaultTime: '8',
+                minTime: '08:00',
+                maxTime: '20:00',
+                defaultTime: '08:00',
                 startTime: '08:00',                
                 dynamic: false,
                 dropdown: true,
@@ -132,22 +133,6 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/Empleados/ObtenerAgendaId',
-                data: { empleadoId: empleado, fecha: fecha },
-                success:
-                    function (respuesta) {
-                        console.log(respuesta);
-                        $('#empleadoAgendaId').val(respuesta)
-                    },
-                error:
-                    function (respuesta) {
-                        alert('El empleado no tiene agenda para esa fecha');
-                    }
-            });
-
-
-            $.ajax({
-                type: 'POST',
                 dataType: 'JSON',
                 url: '/Empleados/ValidarAgenda',
                 data: { empleadoId: empleado, fecha: fecha },
@@ -155,31 +140,40 @@
                     function (respuesta) {
                         console.log(respuesta)
                         let opciones = '';
-                        for (let i = 0; i < respuesta.length; i++) {
-                            opciones += '<li>'+ 'Fecha cita: ' + respuesta[i].horaInicio +  '</li>';
+                        for (let i = 0; i < 1; i++) {
+                            opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
                         }
+                        
+                        $('#timepicker').timepicker('option', 'minTime', respuesta.horaInicio);
+                        $('#timepicker').timepicker('option', 'maxTime', respuesta.horaFin);
+                        $('#timepicker').timepicker('setTime', respuesta.horaInicio);
                         $("#listaAgendaOcupada").html(opciones);
                     },
                 error:
                     function (respuesta) {
-                        console.log(respuesta)
+                        alert('Algo salió mal, recarge la página nuevamente');
                     }
             });
         })
 
         function validarHorario() {
-            let empleadoAgendaId = $("#empleadoAgendaId").val();
+            let empleado = $("#empleadoDropdown option:selected").val();
             let hora = $("#timepicker").val();
             let servicio = $("#servicio option:selected");
-            let duracion = servicio.attr("precio");
+            let duracion = servicio.attr("duracion");
+            let fecha = $("#datepicker").val();
             
             $.ajax({
                 type: 'POST',
                 url: '/Empleados/HorarioDisponible',
-                data: { empleadoAgendaId: empleadoAgendaId, horaInicio: hora, duracion: duracion },
+                data: { empleadoId: empleado, horaInicio: hora, duracion: duracion, fecha: fecha },
                 success:
                     function (respuesta) {
-                        console.log(respuesta);
+                        if (respuesta) {
+                            $(".hora").hide();
+                        } else if (respuesta == false) {
+                            $(".hora").show();
+                        }
                     },
                 error:
                     function (respuesta) {

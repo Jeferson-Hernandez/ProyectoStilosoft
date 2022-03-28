@@ -31,7 +31,6 @@ namespace Stilosoft.Model.Entities
         public bool Estado { get; set; }
 
         public virtual IdentityUser IdentityUser { get; set; }
-        public virtual List<DetalleCitaServicios> DetalleCitaServicios { get; set; }
         public virtual List<DetalleEmpleadoServicios> DetalleEmpleadoServicios { get; set; }
     }
 }

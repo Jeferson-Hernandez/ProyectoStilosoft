@@ -584,7 +584,7 @@ namespace Stilosoft.Controllers
         public async Task<IActionResult> CerrarSesion()
         {
             await _signInManager.SignOutAsync();
-            //_httpContextAccessor.HttpContext.Session.Clear();
+            _httpContextAccessor.HttpContext.Session.Clear();
             return RedirectToAction("login", "Usuarios");
         }
         private bool DocumentoExists(string documento)

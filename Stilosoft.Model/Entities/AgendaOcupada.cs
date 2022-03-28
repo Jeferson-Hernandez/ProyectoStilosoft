@@ -11,10 +11,11 @@ namespace Stilosoft.Model.Entities
     {
         [Key]
         public int AgendaOcupadaId { get; set; }
-        public int EmpleadoAgendaId { get; set; }
+        public string EmpleadoId { get; set; }
+        public string Fecha { get; set; }
         public string HoraInicio { get; set; }
         public string HoraFin { get; set; }
 
-        public virtual EmpleadoAgenda EmpleadoAgenda { get; set; }
+        public virtual Empleado Empleado { get; set; }
     }
 }
