@@ -18,9 +18,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Apellido)
                 </th>
-                <th>
+                @*<th>
                     @Html.DisplayNameFor(model => model.Numero)
-                </th>
+                </th>*@
                 <th>
                     @Html.DisplayNameFor(model => model.Documento)
                 </th>
@@ -33,9 +33,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Estado)
                 </th>
-                <th>
+                @*<th>
                     Acciones
-                </th>
+                </th>*@
                 <th>
                     Cambiar contraseña
                 </th>
@@ -51,14 +51,14 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Apellido)
                     </td>
-                        @if (item.Numero != "0")
+                        @*@if (item.Numero != "0")
                         {
                             <td>@Html.DisplayFor(modelItem => item.Numero)</td>
                         }
                         else
                         {
                               <td>N/A</td>
-                        }
+                        }*@
                     
                     <td>
                         @Html.DisplayFor(modelItem => item.Documento)
@@ -83,12 +83,12 @@
                             </form>
                         }
                     </td>
-                    <td>
+                    @*<td>
                         @if (item.Rol != "Empleado")
                         {
                             <a onclick="mostrarModalS('@Url.Action("Editar","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Editar usuario')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         }                       
-                    </td>
+                    </td>*@
                     <td>
                         <a onclick="mostrarModalS('@Url.Action("ResetPassword","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Cambiar contraseña')" class="btn btn-dark"><i class="fa fa-lock"></i></a>
                     </td>

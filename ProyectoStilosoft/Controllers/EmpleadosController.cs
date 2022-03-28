@@ -272,13 +272,22 @@ namespace ProyectoStilosoft.Controllers
         public async Task<IActionResult> EditarEstado(string id)
         {
             Empleado empleado = await _empleado.ObtenerEmpleadoPorId(id);
-            if (empleado.Estado == true)
-                empleado.Estado = false;
-            else if (empleado.Estado == false)
-                empleado.Estado = true;
+            Usuario usuario = await _usuarioService.ObtenerUsuarioPorId(id);
+            empleado.EmpleadoId = usuario.UsuarioId;
 
+            if (empleado.Estado == true)
+            {
+                empleado.Estado = false;
+                usuario.Estado = false;
+            }
+            else if (empleado.Estado == false)
+            {
+                empleado.Estado = true;
+                usuario.Estado = true;
+            }              
             try
             {
+                await _usuarioService.EditarUsuario(usuario);
                 await _empleado.EditarEmpleado(empleado);
                 TempData["Accion"] = "EditarEstado";
                 TempData["Mensaje"] = "Estado editado correctamente";

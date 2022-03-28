@@ -22,6 +22,7 @@ namespace Stilosoft.Controllers
     public class UsuariosController : Controller
     {
         private readonly IClienteService _clienteService;
+        private readonly IEmpleadoService _EmpleadoService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -32,9 +33,10 @@ namespace Stilosoft.Controllers
         const string SesionNombre = "_Nombre";
         const string SesionId = "_ClienteId";
 
-        public UsuariosController(IClienteService clienteService, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUsuarioService usuarioService, AppDbContext context)
+        public UsuariosController(IClienteService clienteService,IEmpleadoService empleadoService ,UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IHttpContextAccessor httpContextAccessor, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUsuarioService usuarioService, AppDbContext context)
         {
             _clienteService = clienteService;
+            _EmpleadoService = empleadoService;
             _userManager = userManager;
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
@@ -131,8 +133,8 @@ namespace Stilosoft.Controllers
                 }
             }
             TempData["Accion"] = "Error";
-            TempData["Mensaje"] = "Ingresaste un valor inválido";
-            return RedirectToAction("login", "Usuarios");
+            TempData["Mensaje"] = "Debe validar no soy robot";
+            return View();
         }
 
         [HttpGet]
@@ -142,7 +144,7 @@ namespace Stilosoft.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string id)
         {
             if (ModelState.IsValid)
             {
@@ -150,8 +152,10 @@ namespace Stilosoft.Controllers
                 var resultado = await _signInManager.PasswordSignInAsync(loginViewModel.Email, loginViewModel.Password, loginViewModel.RecordarMe, false);
                 if (resultado.Succeeded)
                 {
+
                     var usuario = await _userManager.FindByEmailAsync(loginViewModel.Email);
                     var rol = await _userManager.GetRolesAsync(usuario);
+                    var usuarioLogin = await _context.usuarios.FirstOrDefaultAsync(i => i.UsuarioId == usuario.Id);
 
                     if (rol.Contains("Administrador"))
                     {
@@ -159,13 +163,34 @@ namespace Stilosoft.Controllers
                     }
                     else if (rol.Contains("Cliente"))
                     {
-                        var cliente = await _clienteService.ObtenerClientePorId(usuario.Id);
-                        _httpContextAccessor.HttpContext.Session.SetString(SesionNombre, cliente.Nombre);
-                        _httpContextAccessor.HttpContext.Session.SetString(SesionId, cliente.ClienteId);
-                        return RedirectToAction("index", "Landing");
+                        if (usuarioLogin.Estado == true)
+                        {
+                            var cliente = await _clienteService.ObtenerClientePorId(usuario.Id);
+                            _httpContextAccessor.HttpContext.Session.SetString(SesionNombre, cliente.Nombre);
+                            _httpContextAccessor.HttpContext.Session.SetString(SesionId, cliente.ClienteId);
+                            return RedirectToAction("index", "Landing");
+                        }
+                        else
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "Usuario inactivo";
+                            return View();
+                        }
                     }
-                    return RedirectToAction("index", "Usuarios");
-                }
+                    else if (rol.Contains("Empleado"))
+                    {
+                        if (usuarioLogin.Estado == true)
+                        {
+                            return RedirectToAction("index", "Citas");
+                        }
+                        else
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "Usuario inactivo";
+                            return View();
+                        }                  
+                    }                   
+                }                                     
                 TempData["Accion"] = "Error";
                 TempData["Mensaje"] = "Correo o contraseña incorrecto";
                 return View();
@@ -375,12 +400,31 @@ namespace Stilosoft.Controllers
                 return RedirectToAction("index");
             }
             Usuario usuario = await _usuarioService.ObtenerUsuarioPorId(id);
+            Cliente cliente = await _clienteService.ObtenerClientePorId(id);
+            Empleado empleado = await _EmpleadoService.ObtenerEmpleadoPorId(id);      
             try
             {
                 if (usuario.Estado == true)
                     usuario.Estado = false;
                 else if (usuario.Estado == false)
                     usuario.Estado = true;
+
+                if (usuario.Rol == "Cliente")
+                {
+                    if (cliente.Estado == true)
+                        cliente.Estado = false;
+                    else if (cliente.Estado == false)
+                        cliente.Estado = true;
+                    await _clienteService.EditarCliente(cliente);
+                }
+                else if (usuario.Rol == "Empleado")
+                {
+                    if (empleado.Estado == true)
+                        empleado.Estado = false;
+                    else if (empleado.Estado == false)
+                        empleado.Estado = true;
+                    await _EmpleadoService.EditarEmpleado(empleado);
+                }
 
                 await _usuarioService.EditarUsuario(usuario);
                 TempData["Accion"] = "EditarEstado";

@@ -102,7 +102,7 @@ namespace ProyectoStilosoft
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Landing}/{action=Index}/{id?}");
+                    pattern: "{controller=Dashboard}/{action=gpastel}/{id?}");
             });
         }
     }

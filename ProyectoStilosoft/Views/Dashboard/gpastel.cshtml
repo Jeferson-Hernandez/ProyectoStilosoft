@@ -32,5 +32,49 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
        
-    <script src="~/js/pastel.js"></script>
+    <script>
+        var Cantidad = @ViewBag.VentasFinalizadas;
+        var servicio = @ViewBag.servicio
+        
+
+        Highcharts.chart('container', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Servicios realizados en el 2022'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.0f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Porcentaje',
+                colorByPoint: true,
+                data:[{                  
+                    name: servicio,
+                    y: Cantidad,
+                    sliced: true,
+                    selected: true
+                }]
+            }]
+        });
+    </script>
 }
