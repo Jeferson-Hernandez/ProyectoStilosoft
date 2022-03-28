@@ -39,7 +39,7 @@
                             <option value="seleccione">Seleccione</option>
                             @foreach (var item in Model.Servicios)
                             {
-                                <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
+                                <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre + @item.Duracion min</option>
                             }
                         </select>
                     </div>
@@ -141,7 +141,7 @@
                         console.log(respuesta)
                         let opciones = '';
                         for (let i = 0; i < 1; i++) {
-                            opciones += '<li>' + 'Horario de trabajo: ' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+                            opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
                         }
                         
                         $('#timepicker').timepicker('option', 'minTime', respuesta.horaInicio);

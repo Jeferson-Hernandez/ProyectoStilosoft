@@ -15,7 +15,14 @@
             <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#services">Servicios</a></li>
                 <li class="nav-item"><a class="nav-link" href="#about">¿Quiénes somos?</a></li>
-                <li class="nav-item"><a class="nav-link" asp-action="clienteCita" asp-controller="Citas">Pide tu cita</a></li>
+                @if (Context.Session.GetString("_ClienteId") == null)
+                {
+                    <li class="nav-item"><a class="nav-link" asp-action="login" asp-controller="usuarios">Pide tu cita</a></li>
+                }
+                else
+                {
+                    <li class="nav-item"><a class="nav-link" asp-action="clienteCita" asp-controller="Citas">Pide tu cita</a></li>
+                }
                 @if (Context.Session.GetString("_Nombre") == null)
                 {
                     <li class="nav-item"><a class="nav-link" asp-action="login" asp-controller="usuarios" id="sesion">Iniciar sesión</a></li>

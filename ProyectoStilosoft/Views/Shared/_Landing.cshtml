@@ -98,7 +98,16 @@
 
     <script src="~/lib/AlertifyJS/alertify.js"></script>
     <!-- jQuery -->
-
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
+                  alertify.alert('Crear cita', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]'});
+                 </text>
+        }
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

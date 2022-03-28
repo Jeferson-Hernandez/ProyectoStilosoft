@@ -63,6 +63,14 @@ namespace ProyectoStilosoft.Controllers
                 {
                     try
                     {
+                        var horaOcupada = _context.agendaOcupadas.Where(e => e.EmpleadoId == citaDatos.EmpleadoId).Where(f => f.Fecha == citaDatos.Fecha).Any(h => h.HoraInicio == citaDatos.Hora);
+                        if (horaOcupada)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "La hora seleccionada ya se encuentra agendada";
+                            return RedirectToAction("index");
+                        }
+
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
@@ -78,17 +86,23 @@ namespace ProyectoStilosoft.Controllers
 
                         int contador = 0;
                         if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
-                        {
                             contador = 1;
-                        }
                         else if (citaDatos.Duracion > 30 && citaDatos.Duracion <= 60)
-                        {
                             contador = 2;
-                        }
                         else if (citaDatos.Duracion > 60 && citaDatos.Duracion <= 90)
-                        {
                             contador = 3;
-                        }
+                        else if (citaDatos.Duracion > 90 && citaDatos.Duracion <= 120)
+                            contador = 4;
+                        else if (citaDatos.Duracion > 120 && citaDatos.Duracion <= 150)
+                            contador = 5;
+                        else if (citaDatos.Duracion > 150 && citaDatos.Duracion <= 180)
+                            contador = 6;
+                        else if (citaDatos.Duracion > 180 && citaDatos.Duracion <= 210)
+                            contador = 7;
+                        else if (citaDatos.Duracion > 210 && citaDatos.Duracion <= 240)
+                            contador = 8;
+                        else if (citaDatos.Duracion > 240 && citaDatos.Duracion <= 270)
+                            contador = 9;
 
                         DateTime fechaHoraFin = DateTime.Parse(citaDatos.Hora).AddMinutes(citaDatos.Duracion);
                         string horaFin = fechaHoraFin.ToString("HH:mm");
@@ -170,6 +184,13 @@ namespace ProyectoStilosoft.Controllers
                 {
                     try
                     {
+                        var horaOcupada = _context.agendaOcupadas.Where(e => e.EmpleadoId == citaDatos.EmpleadoId).Where(f => f.Fecha == citaDatos.Fecha).Any(h => h.HoraInicio == citaDatos.Hora);
+                        if (horaOcupada)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "La hora seleccionada ya se encuentra agendada";
+                            return RedirectToAction("index");
+                        }
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
@@ -182,6 +203,48 @@ namespace ProyectoStilosoft.Controllers
                         };
                         _context.Add(cita);
                         await _context.SaveChangesAsync();
+
+                        int contador = 0;
+                        if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
+                            contador = 1;
+                        else if (citaDatos.Duracion > 30 && citaDatos.Duracion <= 60)
+                            contador = 2;
+                        else if (citaDatos.Duracion > 60 && citaDatos.Duracion <= 90)
+                            contador = 3;
+                        else if (citaDatos.Duracion > 90 && citaDatos.Duracion <= 120)
+                            contador = 4;
+                        else if (citaDatos.Duracion > 120 && citaDatos.Duracion <= 150)
+                            contador = 5;
+                        else if (citaDatos.Duracion > 150 && citaDatos.Duracion <= 180)
+                            contador = 6;
+                        else if (citaDatos.Duracion > 180 && citaDatos.Duracion <= 210)
+                            contador = 7;
+                        else if (citaDatos.Duracion > 210 && citaDatos.Duracion <= 240)
+                            contador = 8;
+                        else if (citaDatos.Duracion > 240 && citaDatos.Duracion <= 270)
+                            contador = 9;
+
+                        DateTime fechaHoraFin = DateTime.Parse(citaDatos.Hora).AddMinutes(citaDatos.Duracion);
+                        string horaFin = fechaHoraFin.ToString("HH:mm");
+
+                        string citaHora = citaDatos.Hora;
+
+                        for (int i = 0; i < contador; i++)
+                        {
+                            AgendaOcupada agendaOcupada = new()
+                            {
+                                EmpleadoId = citaDatos.EmpleadoId,
+                                Fecha = citaDatos.Fecha,
+                                HoraInicio = citaHora,
+                                HoraFin = horaFin
+                            };
+                            _context.Add(agendaOcupada);
+                            await _context.SaveChangesAsync();
+
+                            DateTime CitaHoraNueva = DateTime.Parse(citaHora).AddMinutes(30);
+                            string CitaHoraString = CitaHoraNueva.ToString("HH:mm");
+                            citaHora = CitaHoraString;
+                        }
 
                         var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
 
@@ -228,6 +291,8 @@ namespace ProyectoStilosoft.Controllers
 
                 if ( cita.EstadoCitaId == 4)
                 {
+                    
+
                     var usuario = await _userManager.FindByIdAsync(cita.ClienteId);
 
                     MailMessage mensaje = new();
