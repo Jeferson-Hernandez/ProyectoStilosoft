@@ -106,6 +106,14 @@ namespace ProyectoStilosoft.Controllers
 
                 try
                 {
+                    var ServicioExiste = await _servicioService.NombreServicioExiste(servicio.Nombre);
+
+                    if (ServicioExiste != null)
+                    {
+                        TempData["Accion"] = "Error";
+                        TempData["Mensaje"] = "El servicio ya se encuentra registrado";
+                        return RedirectToAction("index");
+                    }
                     await _servicioService.EditarServicio(servicio);
                     TempData["Accion"] = "Editar";
                     TempData["Mensaje"] = "Servicio editado correctamente";

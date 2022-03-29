@@ -272,7 +272,7 @@ namespace Stilosoft.Controllers
                         await _usuarioService.GuardarUsuario(usuario1);
                         TempData["Accion"] = "Crear";
                         TempData["Mensaje"] = "Usuario registrado correctamente";
-                            return RedirectToAction("index");
+                        return RedirectToAction("index");
                     }
 
                     TempData["Accion"] = "Error";
