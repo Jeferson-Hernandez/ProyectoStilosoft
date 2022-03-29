@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Stilosoft.Model.Migrations
 {
-    public partial class inicial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -411,11 +411,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-<<<<<<< HEAD:Stilosoft.Model/Migrations/20220323020035_inicial.cs
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "df78dd0e-aeb5-4091-9754-5c97a6878a33", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEFkphDOv8S1WsIedVeNeF0BerXN251JYTXl9rIIIRP4n7P1Xnjx6HyECPeNvSJdzhw==", "1234567890", false, "295e3f38-35c7-4da2-8c1a-585eb30eed8d", false, "admin@gmail.com" });
-=======
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "351802ae-be40-4180-98c2-48a80cef18a5", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEH11NuCN03cbCIYZvrXSSWCx2hf70cKRuKLsodXN+nH7GBM5gMY2LEH+BOmKE0dxLw==", "1234567890", false, "a2942095-b633-45d3-9301-0966ae62560a", false, "admin@gmail.com" });
->>>>>>> DanielP:Stilosoft.Model/Migrations/20220324044946_inicial.cs
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "2a8c736a-f7a1-4910-8b9d-ceb3e5f8b7da", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAELmwag3QHGsw8sWQyISbx0v/x8S163uoXf8AFkvS5MTPTBEyJHHNqfzaUeU/pSIMbw==", "1234567890", false, "d73ec0d5-fe90-49a9-b483-8673e83fc17e", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",

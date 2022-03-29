@@ -121,21 +121,21 @@ namespace ProyectoStilosoft.Controllers
 
                         var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
 
-                        MailMessage mensaje = new();
-                        mensaje.To.Add(usuario.Email); //destinatario
-                        mensaje.Subject = "Cita Stilosoft";
+                        //MailMessage mensaje = new();
+                        //mensaje.To.Add(usuario.Email); //destinatario
+                        //mensaje.Subject = "Cita Stilosoft";
 
-                        mensaje.Body = "<h1> Cita reservada correctamente </h1><br>" +
-                            "<h3> Gracias por confiar en nosotros <h3><br>";
+                        //mensaje.Body = "<h1> Cita reservada correctamente </h1><br>" +
+                        //    "<h3> Gracias por confiar en nosotros <h3><br>";
 
-                        mensaje.IsBodyHtml = true;
-                        mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
-                        SmtpClient smtpClient = new("smtp.gmail.com");
-                        smtpClient.Port = 587;
-                        smtpClient.UseDefaultCredentials = false;
-                        smtpClient.EnableSsl = true;
-                        smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
-                        smtpClient.Send(mensaje);
+                        //mensaje.IsBodyHtml = true;
+                        //mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
+                        //SmtpClient smtpClient = new("smtp.gmail.com");
+                        //smtpClient.Port = 587;
+                        //smtpClient.UseDefaultCredentials = false;
+                        //smtpClient.EnableSsl = true;
+                        //smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
+                        //smtpClient.Send(mensaje);
 
                         transaction.Commit();
                     }

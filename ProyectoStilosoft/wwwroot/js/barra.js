@@ -1,36 +1,63 @@
 ﻿Highcharts.chart('container', {
     chart: {
-        type: 'bar'
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
     },
     title: {
-        text: 'Stacked bar chart'
+        text: 'Browser market shares in January, 2018'
     },
-    xAxis: {
-        categories: ['Daniel Polo', 'Daniel Agudelo', 'Jefferson Hernandez', 'Guillermo Cardenas']
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
-    yAxis: {
-        min: 0,
-        title: {
-            text: 'Total fruit consumption'
+    accessibility: {
+        point: {
+            valueSuffix: '%'
         }
     },
-    legend: {
-        reversed: true
-    },
     plotOptions: {
-        series: {
-            stacking: 'normal'
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+            }
         }
     },
     series: [{
-        name: 'John',
-        data: [5, 3, 4, 7, 2]       
-
-    }, {
-        name: 'Jane',
-        data: [2, 2, 3, 2, 1]
-    }, {
-        name: 'Joe',
-        data: [3, 4, 4, 2, 5]
+        name: 'Brands',
+        colorByPoint: true,
+        data: [{
+            name: 'Chrome',
+            y: 61.41,
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Internet Explorer',
+            y: 11.84
+        }, {
+            name: 'Firefox',
+            y: 10.85
+        }, {
+            name: 'Edge',
+            y: 4.67
+        }, {
+            name: 'Safari',
+            y: 4.18
+        }, {
+            name: 'Sogou Explorer',
+            y: 1.64
+        }, {
+            name: 'Opera',
+            y: 1.6
+        }, {
+            name: 'QQ',
+            y: 1.2
+        }, {
+            name: 'Other',
+            y: 2.61
+        }]
     }]
 });

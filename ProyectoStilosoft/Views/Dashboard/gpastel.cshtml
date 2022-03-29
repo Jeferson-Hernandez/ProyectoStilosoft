@@ -9,9 +9,9 @@
 <section class="content pt-3 pl-3 pr-3">
     <p>
         <a asp-action="index" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de ventas</a>
-    
+
         <a asp-action="gpastel" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de servicios</a>
-    
+
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
     </p>
     <table class="table table-bordered" id="tabla">
@@ -23,14 +23,35 @@
         </tbody>
     </table>
 </section>
-<div id="container"></div>
+<div id="donutchart" style="width: 900px; height: 500px;"></div>
 
-@section Scripts{
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/data.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+@section Scripts{   
 
-       
-    <script src="~/js/pastel.js"></script>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load("current", { packages: ["corechart"] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Work', 11],
+                ['Eat', 2],
+                ['Commute', 2],
+                ['Watch TV', 2],
+                ['Sleep', 7]
+            ]);
+
+
+
+            var options = {
+                title: 'My Daily Activities',
+                pieHole: 0.4,
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+            chart.draw(data, options);
+        }
+    </script>
 }
