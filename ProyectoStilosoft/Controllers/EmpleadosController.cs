@@ -619,6 +619,12 @@ namespace ProyectoStilosoft.Controllers
             {
                 try
                 {
+                    if (NovedadEditarExists(empleadoNovedad.EmpleadoId, empleadoNovedad.Fecha, empleadoNovedad.EmpleadoNovedadId))
+                    {
+                        TempData["Accion"] = "Error";
+                        TempData["Mensaje"] = "Ya se encuentra un empleado con esa novedad";
+                        return RedirectToAction("ListarAgenda");
+                    }
                     EmpleadoNovedad novedad = new()
                     {
                         EmpleadoNovedadId = empleadoNovedad.EmpleadoNovedadId,
@@ -651,6 +657,10 @@ namespace ProyectoStilosoft.Controllers
         private bool NovedadExists(string empleadoId, string fecha)
         {
             return _context.empleadoNovedades.Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
+        }
+        private bool NovedadEditarExists(string empleadoId, string fecha, int novedadId)
+        {
+            return _context.empleadoNovedades.Where(n => n.EmpleadoNovedadId != novedadId).Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
         }
         private bool DocumentoExists(string documento)
         {
