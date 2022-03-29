@@ -21,6 +21,8 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css">
     <link href="~/css/login.css" rel="stylesheet" />
+    <link href="~/lib/AlertifyJS/css/alertify.css" rel="stylesheet" />
+    <link href="~/lib/AlertifyJS/css/themes/default.css" rel="stylesheet" />
 </head>
 <body class="hold-transition register-page">
     <div class="register-box">
@@ -32,7 +34,7 @@
             <div class="card-body register-card-body">
                 <p class="login-box-msg">Registrarse</p>
 
-                <form asp-action="Registrar" method="post">
+                <form asp-action="Registrar" name="Registrar" method="post">
                     <span asp-validation-for="Nombre" class="text-danger"></span>
                     <div class="input-group mb-3">
                         <input asp-for="Nombre" class="form-control" placeholder="Nombre">
@@ -87,6 +89,16 @@
                             </div>
                         </div>
                     </div>
+                    <div class="input-group mb-3">
+                        <input asp-for="ConfirmarPassword" class="form-control" placeholder="Confirmar contraseña">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="ConfirmarPassword" class="text-danger"></span>
+                    </div>
+                    <div class="g-recaptcha" data-sitekey="6LcQEdoeAAAAAM-6ytfQUuM8F19cFjqZrtcRK-IV"></div>
                     <div class="row justify-content-center">
 
                         <!-- /.col -->
@@ -96,7 +108,6 @@
                         <!-- /.col -->
                     </div>
                 </form>
-
                 <hr />
                 <a asp-action="Login" class="text-center">Ya tengo una cuenta</a>
             </div>
@@ -110,9 +121,18 @@
     <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
     <script src="~/adminlte/dist/js/adminlte.min.js"></script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <!-- reCaptchat -->
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="~/lib/AlertifyJS/alertify.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]', function () {});
+                 </text>
+        }
+    </script>
 </body>
 </html>
 @section Scripts {
-
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+     
 }

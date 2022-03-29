@@ -11,6 +11,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
     public class CrearUsuarioViewModel
     {
         [DisplayName("Nombres *")]
+        [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
         public string Nombre { get; set; }
@@ -38,6 +39,11 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [Required(ErrorMessage = "La contraseña es obligatoria")]
         [StringLength(20, ErrorMessage = "Máximo 20 caracteres")]
         public string Password { get; set; }
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirmar contraseña")]
+        [Compare("Password",
+        ErrorMessage = "Las contraseñas deben coincidir")]
+        public string ConfirmarPassword { get; set; }
         [DisplayName("Rol *")]
         [Required(ErrorMessage = "El rol es obligatorio")]
         public string Rol { get; set; }

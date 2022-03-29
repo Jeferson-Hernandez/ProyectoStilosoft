@@ -1,0 +1,220 @@
+﻿@model ProyectoStilosoft.ViewModels.Citas.CitasCrearViewModel
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Crear cita";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stilosoft | Inicio</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/adminlte/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="~/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css">
+    <link href="~/css/login.css" rel="stylesheet" />
+    <link href="~/lib/AlertifyJS/css/alertify.css" rel="stylesheet" />
+    <link href="~/lib/AlertifyJS/css/themes/default.css" rel="stylesheet" />
+    <link href="~/lib/jquery-timepicker/jquery.timepicker.css" rel="stylesheet" />
+    <link href="~/lib/jquery-ui-1.13.1/jquery-ui.css" rel="stylesheet" />
+</head>
+
+<body class="hold-transition login-page">
+    <br /><br />
+    <div class="container justify-content-center">
+        <form asp-action="clienteCita" asp-controller="Citas" method="post">
+            <input type="hidden" asp-for="Total" id="totalCita" />
+            <input type="hidden" asp-for="Duracion" id="duracion" />
+            <input type="hidden" asp-for="ClienteId" value="@Context.Session.GetString("_ClienteId")" id="totalCita" />
+            <h2 class="text"><b>Pedir cita</b></h2>
+            <br />
+            <div class="row">
+                <div class="col-9">
+                    <div class="row">
+                        <div class="form-group col-xs-4 pl-2 pr-4">
+                            <p><b>Servicio *</b></p>
+                            <select asp-for="ServicioId" id="servicio" class="form-control">
+                                <option value="seleccione">Seleccione</option>
+                                @foreach (var item in Model.Servicios)
+                                {
+                                    <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre + @item.Duracion min</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-4 pl-2 pr-4">
+                            <p><b>Empleados *</b></p>
+                            <select asp-for="EmpleadoId" class="form-control" id="empleadoDropdown">
+                            </select>
+                            <p class="text-danger empleado">Eliga una opción válida</p>
+                        </div>
+                        <div class=" col-xs-4 pl-2 pr-4">
+                            <p><b>Fecha *</b></p>
+                            <input asp-for="Fecha" id="datepicker" class="datepicker form-control" />
+                            <p class="text-danger fecha">El empleado no tiene una agenda para esa fecha</p>
+                        </div>
+                        <div class=" col-xs-4 pl-2">
+                            <p><b>Hora *</b></p>
+                            <input asp-for="Hora" id="timepicker" class="timepicker form-control" />
+                            <p class="text-danger hora">La hora ya se encuentra ocupada</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <h3><b>Horario de trabajo</b></h3>
+                    <ul id="listaAgendaOcupada">
+                    </ul>
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-6">
+                    <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-primary" />
+                </div>
+                <div class="col-6 text-right"> 
+                    <a asp-action="Index" asp-controller="Landing" class="btn btn-info">Ir al inicio</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- /.login-box -->
+    <!-- jQuery -->
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="~/adminlte/dist/js/adminlte.min.js"></script>
+    <script src="~/lib/AlertifyJS/alertify.js"></script>
+    <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-timepicker/jquery.timepicker.js"></script>
+    <script src="~/lib/jquery-ui-1.13.1/jquery-ui.js"></script>
+    <script>
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Registrar")) { <text>
+        alertify.success('Registrado correctamente.');
+                 </text>
+        }
+        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error', '@TempData["Mensaje"]');
+                 </text>
+        }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".text-danger").hide();
+
+            $('input.timepicker').timepicker({
+                timeFormat: 'H:mm',
+                interval: 30,
+                minTime: '08:00',
+                maxTime: '20:00',
+                defaultTime: '08:00',
+                startTime: '08:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true,
+                change: function () {
+                    validarHorario();
+                }
+            });
+
+            $(function () {
+                $("input.datepicker").datepicker({
+                    minDate: -0, maxDate: "+1M"
+                });
+            });
+        });
+    </script>
+    <script>
+        $("#servicio").change(function () {
+            let valorSeleccionado = $(this).val();
+            let servicio = $("#servicio option:selected");
+            $('#totalCita').val(servicio.attr("precio"));
+            $('#duracion').val(servicio.attr("duracion"));
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Empleados/obtenerEmpleados',
+                data: { servicioId: valorSeleccionado },
+                success:
+                    function (respuesta) {
+                        let opciones = '<option value="0">Seleccione</option>';
+                        for (let i = 0; i < respuesta.length; i++) {
+                            opciones += '<option value="' + respuesta[i].empleadoId + '">' + respuesta[i].empleadoNombre + '</option>';
+                        }
+                        $("#empleadoDropdown").html(opciones);
+                    },
+                error:
+                    function (respuesta) {
+                        alert('Algo salió mal, recarge la página nuevamente ');
+                    }
+            });
+        })
+
+        $("#datepicker").change(function () {
+            let empleado = $("#empleadoDropdown option:selected").val();
+            let fecha = $("#datepicker").val();
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Empleados/ValidarAgenda',
+                data: { empleadoId: empleado, fecha: fecha },
+                success:
+                    function (respuesta) {
+                        console.log(respuesta)
+                        let opciones = '';
+                        for (let i = 0; i < 1; i++) {
+                            opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+                        }
+
+                        $('#timepicker').timepicker('option', 'minTime', respuesta.horaInicio);
+                        $('#timepicker').timepicker('option', 'maxTime', respuesta.horaFin);
+                        $('#timepicker').timepicker('setTime', respuesta.horaInicio);
+                        $("#listaAgendaOcupada").html(opciones);
+                    },
+                error:
+                    function (respuesta) {
+                        alert('Algo salió mal, recarge la página nuevamente');
+                    }
+            });
+        })
+
+        function validarHorario() {
+            let empleado = $("#empleadoDropdown option:selected").val();
+            let hora = $("#timepicker").val();
+            let servicio = $("#servicio option:selected");
+            let duracion = servicio.attr("duracion");
+            let fecha = $("#datepicker").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Empleados/HorarioDisponible',
+                data: { empleadoId: empleado, horaInicio: hora, duracion: duracion, fecha: fecha },
+                success:
+                    function (respuesta) {
+                        if (respuesta) {
+                            $(".hora").hide();
+                        } else if (respuesta == false) {
+                            $(".hora").show();
+                        }
+                    },
+                error:
+                    function (respuesta) {
+                        alert('El empleado no tiene agenda para esa fecha');
+                    }
+            });
+        }
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+</body>
+</html>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+

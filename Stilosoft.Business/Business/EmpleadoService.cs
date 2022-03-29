@@ -61,5 +61,25 @@ namespace Stilosoft.Business.Business
             _context.Remove(EmpleadoServicio);
             await _context.SaveChangesAsync();
         }
+
+        //Empleado agenda 
+        public async Task<IEnumerable<EmpleadoNovedad>> ObtenerListaNovedades()
+        {
+            return await _context.empleadoNovedades.Include(e => e.Empleado).ToListAsync();
+        }
+        public async Task<EmpleadoNovedad> ObtenerNovedadPorId(int id)
+        {
+            return await _context.empleadoNovedades.FirstOrDefaultAsync(s => s.EmpleadoNovedadId == id);
+        }
+        public async Task GuardarEmpleadoNovedad(EmpleadoNovedad empleadoNovedad)
+        {
+            _context.Add(empleadoNovedad);
+            await _context.SaveChangesAsync();
+        }
+        public async Task EditarEmpleadoNovedad(EmpleadoNovedad empleadoNovedad)
+        {
+            _context.Update(empleadoNovedad);
+            await _context.SaveChangesAsync();
+        }
     }
 }

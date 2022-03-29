@@ -1,0 +1,65 @@
+﻿@model ProyectoStilosoft.ViewModels.EmpleadoAgenda.EmpleadoAgendaEditarViewModel
+
+@{
+    ViewData["Title"] = "Editar novedad";
+}
+
+@section Styles{
+}
+<div class="container justify-content-center">
+    <br />
+    <form asp-action="EditarNovedad" asp-controller="Empleados" method="post">
+        <input type="hidden" asp-for="EmpleadoNovedadId" />
+        <h3 class="text">Empleado editar novedad</h3>
+        <br />
+        <div class="row">
+            <div class="form-group col-xs-4 pl-2 pr-4">
+                <label asp-for="EmpleadoId" class="control-label"></label>
+                <select asp-items="ViewBag.Empleados" asp-for="EmpleadoId" class="form-control"></select>
+                <span asp-validation-for="EmpleadoId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-xs-4 pl-2 pr-4">
+                <label asp-for="Fecha" class="control-label"></label>
+                <input asp-for="Fecha" id="datepicker" class="datepicker form-control" />
+            </div>
+            <div class="form-group col-xs-4 pl-2 pr-4">
+                <label asp-for="HoraInicio" class="control-label"></label>
+                <input asp-for="HoraInicio" id="timepicker" class="timepicker form-control" />
+            </div>
+            <div class="form-group col-xs-4 pl-2">
+                <label asp-for="HoraFin" class="control-label"></label>
+                <input asp-for="HoraFin" id="timepicker" class="timepicker form-control" />
+            </div>
+        </div>
+        <div class="col-3">
+            <input id="terminarSolicitud" type="submit" value="Crear agenda" class="btn btn-info mt-4 mr-5" />
+        </div>
+    </form>
+</div>
+@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('input.timepicker').timepicker({
+                timeFormat: 'H:mm',
+                interval: 30,
+                minTime: '8',
+                maxTime: '8:00pm',
+                startTime: '08:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true,
+            });
+
+            $(function () {
+                $("input.datepicker").datepicker({
+                    minDate: -0, maxDate: "+1M"
+                });
+            });
+        });
+    </script>
+
+}
