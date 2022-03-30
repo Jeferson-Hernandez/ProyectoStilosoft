@@ -1,4 +1,4 @@
-﻿@model ProyectoStilosoft.ViewModels.Usuarios.LoginViewModel
+﻿@model ProyectoStilosoft.ViewModels.Usuarios.CrearUsuarioViewModel
 
 @{
     ViewData["Title"] = "Login";
@@ -20,76 +20,97 @@
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="~/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css">
-    <link href="~/css/login.css" rel="stylesheet" />
+    @*    <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css">
+        <link href="~/css/login.css" rel="stylesheet" />*@
     <link href="~/lib/AlertifyJS/css/alertify.css" rel="stylesheet" />
     <link href="~/lib/AlertifyJS/css/themes/default.css" rel="stylesheet" />
+    <link href="~/css/NuevoLogin.css" rel="stylesheet" />
 </head>
-<body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a class="h1"><b>Maria C</b> Stilos</a>
-        </div>
-        <!-- /.login-logo -->
-        <div class="card">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Iniciar sesión</p>
-
-                <form asp-action="Login" method="post">
-                    <span asp-validation-for="Email" class="text-danger small"></span>
-                    <div class="input-group mb-3">
-                        <input asp-for="Email" class="form-control" placeholder="Correo">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <span asp-validation-for="Password" class="text-danger small"></span>
-                    <div class="input-group mb-3">
-                        <input type="password" asp-for="Password" class="form-control" placeholder="Contraseña">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Recordarme
-                                </label>
-                            </div>
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-6">
-                            <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
-                        </div>
-                        <!-- /.col -->
-                    </div>
-                </form>
-                <hr />
-
-                <div class="row">
-                    <p class="col-7">
-                        <a asp-action="Registrar">Registrarse</a>
-                    </p>
-                    <p class="col-5">
-                        <a asp-action="OlvidePassword">Olvidé mi contraseña</a>
-                    </p>
-                </div>
-                <div class="row">
-                    <p class="col-7">
-                        <a asp-action="Index" asp-controller="Landing">Ir al inicio</a>
-                    </p>
+<body>
+    <div class="container">
+        <div class="backbox">
+            <div class="loginMsg">
+                <div class="textcontent">
+                    <p class="title">No tienes una cuenta?</p>
+                   <p>¿Qué estás esperando?</p>
+                    <button id="switch1">Regístrate</button>
                 </div>
             </div>
-            <!-- /.login-card-body -->
+            <div class="signupMsg visibility">
+                <div class="textcontent">
+                    <p class="title">Tienes una cuenta?</p>
+                    <p>Ingresa y pide tu cita!</p>
+                    <button id="switch2">Ingresar</button>
+                </div>
+            </div>
         </div>
-    </div>
+        <!-- backbox -->
+
+        <div class="frontbox">
+
+            <div class="login">
+
+                <h2>Inicio de sesión</h2>
+                <div class="inputbox">
+                    <form asp-action="Login" method="post">
+                        <span asp-validation-for="Email"></span>
+                        <input asp-for="Email" placeholder=" CORREO">
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                        <input type="password" asp-for="Password" placeholder="CONTRASEÑA">
+                        <div>
+                            <a asp-action="OlvidePassword">Olvidaste tu contraseña?</a>
+                            <a asp-action="Index" asp-controller="Landing">Ir al inicio</a>
+                        </div>
+                        <button type="submit">Ingresar</button>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="signup hide">
+
+                <h2>Registrarse</h2>
+                <div class="inputbox" id="contenedor">
+                   
+                     <form asp-action="Registrar" name="Registrar" method="post">
+                    <section>
+                        <span asp-validation-for="Nombre"></span>
+                        <input asp-for="Nombre" placeholder=" NOMBRE">
+                        <span asp-validation-for="Apellido"></span>
+                        <input  asp-for="Apellido" placeholder=" APELLIDO">                   
+                        <span asp-validation-for="Documento"></span>
+                        <input asp-for="Documento" placeholder=" DOCUMENTO">
+                        
+                    </section>
+                    <section>
+
+                        <span asp-validation-for="Email"></span>
+                        <input asp-for="Email" placeholder=" CORREO">
+                        <span asp-validation-for="Password"></span>
+                        <input type="password" asp-for="Password" placeholder=" CONTRASEÑA">
+                         <span asp-validation-for="ConfirmarPassword" class="text-danger"></span>
+                        <input asp-for="ConfirmarPassword" class="form-control" placeholder=" CONFIRMAR CONTRASEÑA">
+                    </section>
+                    <section>
+                         <span asp-validation-for="Numero"></span>
+                        <input asp-for="Numero" placeholder=" NÚMERO">
+                         <p class="g-recaptcha" data-sitekey="6LcQEdoeAAAAAM-6ytfQUuM8F19cFjqZrtcRK-IV"></p>
+                         <p class="row justify-content-center">
+                             <button type="submit">Registrar</button>        
+             
+                </section>
+                <a id="previo"> << Previo</a>
+                <a id="siguiente">Siguiente >> </a>
+                 </form>
+                 
+                 </div>
+                             
+            </div>
+
+        </div>
+        </div>
+        <!-- frontbox -->
+  
     <!-- /.login-box -->
     <!-- jQuery -->
     <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
@@ -98,20 +119,60 @@
     <!-- AdminLTE App -->
     <script src="~/adminlte/dist/js/adminlte.min.js"></script>
     <script src="~/lib/AlertifyJS/alertify.js"></script>
+    <script src=~/css/loginscripts.js></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
 
     <script>
-        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Registrar")) { <text>
-        alertify.success('Registrado correctamente.');
-                 </text>
+        @if (TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Registrar"))
+        {
+            <text>
+                    alertify.success('Registrado correctamente.');
+            </text>
         }
-        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
-        alertify.alert('Error', '@TempData["Mensaje"]');
-                 </text>
+        @if (TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error"))
+        {
+            <text>
+                    alertify.alert('Error', '@TempData["Mensaje"]');
+            </text>
         }
     </script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 </body>
 </html>
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+        $(document).ready(function(){
+        $("#contenedor section").each(function(e) {
+            if (e != 0)
+                $(this).hide();
+        });
+
+         $("#siguiente").click(function(){
+        if ($("#contenedor section:visible").next().length != 0)
+            $("#contenedor section:visible").next().show().prev().hide();
+        else {
+            $("#contenedor section:visible").show();
+            $("#contenedor section:first").show();
+        }
+        return false;
+    });
+
+        $("#previo").click(function(){
+            if ($("#contenedor section:visible").prev().length != 0)
+                $("#contenedor section:visible").prev().show().next().hide();
+            else {
+                $("#contenedor section:visible").hide();
+                $("#contenedor section:last").hide();
+            }
+            return false;
+        });
+    });
+</script>
