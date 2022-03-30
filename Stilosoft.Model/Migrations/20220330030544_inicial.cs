@@ -393,7 +393,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "a4ff695d-0a38-4222-b10d-3a72e6b9b6e8", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEDZ46hdcs7p+Y2aJISgVzHIZUG0pHO5ADpdVSjXa5NwSVOXBI8FocpYeW6BrWyw3XA==", "1234567890", false, "e2167ea2-ddb2-4b3f-aaec-6d748a4097dd", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "4d7b3e28-ae16-47cd-8fa2-79007b624657", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAECB4j9MdKLmRQjFhtBgp9qyp8d2+SlmEqtptRngLwIXh0F8dX7XYermOEiz6Pxz82Q==", "1234567890", false, "904aca86-3c41-47c6-a219-f9cccaa11fb9", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",
