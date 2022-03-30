@@ -19,6 +19,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Stilosoft.Controllers
 {
+   
     public class UsuariosController : Controller
     {
         private readonly IClienteService _clienteService;
@@ -155,7 +156,7 @@ namespace Stilosoft.Controllers
 
                     var usuario = await _userManager.FindByEmailAsync(loginViewModel.Email);
                     var rol = await _userManager.GetRolesAsync(usuario);
-                    var usuarioLogin = await _context.usuarios.FirstOrDefaultAsync(i => i.UsuarioId == usuario.Id);
+                    var usuarioLogin = await _context.usuarios.FirstOrDefaultAsync(i => i.UsuarioId == usuario.Id);                 
 
                     if (rol.Contains("Administrador"))
                     {
@@ -181,7 +182,9 @@ namespace Stilosoft.Controllers
                     {
                         if (usuarioLogin.Estado == true)
                         {
-                            return RedirectToAction("index", "Citas");
+                            var empleado = await _EmpleadoService.ObtenerEmpleadoPorId(usuario.Id);
+
+                            return RedirectToAction("AgendaCitasEmpleado", "Empleados", new { id = empleado.EmpleadoId });
                         }
                         else
                         {
@@ -199,7 +202,7 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return View(loginViewModel);
         }
-  
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> CrearUsuario()
         {
@@ -217,7 +220,8 @@ namespace Stilosoft.Controllers
 
             return View();
         }
-     
+
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> CrearUsuario(CrearUsuarioViewModel crearUsuarioViewModel)
         {

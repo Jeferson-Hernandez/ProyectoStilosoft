@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoStilosoft.ViewModels.EmpleadoAgenda;
 using ProyectoStilosoft.ViewModels.Empleados;
+using ProyectoStilosoft.ViewModels.Usuarios;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.DAL;
 using Stilosoft.Model.Entities;
@@ -13,22 +15,24 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
-{
+{   
     public class EmpleadosController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IUsuarioService _usuarioService;
         private readonly IEmpleadoService _empleado;
+        private readonly ICitaService _cita;
         private readonly IServicioService _servicio;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public EmpleadosController(AppDbContext context, IEmpleadoService empleado, IServicioService servicio, IUsuarioService usuarioService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public EmpleadosController(AppDbContext context, ICitaService citaService, IEmpleadoService empleado, IServicioService servicio, IUsuarioService usuarioService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _empleado = empleado;
             _usuarioService = usuarioService;
             _servicio = servicio;
+            _cita = citaService;
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -36,7 +40,10 @@ namespace ProyectoStilosoft.Controllers
         {
             return View(await _empleado.ObtenerListaEmpleados());
         }
-
+        public async Task<IActionResult> AgendaCitasEmpleado(string id)
+        {
+            return View(await _context.citas.Where(i => i.EmpleadoId == id).Include(c => c.Cliente).Include(s => s.Servicio).Include(e => e.EstadoCita).ToListAsync());
+        }
         [HttpGet]
         public async Task<IActionResult> Crear()
         {
