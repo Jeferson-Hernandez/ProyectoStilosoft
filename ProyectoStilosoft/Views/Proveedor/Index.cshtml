@@ -89,7 +89,7 @@
     <script src="~/js/modals.js"></script>
     <script>
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
-        alertify.alert('Guardar proveedor', '@TempData["Mensaje"]', function () { alertify.success('proveedor guardado'); });
+        alertify.alert('Registrar', '@TempData["Mensaje"]', function () { alertify.success('Proveedor guardado'); });
                  </text>
         }
         @if (TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error"))
