@@ -81,7 +81,7 @@
             $(".text-danger").hide();
 
             $('input.timepicker').timepicker({
-                timeFormat: 'H:mm',
+                timeFormat: 'HH:mm',
                 interval: 30,
                 minTime: '08:00',
                 maxTime: '20:00',
@@ -148,13 +148,18 @@
                     function (respuesta) {
                         console.log(respuesta)
                         let opciones = '';
-                        for (let i = 0; i < 1; i++) {
-                            opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+
+                        if (respuesta.empleadoId == "novedad") {
+                            opciones = '<li>El empleado seleccionado tiene una novedad para esa fecha.</br>No es posible seleccionar entre el siguiente horario</p></li>';
+                            for (let i = 0; i < 1; i++) {
+                                opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+                            }
+                        } else {
+                            for (let i = 0; i < 1; i++) {
+                                opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+                            }
                         }
-                        
-                        $('#timepicker').timepicker('option', 'minTime', respuesta.horaInicio);
-                        $('#timepicker').timepicker('option', 'maxTime', respuesta.horaFin);
-                        $('#timepicker').timepicker('setTime', respuesta.horaInicio);
+                        $('#timepicker').timepicker('setTime', "08:00");
                         $("#listaAgendaOcupada").html(opciones);
                     },
                 error:

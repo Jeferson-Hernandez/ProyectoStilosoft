@@ -71,6 +71,14 @@ namespace ProyectoStilosoft.Controllers
                             return RedirectToAction("index");
                         }
 
+                        var clienteCita = _context.citas.Where(c => c.ClienteId == citaDatos.ClienteId).Where(f => f.Fecha == citaDatos.Fecha).Where(h => h.Hora == citaDatos.Hora).Any();
+                        if (clienteCita)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "Ya hay una cita registrada para la fecha y hora seleccionadas";
+                            return RedirectToAction("index");
+                        }
+
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
@@ -191,6 +199,14 @@ namespace ProyectoStilosoft.Controllers
                             TempData["Mensaje"] = "La hora seleccionada ya se encuentra agendada";
                             return RedirectToAction("index");
                         }
+
+                        var clienteCita = _context.citas.Where(c => c.ClienteId == citaDatos.ClienteId).Where(f => f.Fecha == citaDatos.Fecha).Where(h => h.Hora == citaDatos.Hora).Any();
+                        if (clienteCita)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "Ya hay una cita registrada para la fecha y hora seleccionadas";
+                            return RedirectToAction("index");
+                        }
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
@@ -282,7 +298,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index","Landing");
         }
-        public async Task<IActionResult> citaEstados(int citaId, int estadoId, string empleadoId, string horaInicio)
+        public async Task<IActionResult> citaEstados(int citaId, int estadoId, string empleadoId, string horaInicio, int duracion, string fecha)
         {
             try
             {
@@ -291,7 +307,19 @@ namespace ProyectoStilosoft.Controllers
 
                 if ( cita.EstadoCitaId == 4)
                 {
-                    
+                    DateTime fechaHoraFin = DateTime.Parse(horaInicio).AddMinutes(duracion);
+                    string horaFin = fechaHoraFin.ToString("HH:mm");
+
+                    var agendaEliminar = await _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Where(h => h.HoraFin == horaFin).ToListAsync();
+
+                    if (agendaEliminar != null)
+                    {
+                        foreach (var item in agendaEliminar)
+                        {
+                            _context.Remove(item);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
 
                     var usuario = await _userManager.FindByIdAsync(cita.ClienteId);
 

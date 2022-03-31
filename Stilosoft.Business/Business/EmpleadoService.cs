@@ -81,5 +81,6 @@ namespace Stilosoft.Business.Business
             _context.Update(empleadoNovedad);
             await _context.SaveChangesAsync();
         }
+
     }
 }
