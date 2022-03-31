@@ -68,7 +68,7 @@
                     <td>
                         <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="2" class="btn btn-primary"><i class="fas fa-spinner"></i></a>
                         -|- <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="3" class="btn btn-success"><i class="fas fa-check-circle"></i></a>
-                        -|- <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="4" asp-route-empleadoId="@item.EmpleadoId" asp-route-horaInicio="@item.Hora" class="btn btn-danger"><i class="fas fa-times-circle"></i></a>
+                        -|- <a asp-controller="Citas" asp-action="citaEstados" asp-route-citaId="@item.CitaId" asp-route-estadoId="4" asp-route-empleadoId="@item.EmpleadoId" asp-route-duracion="@item.Servicio.Duracion" asp-route-horaInicio="@item.Hora" asp-route-fecha="@item.Fecha" class="btn btn-danger"><i class="fas fa-times-circle"></i></a>
                     </td>
                     }else if(item.EstadoCitaId == 2)
                     {
@@ -98,15 +98,16 @@
     <script src="~/js/modals.js"></script>
     <script>
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
-                  alertify.alert('Crear cita', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
+        alertify.alert('Crear cita', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
-        alertify.alert('Error', '@TempData["Mensaje"]'});
+        alertify.alert('Error cita', '@TempData["Mensaje"]', function () { alertify.error('Error al crear la cita'); });
                  </text>
         }
+        
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
-        alertify.success('Estado cambiado correctamente.');
+                  alertify.success('Estado cambiado correctamente.');
                  </text>
         }
     </script>
