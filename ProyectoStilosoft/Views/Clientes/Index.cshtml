@@ -81,9 +81,9 @@
 
     <script src="~/js/tabla.js"></script>
     <script src="~/js/modals.js"></script>
-    <script>
+    <script>       
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Registrar")) { <text>
-        alertify.success('Registrado correctamente.');
+                  alertify.alert('Crear', '@TempData["Mensaje"]', function () { alertify.success('Cliente guardado'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
@@ -93,11 +93,7 @@
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
         alertify.success('Estado cambiado correctamente.');
                  </text>
-        }
-        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Eliminar")) { <text>
-        alertify.alert('Eliminar cliente', '@TempData["Mensaje"]', function () { alertify.error('Cliente eliminado'); });
-                 </text>
-        }
+        }      
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
         alertify.alert('Editar cliente', '@TempData["Mensaje"]', function () { alertify.success('Cliente editado'); });
                  </text>

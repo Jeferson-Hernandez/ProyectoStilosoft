@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,7 @@ namespace ProyectoStilosoft.Controllers
             _userManager = userManager;
             _configuration = configuration;
         }
-
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
         {
             return View(await _cita.ObtenerListaCitas());
@@ -208,6 +209,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index");
         }
+        [Authorize(Roles = "Cliente")]
         [HttpGet]
         public async Task<IActionResult> clienteCita()
         {

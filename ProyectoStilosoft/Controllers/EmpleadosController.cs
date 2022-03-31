@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoStilosoft.ViewModels.EmpleadoAgenda;
 using ProyectoStilosoft.ViewModels.Empleados;
+using ProyectoStilosoft.ViewModels.Usuarios;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.DAL;
 using Stilosoft.Model.Entities;
@@ -13,22 +15,24 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
-{
+{   
     public class EmpleadosController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IUsuarioService _usuarioService;
         private readonly IEmpleadoService _empleado;
+        private readonly ICitaService _cita;
         private readonly IServicioService _servicio;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public EmpleadosController(AppDbContext context, IEmpleadoService empleado, IServicioService servicio, IUsuarioService usuarioService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public EmpleadosController(AppDbContext context, ICitaService citaService, IEmpleadoService empleado, IServicioService servicio, IUsuarioService usuarioService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _empleado = empleado;
             _usuarioService = usuarioService;
             _servicio = servicio;
+            _cita = citaService;
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -36,7 +40,10 @@ namespace ProyectoStilosoft.Controllers
         {
             return View(await _empleado.ObtenerListaEmpleados());
         }
-
+        public async Task<IActionResult> AgendaCitasEmpleado(string id)
+        {
+            return View(await _context.citas.Where(i => i.EmpleadoId == id).Include(c => c.Cliente).Include(s => s.Servicio).Include(e => e.EstadoCita).ToListAsync());
+        }
         [HttpGet]
         public async Task<IActionResult> Crear()
         {
@@ -167,19 +174,23 @@ namespace ProyectoStilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if (DocumentoExists(empleadoEditarViewModel.Documento))
-                //{
-                //    TempData["Accion"] = "Error";
-                //    TempData["Mensaje"] = "El documento ya se encuentra registrado";
-                //    return RedirectToAction("index");
-                //}
-                foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
+                
+                if (EmpleadoExists(empleadoEditarViewModel.Documento, empleadoEditarViewModel.EmpleadoId))
                 {
-                    if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index", "Empleados");
+                }
+                if (empleadoEditarViewModel.EmpleadoServicios != null)
+                {
+                    foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
                     {
-                        TempData["Accion"] = "Error";
-                        TempData["Mensaje"] = "No es posible repetir el servicio";
-                        return RedirectToAction("Index");
+                        if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "No es posible repetir el servicio";
+                            return RedirectToAction("Index");
+                        }
                     }
                 }
                 using (var transaction = _context.Database.BeginTransaction())
@@ -196,20 +207,23 @@ namespace ProyectoStilosoft.Controllers
                             Estado = empleadoEditarViewModel.Estado
                         };
                         await _empleado.EditarEmpleado(empleado);
-
-                        if (empleadoEditarViewModel.EmpleadoServicios.Count() > 0)
+                        if(empleadoEditarViewModel.EmpleadoServicios != null)
                         {
-                            foreach (var servicios in empleadoEditarViewModel.EmpleadoServicios)
+                            if (empleadoEditarViewModel.EmpleadoServicios.Count() > 0)
                             {
-                                DetalleEmpleadoServicios detalleEmpleado = new()
+                                foreach (var servicios in empleadoEditarViewModel.EmpleadoServicios)
                                 {
-                                    EmpleadoId = empleado.EmpleadoId,
-                                    ServicioId = servicios.ServicioId
-                                };
-                                _context.Add(detalleEmpleado);
+                                    DetalleEmpleadoServicios detalleEmpleado = new()
+                                    {
+                                        EmpleadoId = empleado.EmpleadoId,
+                                        ServicioId = servicios.ServicioId
+                                    };
+                                    _context.Add(detalleEmpleado);
+                                }
+                                _context.SaveChanges();
                             }
-                            _context.SaveChanges();
-                        }
+                        }                      
+
                         transaction.Commit();
                     }
                     catch (Exception)
@@ -535,6 +549,10 @@ namespace ProyectoStilosoft.Controllers
         private bool ServicioExists(int servicioId, string empleadoId)
         {
             return _context.detalleEmpleados.Where(e => e.EmpleadoId == empleadoId).Any(s => s.ServicioId == servicioId);
+        }
+        private bool EmpleadoExists(string documento, string id)
+        {
+            return _context.empleados.Where(i => i.EmpleadoId != id).Any(d => d.Documento == documento);
         }
     }
 }
