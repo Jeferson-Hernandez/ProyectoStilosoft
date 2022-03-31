@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220330014927_inicial")]
+    [Migration("20220330234408_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,16 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b24f6502-d1ba-4ddc-ab0b-4586925d2636",
+                            ConcurrencyStamp = "fde7cdc4-8f88-4508-80e1-72ff97d9b3f9",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECcqBVq1ZqWAUKFi5xYVopKkfZ+CUahD7IA50P9Uhmo2ueWhCM5r1n5PuxRo7gKY0Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM6JjPScirAu6MiCFSWkL87RSDrhLJ6gs7TkezT6J4N6pt1SVS9r1OFE9e1+iVV87A==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "60c9e202-183f-45c9-a76c-d6e42050ed0d",
+                            SecurityStamp = "621f6fde-8b64-415c-a9c3-f2a3200c59ea",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });

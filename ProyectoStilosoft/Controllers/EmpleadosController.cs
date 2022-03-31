@@ -174,19 +174,23 @@ namespace ProyectoStilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if (DocumentoExists(empleadoEditarViewModel.Documento))
-                //{
-                //    TempData["Accion"] = "Error";
-                //    TempData["Mensaje"] = "El documento ya se encuentra registrado";
-                //    return RedirectToAction("index");
-                //}
-                foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
+                
+                if (EmpleadoExists(empleadoEditarViewModel.Documento, empleadoEditarViewModel.EmpleadoId))
                 {
-                    if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index", "Empleados");
+                }
+                if (empleadoEditarViewModel.EmpleadoServicios != null)
+                {
+                    foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
                     {
-                        TempData["Accion"] = "Error";
-                        TempData["Mensaje"] = "No es posible repetir el servicio";
-                        return RedirectToAction("Index");
+                        if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "No es posible repetir el servicio";
+                            return RedirectToAction("Index");
+                        }
                     }
                 }
                 using (var transaction = _context.Database.BeginTransaction())
@@ -203,20 +207,23 @@ namespace ProyectoStilosoft.Controllers
                             Estado = empleadoEditarViewModel.Estado
                         };
                         await _empleado.EditarEmpleado(empleado);
-
-                        if (empleadoEditarViewModel.EmpleadoServicios.Count() > 0)
+                        if(empleadoEditarViewModel.EmpleadoServicios != null)
                         {
-                            foreach (var servicios in empleadoEditarViewModel.EmpleadoServicios)
+                            if (empleadoEditarViewModel.EmpleadoServicios.Count() > 0)
                             {
-                                DetalleEmpleadoServicios detalleEmpleado = new()
+                                foreach (var servicios in empleadoEditarViewModel.EmpleadoServicios)
                                 {
-                                    EmpleadoId = empleado.EmpleadoId,
-                                    ServicioId = servicios.ServicioId
-                                };
-                                _context.Add(detalleEmpleado);
+                                    DetalleEmpleadoServicios detalleEmpleado = new()
+                                    {
+                                        EmpleadoId = empleado.EmpleadoId,
+                                        ServicioId = servicios.ServicioId
+                                    };
+                                    _context.Add(detalleEmpleado);
+                                }
+                                _context.SaveChanges();
                             }
-                            _context.SaveChanges();
-                        }
+                        }                      
+
                         transaction.Commit();
                     }
                     catch (Exception)
@@ -676,6 +683,10 @@ namespace ProyectoStilosoft.Controllers
         private bool ServicioExists(int servicioId, string empleadoId)
         {
             return _context.detalleEmpleados.Where(e => e.EmpleadoId == empleadoId).Any(s => s.ServicioId == servicioId);
+        }
+        private bool EmpleadoExists(string documento, string id)
+        {
+            return _context.empleados.Where(i => i.EmpleadoId != id).Any(d => d.Documento == documento);
         }
     }
 }

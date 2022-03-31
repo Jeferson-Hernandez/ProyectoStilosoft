@@ -69,8 +69,8 @@
                   alertify.alert('Guardar empleado', '@TempData["Mensaje"]', function () { alertify.success('Empleado guardado'); });
                  </text>
         }
-        @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
-        alertify.alert('Error', '@TempData["Mensaje"]'});
+       @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
+        alertify.alert('Error empleado', '@TempData["Mensaje"]', function () { alertify.error('Error empleado'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Editar")) { <text>
