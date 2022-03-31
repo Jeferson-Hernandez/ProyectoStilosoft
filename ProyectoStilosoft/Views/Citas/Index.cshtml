@@ -98,13 +98,14 @@
     <script src="~/js/modals.js"></script>
     <script>
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
-                  alertify.alert('Crear cita', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
+        alertify.alert('Crear cita', '@TempData["Mensaje"]', function () { alertify.success('Cita creada'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>
-                  alertify.alert('Error', '@TempData["Mensaje"]'});
+        alertify.alert('Error cita', '@TempData["Mensaje"]', function () { alertify.error('Error al crear la cita'); });
                  </text>
         }
+        
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("EditarEstado")) { <text>
                   alertify.success('Estado cambiado correctamente.');
                  </text>
