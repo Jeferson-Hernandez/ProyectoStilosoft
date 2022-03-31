@@ -2,20 +2,24 @@
 using Microsoft.AspNetCore.Mvc;
 using ProyectoStilosoft.ViewModels.Servicios;
 using Stilosoft.Business.Abstract;
+using Stilosoft.Model.DAL;
 using Stilosoft.Model.Entities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+  
     public class ServiciosController : Controller
     {
         private readonly IServicioService _servicioService;
+        private readonly AppDbContext _context;
 
-        public ServiciosController(IServicioService servicioService)
+        public ServiciosController(IServicioService servicioService, AppDbContext context)
         {
             _servicioService = servicioService;
+            _context = context;
         }
 
         [HttpGet]
@@ -91,7 +95,7 @@ namespace ProyectoStilosoft.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Editar(ServicioViewModel servicioViewModel)
+        public async Task<IActionResult> Editar(ServicioViewModel servicioViewModel, int id)
         {
             if (ModelState.IsValid)
             {
@@ -105,19 +109,17 @@ namespace ProyectoStilosoft.Controllers
                 };
 
                 try
-                {
-                    var ServicioExiste = await _servicioService.NombreServicioExiste(servicio.Nombre);
-
-                    if (ServicioExiste != null)
+                {              
+                    if (ServicioExists(servicioViewModel.Nombre, servicioViewModel.ServicioId))
                     {
                         TempData["Accion"] = "Error";
                         TempData["Mensaje"] = "El servicio ya se encuentra registrado";
-                        return RedirectToAction("index");
-                    }
-                    await _servicioService.EditarServicio(servicio);
-                    TempData["Accion"] = "Editar";
-                    TempData["Mensaje"] = "Servicio editado correctamente";
-                    return RedirectToAction("index");
+                        return RedirectToAction("Index");
+                    }                                         
+                        await _servicioService.EditarServicio(servicio);
+                        TempData["Accion"] = "Editar";
+                        TempData["Mensaje"] = "Servicio editado correctamente";
+                        return RedirectToAction("index");                    
                 }
                 catch (Exception)
                 {
@@ -157,6 +159,10 @@ namespace ProyectoStilosoft.Controllers
                 TempData["Mensaje"] = "Ingresaste un valor inválido";
                 return RedirectToAction("index");
             }
+        }
+        private bool ServicioExists(string nombre,int id)
+        {
+            return _context.servicios.Where(i => i.ServicioId != id).Any(d => d.Nombre == nombre);
         }
     }
 }
