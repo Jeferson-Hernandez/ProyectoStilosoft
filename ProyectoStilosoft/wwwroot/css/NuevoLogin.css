@@ -151,6 +151,7 @@ body {
     /*opacity: 1;*/
     transition: opacity .8s ease-in-out;
 }
+    
 
 .visibility {
     opacity: 0;
@@ -159,3 +160,5 @@ body {
 .hide {
     display: none;
 }
+
+
