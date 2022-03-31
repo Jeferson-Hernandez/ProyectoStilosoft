@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.ViewModels.EmpleadoAgenda
 {
-    public class EmpleadoAgendaViewModel
+    public class EmpleadoAgendaEditarViewModel
     {
+        public int EmpleadoNovedadId { get; set; }
         [DisplayName("Empleado *")]
         [Required(ErrorMessage = "El empleado es obligatorio")]
         public string EmpleadoId { get; set; }

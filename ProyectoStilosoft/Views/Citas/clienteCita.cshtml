@@ -26,66 +26,66 @@
     <link href="~/lib/AlertifyJS/css/themes/default.css" rel="stylesheet" />
     <link href="~/lib/jquery-timepicker/jquery.timepicker.css" rel="stylesheet" />
     <link href="~/lib/jquery-ui-1.13.1/jquery-ui.css" rel="stylesheet" />
+    
 </head>
-<body class="hold-transition login-page">
-    <div class="login-box">
-        <div class="login-logo">
-            <a class="h1"><b>Maria C</b> Stilos</a>
-        </div>
-        <!-- /.login-logo -->
-        <div class="card">
-            <div class="card-body">
-                <div class="container-fluid">
-                    <form asp-action="clienteCita" asp-controller="Citas" method="post">
-                        <input type="hidden" asp-for="Total" id="totalCita" />
-                        <input type="hidden" asp-for="ClienteId" value="@Context.Session.GetString("_ClienteId")" id="totalCita" />
-                        <h3 class="text">Datos de la cita</h3>
-                        <br />
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <h5>Servicio*</h5>
-                                    <select asp-for="ServicioId" id="servicio" class="form-control">
-                                        <option value="seleccione">Seleccione</option>
-                                        @foreach (var item in Model.Servicios)
-                                        {
-                                            <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group ">
-                                    <h5>Empleados*</h5>
-                                    <select asp-for="EmpleadoId" class="form-control" id="empleadoDropdown">
-                                    </select>
-                                </div>
-                            </div>
-                        </div><br />
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <h5>Fecha*</h5>
-                                    <input asp-for="Fecha" id="datepicker" class="datepicker form-control" />
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <h5>Hora*</h5>
-                                    <input asp-for="Hora" id="timepicker" class="timepicker form-control" />
-                                </div>
-                            </div>
+
+<body>
+    <br /><br />
+    <div class="container h-100">
+        <form asp-action="clienteCita" asp-controller="Citas" method="post">
+            <input type="hidden" asp-for="Total" id="totalCita" />
+            <input type="hidden" asp-for="Duracion" id="duracion" />
+            <input type="hidden" asp-for="ClienteId" value="@Context.Session.GetString("_ClienteId")" id="totalCita" />
+            <h2 class="text"><b>Pedir cita</b></h2>
+            <br />
+            <div class="row">
+                <div class="col-9">
+                    <div class="row">
+                        <div class="form-group col-xs-4 pl-2 pr-4">
+                            <p><b>Servicio *</b></p>
+                            <select asp-for="ServicioId" id="servicio" class="form-control">
+                                <option value="seleccione">Seleccione</option>
+                                @foreach (var item in Model.Servicios)
+                                {
+                                    <option precio="@item.Costo" duracion="@item.Duracion" value="@item.ServicioId">@item.Nombre + @item.Duracion min</option>
+                                }
+                            </select>
+                            <span asp-validation-for="ServicioId" class="text-danger"></span>
                         </div>
-                        <div class="form-group">
-                            <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-info mt-4 mr-5" />
-                        </div><br />
-
-
-                    </form>
+                        <div class="form-group col-xs-4 pl-2 pr-4">
+                            <p><b>Empleados *</b></p>
+                            <select asp-for="EmpleadoId" class="form-control" id="empleadoDropdown">
+                            </select>
+                            <span asp-validation-for="EmpleadoId" class="text-danger"></span>
+                        </div>
+                        <div class=" col-xs-4 pl-2 pr-4">
+                            <p><b>Fecha *</b></p>
+                            <input asp-for="Fecha" id="datepicker" class="datepicker form-control" readonly/>
+                            <span asp-validation-for="Fecha" class="text-danger"></span>
+                        </div>
+                        <div class=" col-xs-4 pl-2">
+                            <p><b>Hora *</b></p>
+                            <input asp-for="Hora" id="timepicker" class="timepicker form-control" readonly/>
+                            <span asp-validation-for="Hora" class="text-danger"></span>
+                            <p class="text-danger hora">La hora ya se encuentra ocupada</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <h3><b>Horario de trabajo</b></h3>
+                    <ul id="listaAgendaOcupada">
+                    </ul>
+                </div>
+            </div><br />
+            <div class="row">
+                <div class="col-9">
+                    <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-primary" />
+                </div>
+                <div class="col-3"> 
+                    <a asp-action="Index" asp-controller="Landing" class="btn btn-info">Ir al inicio</a>
                 </div>
             </div>
-            <!-- /.login-card-body -->
-        </div>
+        </form>
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->
@@ -110,24 +110,23 @@
     </script>
     <script>
         $(document).ready(function () {
+            $(".text-danger").hide();
 
-            $(function () {
-                $('input.timepicker').timepicker({
-                    timeFormat: 'h:mm p',
-                    interval: 30,
-                    minTime: '10',
-                    maxTime: '6:00pm',
-                    defaultTime: '10',
-                    startTime: '10:00',
-                    dynamic: true,
-                    dropdown: true,
-                    scrollbar: true
-                });
+            $('.timepicker').timepicker({
+                timeFormat: 'HH:mm',
+                interval: 30,
+                minTime: '08:00',
+                maxTime: '20:00',
+                startTime: '08:00',
+                dynamic: false,
+                dropdown: true,
+                scrollbar: true,
+                change: validarHorario()
             });
-            $(function () {
-                $("input.datepicker").datepicker({
-                    minDate: -0, maxDate: "+1M"
-                });
+
+            
+            $(".datepicker").datepicker({
+                minDate: -0, maxDate: "+1M"
             });
         });
     </script>
@@ -135,7 +134,8 @@
         $("#servicio").change(function () {
             let valorSeleccionado = $(this).val();
             let servicio = $("#servicio option:selected");
-            $('#totalCita').val(servicio.attr("precio"))
+            $('#totalCita').val(servicio.attr("precio"));
+            $('#duracion').val(servicio.attr("duracion"));
 
             $.ajax({
                 type: 'POST',
@@ -149,6 +149,8 @@
                             opciones += '<option value="' + respuesta[i].empleadoId + '">' + respuesta[i].empleadoNombre + '</option>';
                         }
                         $("#empleadoDropdown").html(opciones);
+                        $("#datepicker").val('');
+                        $("#timepicker").val('');
                     },
                 error:
                     function (respuesta) {
@@ -156,6 +158,65 @@
                     }
             });
         })
+        $("#empleadoDropdown").change(function () {
+            $("#datepicker").val('');
+            $("#timepicker").val('');
+        });
+
+        $("#datepicker").change(function () {
+            let empleado = $("#empleadoDropdown option:selected").val();
+            let fecha = $("#datepicker").val();
+
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/Empleados/ValidarAgenda',
+                data: { empleadoId: empleado, fecha: fecha },
+                success:
+                    function (respuesta) {
+                        console.log(respuesta)
+                        let opciones = '';
+                        for (let i = 0; i < 1; i++) {
+                            opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+                        }
+
+                        $('#timepicker').timepicker('option', 'minTime', respuesta.horaInicio);
+                        $('#timepicker').timepicker('option', 'maxTime', respuesta.horaFin);
+                        $('#timepicker').timepicker('setTime', respuesta.horaInicio);
+                        $("#listaAgendaOcupada").html(opciones);
+                    },
+                error:
+                    function (respuesta) {
+                        alert('Algo salió mal, recarge la página nuevamente');
+                    }
+            });
+        })
+
+        function validarHorario() {
+            let empleado = $("#empleadoDropdown option:selected").val();
+            let hora = $("#timepicker").val();
+            let servicio = $("#servicio option:selected");
+            let duracion = servicio.attr("duracion");
+            let fecha = $("#datepicker").val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/Empleados/HorarioDisponible',
+                data: { empleadoId: empleado, horaInicio: hora, duracion: duracion, fecha: fecha },
+                success:
+                    function (respuesta) {
+                        if (respuesta) {
+                            $(".hora").hide();
+                        } else if (respuesta == false) {
+                            $(".hora").show();
+                        }
+                    },
+                error:
+                    function (respuesta) {
+                        alert('El empleado no tiene agenda para esa fecha');
+                    }
+            });
+        }
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 </body>

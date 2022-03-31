@@ -118,13 +118,23 @@ namespace Stilosoft.Controllers
                 return RedirectToAction("index");
             }
             Cliente cliente = await _clienteService.ObtenerClientePorId(id);
+            Usuario usuario = await _usuarioService.ObtenerUsuarioPorId(id);
+            cliente.ClienteId = usuario.UsuarioId;
+
             try
             {
                 if (cliente.Estado == true)
+                {
                     cliente.Estado = false;
+                    usuario.Estado = false;
+                }
                 else if (cliente.Estado == false)
+                {
                     cliente.Estado = true;
+                    usuario.Estado = true;
+                }
 
+                await _usuarioService.EditarUsuario(usuario);
                 await _clienteService.EditarCliente(cliente);
                 TempData["Accion"] = "EditarEstado";
                 TempData["Mensaje"] = "Estado editado correctamente";

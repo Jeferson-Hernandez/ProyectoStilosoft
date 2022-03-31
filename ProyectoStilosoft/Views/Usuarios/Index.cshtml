@@ -18,9 +18,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Apellido)
                 </th>
-                <th>
+                @*<th>
                     @Html.DisplayNameFor(model => model.Numero)
-                </th>
+                </th>*@
                 <th>
                     @Html.DisplayNameFor(model => model.Documento)
                 </th>
@@ -33,9 +33,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Estado)
                 </th>
-                <th>
+                @*<th>
                     Acciones
-                </th>
+                </th>*@
                 <th>
                     Cambiar contraseña
                 </th>
@@ -51,14 +51,14 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.Apellido)
                     </td>
-                        @if (item.Numero != "0")
+                        @*@if (item.Numero != "0")
                         {
                             <td>@Html.DisplayFor(modelItem => item.Numero)</td>
                         }
                         else
                         {
                               <td>N/A</td>
-                        }
+                        }*@
                     
                     <td>
                         @Html.DisplayFor(modelItem => item.Documento)
@@ -70,25 +70,35 @@
                         @Html.DisplayFor(modelItem => item.Rol)
                     </th>
                     <td>
-                        @if (item.Estado == true)
+                        @if (item.Rol != "Administrador")
+                        {
+                             @if (item.Estado == true)
                         {
                             <form asp-action="EditarEstado" asp-route-id="@item.UsuarioId">
                                 <button type="submit"><i class="fas fa-toggle-on"></i></button>
                             </form>
                         }
-                        else if (item.Estado == false)
+                             else if (item.Estado == false)
                         {
                             <form asp-action="EditarEstado" asp-route-id="@item.UsuarioId">
                                 <button type="submit"><i class="fas fa-toggle-off"></i></button>
                             </form>
                         }
+                        }
+                        else
+                        {
+                            <form asp-action="EditarEstado" asp-route-id="@item.UsuarioId">
+                                <button type="submit" disabled><i class="fas fa-toggle-on" ></i></button>
+                            </form>
+                        }
+
                     </td>
-                    <td>
+                    @*<td>
                         @if (item.Rol != "Empleado")
                         {
                             <a onclick="mostrarModalS('@Url.Action("Editar","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Editar usuario')" class="btn btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         }                       
-                    </td>
+                    </td>*@
                     <td>
                         <a onclick="mostrarModalS('@Url.Action("ResetPassword","Usuarios", new {id = item.UsuarioId}, Context.Request.Scheme)', 'Cambiar contraseña')" class="btn btn-dark"><i class="fa fa-lock"></i></a>
                     </td>
@@ -104,7 +114,7 @@
     <script src="~/js/modals.js"></script>
     <script>
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Crear")) { <text>
-                  alertify.alert('Guardar usuario', '@TempData["Mensaje"]', function () { alertify.success('Usuario guardado'); });
+                  alertify.alert('Registrar', '@TempData["Mensaje"]', function () { alertify.success('Usuario guardado'); });
                  </text>
         }
         @if(TempData["Mensaje"] != null && TempData["Accion"].ToString().Equals("Error")) { <text>

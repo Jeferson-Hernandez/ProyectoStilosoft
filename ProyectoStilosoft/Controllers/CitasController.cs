@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,7 @@ namespace ProyectoStilosoft.Controllers
             _userManager = userManager;
             _configuration = configuration;
         }
-
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
         {
             return View(await _cita.ObtenerListaCitas());
@@ -63,9 +64,84 @@ namespace ProyectoStilosoft.Controllers
                 {
                     try
                     {
+                        var horaOcupada = _context.agendaOcupadas.Where(e => e.EmpleadoId == citaDatos.EmpleadoId).Where(f => f.Fecha == citaDatos.Fecha).Any(h => h.HoraInicio == citaDatos.Hora);
+                        if (horaOcupada)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "La hora seleccionada ya se encuentra agendada";
+                            return RedirectToAction("index");
+                        }
+
+                        var clienteCita = _context.citas.Where(c => c.ClienteId == citaDatos.ClienteId).Where(f => f.Fecha == citaDatos.Fecha).Where(h => h.Hora == citaDatos.Hora).Any();
+                        if (clienteCita)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "Ya hay una cita registrada para la fecha y hora seleccionadas";
+                            return RedirectToAction("index");
+                        }
+
+                        int contador = 0;
+                        if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
+                            contador = 1;
+                        else if (citaDatos.Duracion > 30 && citaDatos.Duracion <= 60)
+                            contador = 2;
+                        else if (citaDatos.Duracion > 60 && citaDatos.Duracion <= 90)
+                            contador = 3;
+                        else if (citaDatos.Duracion > 90 && citaDatos.Duracion <= 120)
+                            contador = 4;
+                        else if (citaDatos.Duracion > 120 && citaDatos.Duracion <= 150)
+                            contador = 5;
+                        else if (citaDatos.Duracion > 150 && citaDatos.Duracion <= 180)
+                            contador = 6;
+                        else if (citaDatos.Duracion > 180 && citaDatos.Duracion <= 210)
+                            contador = 7;
+                        else if (citaDatos.Duracion > 210 && citaDatos.Duracion <= 240)
+                            contador = 8;
+                        else if (citaDatos.Duracion > 240 && citaDatos.Duracion <= 270)
+                            contador = 9;
+
+                        var empleadoNovedad = _context.empleadoNovedades.Where(e => e.EmpleadoId == citaDatos.EmpleadoId).Where(f => f.Fecha == citaDatos.Fecha).FirstOrDefault();
+
+                        if (empleadoNovedad != null)
+                        {
+                            var empleadoHoraInicio = empleadoNovedad.HoraInicio;
+                            var empleadoHoraFin = empleadoNovedad.HoraFin;
+
+                            DateTime novedadHoraInicio = DateTime.Parse(empleadoHoraInicio);
+                            DateTime novedadHoraFin = DateTime.Parse(empleadoHoraFin);
+                            DateTime horaSeleccionada = DateTime.Parse(citaDatos.Hora);
+                            if (horaSeleccionada >= novedadHoraInicio && horaSeleccionada <= novedadHoraFin)
+                            {
+                                TempData["Accion"] = "Error";
+                                TempData["Mensaje"] = "El empleado tiene una novedad para la hora seleccionada";
+                                return RedirectToAction("index");
+                            }
+                            else
+                            {
+                                var citaHoraCiclo = citaDatos.Hora;
+                                DateTime novedadHoraInicioTreinta = DateTime.Parse(empleadoHoraInicio).AddMinutes(30);
+                                string novedadHoraInicioTreintaString = novedadHoraInicioTreinta.ToString("HH:mm");
+                                for (int i = 0; i <= contador; i++)
+                                {
+                                    DateTime citaHoraNueva = DateTime.Parse(citaHoraCiclo).AddMinutes(30);
+                                    string citaHoraString = citaHoraNueva.ToString("HH:mm");
+
+                                    if (citaHoraString == novedadHoraInicioTreintaString)
+                                    {
+                                        TempData["Accion"] = "Error";
+                                        TempData["Mensaje"] = "El empleado tiene una novedad, tenga en cuenta que si la duración pasa el horario de novedad no es posible asignarla";
+                                        return RedirectToAction("index");
+                                    }
+                                    citaHoraCiclo = citaHoraString;
+                                }
+                            }
+                        }
+
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
+                            EmpleadoId = citaDatos.EmpleadoId,
+                            ServicioId = citaDatos.ServicioId,
                             Fecha = citaDatos.Fecha,
                             Hora = citaDatos.Hora,
                             Total = citaDatos.Total,
@@ -73,31 +149,7 @@ namespace ProyectoStilosoft.Controllers
                         };
                         _context.Add(cita);
                         await _context.SaveChangesAsync();
-
-                        DetalleCitaServicios citaServicio = new()
-                        {
-                            CitaId = cita.CitaId,
-                            EmpleadoId = citaDatos.EmpleadoId,
-                            ServicioId = citaDatos.ServicioId
-                        };
-                        _context.Add(citaServicio);
-                        await _context.SaveChangesAsync();
-
-
-                        int contador = 0;
-                        if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
-                        {
-                            contador = 1;
-                        }
-                        else if (citaDatos.Duracion > 30 && citaDatos.Duracion <= 60)
-                        {
-                            contador = 2;
-                        }
-                        else if (citaDatos.Duracion > 60 && citaDatos.Duracion <= 90)
-                        {
-                            contador = 3;
-                        }
-
+                                                
                         DateTime fechaHoraFin = DateTime.Parse(citaDatos.Hora).AddMinutes(citaDatos.Duracion);
                         string horaFin = fechaHoraFin.ToString("HH:mm");
 
@@ -107,7 +159,8 @@ namespace ProyectoStilosoft.Controllers
                         {
                             AgendaOcupada agendaOcupada = new()
                             {
-                                EmpleadoAgendaId = citaDatos.EmpleadoAgendaId,
+                                EmpleadoId = citaDatos.EmpleadoId,
+                                Fecha = citaDatos.Fecha,
                                 HoraInicio = citaHora,
                                 HoraFin = horaFin
                             };
@@ -156,6 +209,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index");
         }
+        [Authorize(Roles = "Cliente")]
         [HttpGet]
         public async Task<IActionResult> clienteCita()
         {
@@ -177,9 +231,26 @@ namespace ProyectoStilosoft.Controllers
                 {
                     try
                     {
+                        var horaOcupada = _context.agendaOcupadas.Where(e => e.EmpleadoId == citaDatos.EmpleadoId).Where(f => f.Fecha == citaDatos.Fecha).Any(h => h.HoraInicio == citaDatos.Hora);
+                        if (horaOcupada)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "La hora seleccionada ya se encuentra agendada";
+                            return RedirectToAction("index");
+                        }
+
+                        var clienteCita = _context.citas.Where(c => c.ClienteId == citaDatos.ClienteId).Where(f => f.Fecha == citaDatos.Fecha).Where(h => h.Hora == citaDatos.Hora).Any();
+                        if (clienteCita)
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "Ya hay una cita registrada para la fecha y hora seleccionadas";
+                            return RedirectToAction("index");
+                        }
                         Cita cita = new()
                         {
                             ClienteId = citaDatos.ClienteId,
+                            EmpleadoId = citaDatos.EmpleadoId,
+                            ServicioId = citaDatos.ServicioId,
                             Fecha = citaDatos.Fecha,
                             Hora = citaDatos.Hora,
                             Total = citaDatos.Total,
@@ -188,14 +259,47 @@ namespace ProyectoStilosoft.Controllers
                         _context.Add(cita);
                         await _context.SaveChangesAsync();
 
-                        DetalleCitaServicios citaServicio = new()
+                        int contador = 0;
+                        if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
+                            contador = 1;
+                        else if (citaDatos.Duracion > 30 && citaDatos.Duracion <= 60)
+                            contador = 2;
+                        else if (citaDatos.Duracion > 60 && citaDatos.Duracion <= 90)
+                            contador = 3;
+                        else if (citaDatos.Duracion > 90 && citaDatos.Duracion <= 120)
+                            contador = 4;
+                        else if (citaDatos.Duracion > 120 && citaDatos.Duracion <= 150)
+                            contador = 5;
+                        else if (citaDatos.Duracion > 150 && citaDatos.Duracion <= 180)
+                            contador = 6;
+                        else if (citaDatos.Duracion > 180 && citaDatos.Duracion <= 210)
+                            contador = 7;
+                        else if (citaDatos.Duracion > 210 && citaDatos.Duracion <= 240)
+                            contador = 8;
+                        else if (citaDatos.Duracion > 240 && citaDatos.Duracion <= 270)
+                            contador = 9;
+
+                        DateTime fechaHoraFin = DateTime.Parse(citaDatos.Hora).AddMinutes(citaDatos.Duracion);
+                        string horaFin = fechaHoraFin.ToString("HH:mm");
+
+                        string citaHora = citaDatos.Hora;
+
+                        for (int i = 0; i < contador; i++)
                         {
-                            CitaId = cita.CitaId,
-                            EmpleadoId = citaDatos.EmpleadoId,
-                            ServicioId = citaDatos.ServicioId
-                        };
-                        _context.Add(citaServicio);
-                        await _context.SaveChangesAsync();
+                            AgendaOcupada agendaOcupada = new()
+                            {
+                                EmpleadoId = citaDatos.EmpleadoId,
+                                Fecha = citaDatos.Fecha,
+                                HoraInicio = citaHora,
+                                HoraFin = horaFin
+                            };
+                            _context.Add(agendaOcupada);
+                            await _context.SaveChangesAsync();
+
+                            DateTime CitaHoraNueva = DateTime.Parse(citaHora).AddMinutes(30);
+                            string CitaHoraString = CitaHoraNueva.ToString("HH:mm");
+                            citaHora = CitaHoraString;
+                        }
 
                         var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
 
@@ -233,7 +337,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index","Landing");
         }
-        public async Task<IActionResult> citaEstados(int citaId, int estadoId)
+        public async Task<IActionResult> citaEstados(int citaId, int estadoId, string empleadoId, string horaInicio, int duracion, string fecha)
         {
             try
             {
@@ -242,6 +346,20 @@ namespace ProyectoStilosoft.Controllers
 
                 if ( cita.EstadoCitaId == 4)
                 {
+                    DateTime fechaHoraFin = DateTime.Parse(horaInicio).AddMinutes(duracion);
+                    string horaFin = fechaHoraFin.ToString("HH:mm");
+
+                    var agendaEliminar = await _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Where(h => h.HoraFin == horaFin).ToListAsync();
+
+                    if (agendaEliminar != null)
+                    {
+                        foreach (var item in agendaEliminar)
+                        {
+                            _context.Remove(item);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+
                     var usuario = await _userManager.FindByIdAsync(cita.ClienteId);
 
                     MailMessage mensaje = new();
@@ -272,11 +390,6 @@ namespace ProyectoStilosoft.Controllers
                 TempData["Mensaje"] = "No se pudo completar la operación";
                 return RedirectToAction("index");
             }
-        }
-
-        public async Task<IActionResult> DetalleCita(int id)
-        {
-            return View(await _cita.ObtenerDetalleCita(id));
         }
     }
 }

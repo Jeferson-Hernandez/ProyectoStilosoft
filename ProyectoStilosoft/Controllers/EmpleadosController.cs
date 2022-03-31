@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ProyectoStilosoft.ViewModels.EmpleadoAgenda;
 using ProyectoStilosoft.ViewModels.Empleados;
+using ProyectoStilosoft.ViewModels.Usuarios;
 using Stilosoft.Business.Abstract;
 using Stilosoft.Model.DAL;
 using Stilosoft.Model.Entities;
@@ -13,22 +15,24 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
-{
+{   
     public class EmpleadosController : Controller
     {
         private readonly AppDbContext _context;
         private readonly IUsuarioService _usuarioService;
         private readonly IEmpleadoService _empleado;
+        private readonly ICitaService _cita;
         private readonly IServicioService _servicio;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public EmpleadosController(AppDbContext context, IEmpleadoService empleado, IServicioService servicio, IUsuarioService usuarioService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public EmpleadosController(AppDbContext context, ICitaService citaService, IEmpleadoService empleado, IServicioService servicio, IUsuarioService usuarioService, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _empleado = empleado;
             _usuarioService = usuarioService;
             _servicio = servicio;
+            _cita = citaService;
             _userManager = userManager;
             _roleManager = roleManager;
         }
@@ -36,7 +40,10 @@ namespace ProyectoStilosoft.Controllers
         {
             return View(await _empleado.ObtenerListaEmpleados());
         }
-
+        public async Task<IActionResult> AgendaCitasEmpleado(string id)
+        {
+            return View(await _context.citas.Where(i => i.EmpleadoId == id).Include(c => c.Cliente).Include(s => s.Servicio).Include(e => e.EstadoCita).ToListAsync());
+        }
         [HttpGet]
         public async Task<IActionResult> Crear()
         {
@@ -167,19 +174,23 @@ namespace ProyectoStilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (DocumentoExists(empleadoEditarViewModel.Documento))
+                
+                if (EmpleadoExists(empleadoEditarViewModel.Documento, empleadoEditarViewModel.EmpleadoId))
                 {
                     TempData["Accion"] = "Error";
                     TempData["Mensaje"] = "El documento ya se encuentra registrado";
-                    return RedirectToAction("index");
+                    return RedirectToAction("index", "Empleados");
                 }
-                foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
+                if (empleadoEditarViewModel.EmpleadoServicios != null)
                 {
-                    if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))
+                    foreach (var item in empleadoEditarViewModel.EmpleadoServicios)
                     {
-                        TempData["Accion"] = "Error";
-                        TempData["Mensaje"] = "No es posible repetir el servicio";
-                        return RedirectToAction("Index");
+                        if (ServicioExists(item.ServicioId, empleadoEditarViewModel.EmpleadoId))
+                        {
+                            TempData["Accion"] = "Error";
+                            TempData["Mensaje"] = "No es posible repetir el servicio";
+                            return RedirectToAction("Index");
+                        }
                     }
                 }
                 using (var transaction = _context.Database.BeginTransaction())
@@ -196,20 +207,23 @@ namespace ProyectoStilosoft.Controllers
                             Estado = empleadoEditarViewModel.Estado
                         };
                         await _empleado.EditarEmpleado(empleado);
-
-                        if (empleadoEditarViewModel.EmpleadoServicios.Count() > 0)
+                        if(empleadoEditarViewModel.EmpleadoServicios != null)
                         {
-                            foreach (var servicios in empleadoEditarViewModel.EmpleadoServicios)
+                            if (empleadoEditarViewModel.EmpleadoServicios.Count() > 0)
                             {
-                                DetalleEmpleadoServicios detalleEmpleado = new()
+                                foreach (var servicios in empleadoEditarViewModel.EmpleadoServicios)
                                 {
-                                    EmpleadoId = empleado.EmpleadoId,
-                                    ServicioId = servicios.ServicioId
-                                };
-                                _context.Add(detalleEmpleado);
+                                    DetalleEmpleadoServicios detalleEmpleado = new()
+                                    {
+                                        EmpleadoId = empleado.EmpleadoId,
+                                        ServicioId = servicios.ServicioId
+                                    };
+                                    _context.Add(detalleEmpleado);
+                                }
+                                _context.SaveChanges();
                             }
-                            _context.SaveChanges();
-                        }
+                        }                      
+
                         transaction.Commit();
                     }
                     catch (Exception)
@@ -270,15 +284,25 @@ namespace ProyectoStilosoft.Controllers
 
         [HttpPost]
         public async Task<IActionResult> EditarEstado(string id)
-        {
-            Empleado empleado = await _empleado.ObtenerEmpleadoPorId(id);
-            if (empleado.Estado == true)
-                empleado.Estado = false;
-            else if (empleado.Estado == false)
-                empleado.Estado = true;
-
+        {           
             try
             {
+                Empleado empleado = await _empleado.ObtenerEmpleadoPorId(id);
+                Usuario usuario = await _usuarioService.ObtenerUsuarioPorId(id);
+                empleado.EmpleadoId = usuario.UsuarioId;
+
+                if (empleado.Estado == true)
+                {
+                    empleado.Estado = false;
+                    usuario.Estado = false;
+                }
+                else if (empleado.Estado == false)
+                {
+                    empleado.Estado = true;
+                    usuario.Estado = true;
+                }
+
+                await _usuarioService.EditarUsuario(usuario);
                 await _empleado.EditarEmpleado(empleado);
                 TempData["Accion"] = "EditarEstado";
                 TempData["Mensaje"] = "Estado editado correctamente";
@@ -305,75 +329,88 @@ namespace ProyectoStilosoft.Controllers
         [HttpPost]
         public IActionResult ValidarAgenda(string empleadoId, string fecha)
         {
-            var fechaExiste = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Count();
+            var novedadExiste = _context.empleadoNovedades.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any();
 
-            if (fechaExiste == 0)
+            if (novedadExiste)
             {
-                return null;
-            }
-            else
-            {
-                var agendaId = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(em => em.EmpleadoAgendaId).ToList();                
-                return Json(_context.agendaOcupadas.Include(em => em.EmpleadoAgenda).Where(a => a.EmpleadoAgendaId == agendaId[0]).Select(a => new 
+                return Json(_context.empleadoNovedades.Where(a => a.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(a => new
                 {
+                    EmpleadoId = "novedad",
                     HoraInicio = a.HoraInicio,
                     HoraFin = a.HoraFin
-                }).ToList());
-            }            
-        }
-        [HttpPost]
-        public int ObtenerAgendaId(string empleadoId, string fecha)
-        {            
-            var agendaId = _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Select(em => em.EmpleadoAgendaId).ToList();
-            if (agendaId.Count() != 0)
-            {
-                return agendaId[0];
+                }).FirstOrDefault());
             }
-            return 0;
+            return Json(_context.empleados.Select(a => new
+            {
+                EmpleadoId = "normal",
+                HoraInicio = "8:00",
+                HoraFin = "20:00"
+            }).FirstOrDefault());
         }
 
         [HttpPost]
-        public bool HorarioDisponible(int empleadoAgendaId, string horaInicio, int duracion)
+        public bool HorarioDisponible(string empleadoId, string horaInicio, int duracion, string fecha)
         {
-            bool horaDisponibleInicio = false;
-            bool horaDisponibleTreinta = false;
-            bool horaDisponibleSesenta = false;
+            int contador = 0;
+            bool horaOcupada = false;
 
-            if (duracion > 0 && duracion <= 30)
+            if (horaInicio == null)
             {
-                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaInicio);
+                horaInicio = "08:00";
             }
-            else if (duracion > 30 && duracion <= 60)
-            {
-                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaInicio);
-                DateTime convertirHoraInicio = DateTime.Parse(horaInicio).AddMinutes(30);
-                string horaTreintaMin = convertirHoraInicio.ToString("HH:mm");
-                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaTreintaMin);
-            }
+            if (duracion > 30 && duracion <= 60)
+                contador = 1;
             else if (duracion > 60 && duracion <= 90)
+                contador = 2;
+            else if (duracion > 90 && duracion <= 120)
+                contador = 3;
+            else if (duracion > 120 && duracion <= 150)
+                contador = 4;
+            else if (duracion > 150 && duracion <= 180)
+                contador = 5;
+            else if (duracion > 180 && duracion <= 210)
+                contador = 6;
+            else if (duracion > 210 && duracion <= 240)
+                contador = 7;
+            else if (duracion > 240 && duracion <= 270)
+                contador = 8;
+
+
+            string citaHora = horaInicio;
+            var horaDisponibleInicial = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == citaHora);
+            if (horaDisponibleInicial || citaHora == "20:00")
             {
-                horaDisponibleInicio = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaInicio);
-                DateTime convertirHoraInicio = DateTime.Parse(horaInicio).AddMinutes(30);
-                string horaTreintaMin = convertirHoraInicio.ToString("HH:mm");
-                horaDisponibleTreinta = _context.agendaOcupadas.Where(e => e.EmpleadoAgendaId == empleadoAgendaId).Any(h => h.HoraInicio == horaTreintaMin);
-                DateTime convertirHoraTreinta = DateTime.Parse(horaTreintaMin).AddMinutes(30);
-                string horaSesentaMin = convertirHoraTreinta.ToString("HH:mm");
+                return false;
             }
 
-            if (horaDisponibleInicio || horaDisponibleTreinta || horaDisponibleSesenta)
+            for (int i = 0; i <= contador; i++)
+            {                
+                DateTime CitaHoraNueva = DateTime.Parse(citaHora).AddMinutes(30);
+                string CitaHoraString = CitaHoraNueva.ToString("HH:mm");
+                var horaDisponible = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == CitaHoraString);
+                if (horaDisponible || CitaHoraString == "20:30")
+                {
+                    horaOcupada = true;
+                    break;
+                }
+                citaHora = CitaHoraString;
+            }
+
+            if (horaOcupada)
             {
                 return false;
             }
             return true;
+
         }
 
 
-        //Empleado agenda
+        //Empleado novedades
 
         [HttpGet]
         public async Task<IActionResult> ListarAgenda()
         {
-            return View( await _empleado.ObtenerListaAgendaEmpleado());
+            return View(await _empleado.ObtenerListaNovedades());
         }
         [HttpGet]
         public async Task<IActionResult> CrearAgenda()
@@ -389,29 +426,96 @@ namespace ProyectoStilosoft.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CrearAgenda(EmpleadoAgendaViewModel empleadoAgenda)
+        public async Task<IActionResult> CrearAgenda(EmpleadoAgendaViewModel empleadoNovedad)
         {
             if (ModelState.IsValid)
             {
 
-                if (AgendaExists(empleadoAgenda.EmpleadoId, empleadoAgenda.Fecha))
+                if (NovedadExists(empleadoNovedad.EmpleadoId, empleadoNovedad.Fecha))
                 {
                     TempData["Accion"] = "Error";
-                    TempData["Mensaje"] = "El empleado ya tiene una agenda para esa fecha";
+                    TempData["Mensaje"] = "El empleado ya tiene una novedad para esa fecha";
                     return RedirectToAction("ListarAgenda");
                 }
                 try
                 {
-                    EmpleadoAgenda agenda = new()
+                    EmpleadoNovedad novedad = new()
                     {
-                        EmpleadoId = empleadoAgenda.EmpleadoId,
-                        Fecha = empleadoAgenda.Fecha,
-                        HoraInicio = empleadoAgenda.HoraInicio,
-                        HoraFin = empleadoAgenda.HoraFin
+                        EmpleadoId = empleadoNovedad.EmpleadoId,
+                        Fecha = empleadoNovedad.Fecha,
+                        HoraInicio = empleadoNovedad.HoraInicio,
+                        HoraFin = empleadoNovedad.HoraFin
                     };
 
-                    await _empleado.GuardarEmpleadoAgenda(agenda);
+                    await _empleado.GuardarEmpleadoNovedad(novedad);
                     TempData["Accion"] = "Crear";
+                    TempData["Mensaje"] = "Empleado creado correctamente";
+                    return RedirectToAction("ListarAgenda");
+                }
+                catch (Exception)
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "Error realizando la operación";
+                    return RedirectToAction("ListarAgenda");
+                }
+            }
+            else
+            {
+                TempData["Accion"] = "Error";
+                TempData["Mensaje"] = "Error realizando la operación";
+                return RedirectToAction("ListarAgenda");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditarNovedad(int id)
+        {
+            var novedad = await _empleado.ObtenerNovedadPorId(id);
+
+            EmpleadoAgendaEditarViewModel editar = new()
+            {
+                EmpleadoNovedadId = novedad.EmpleadoNovedadId,
+                EmpleadoId = novedad.EmpleadoId,
+                Fecha = novedad.Fecha,
+                HoraFin = novedad.HoraFin,
+                HoraInicio = novedad.HoraInicio
+            };
+
+            var empleado = await _context.empleados.Where(e => e.Estado == true).Select(s => new
+            {
+                EmpleadoId = s.EmpleadoId,
+                DatosEmpleado = string.Format("{0} - {1}", s.Nombre, s.Documento)
+            }).ToListAsync();
+
+            ViewBag.Empleados = new SelectList(empleado, "EmpleadoId", "DatosEmpleado");
+
+            return View(editar);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarNovedad(EmpleadoAgendaEditarViewModel empleadoNovedad)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (NovedadEditarExists(empleadoNovedad.EmpleadoId, empleadoNovedad.Fecha, empleadoNovedad.EmpleadoNovedadId))
+                    {
+                        TempData["Accion"] = "Error";
+                        TempData["Mensaje"] = "Ya se encuentra un empleado con esa novedad";
+                        return RedirectToAction("ListarAgenda");
+                    }
+                    EmpleadoNovedad novedad = new()
+                    {
+                        EmpleadoNovedadId = empleadoNovedad.EmpleadoNovedadId,
+                        EmpleadoId = empleadoNovedad.EmpleadoId,
+                        Fecha = empleadoNovedad.Fecha,
+                        HoraFin = empleadoNovedad.HoraFin,
+                        HoraInicio = empleadoNovedad.HoraInicio
+                    };
+
+                    await _empleado.EditarEmpleadoNovedad(novedad);
+                    TempData["Accion"] = "Editar";
                     TempData["Mensaje"] = "Empleado editado correctamente";
                     return RedirectToAction("ListarAgenda");
                 }
@@ -430,9 +534,13 @@ namespace ProyectoStilosoft.Controllers
             }
         }
 
-        private bool AgendaExists(string empleadoId, string fecha)
+        private bool NovedadExists(string empleadoId, string fecha)
         {
-            return _context.empleadoAgendas.Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
+            return _context.empleadoNovedades.Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
+        }
+        private bool NovedadEditarExists(string empleadoId, string fecha, int novedadId)
+        {
+            return _context.empleadoNovedades.Where(n => n.EmpleadoNovedadId != novedadId).Where(e => e.EmpleadoId == empleadoId).Any(d => d.Fecha == fecha);
         }
         private bool DocumentoExists(string documento)
         {
@@ -441,6 +549,10 @@ namespace ProyectoStilosoft.Controllers
         private bool ServicioExists(int servicioId, string empleadoId)
         {
             return _context.detalleEmpleados.Where(e => e.EmpleadoId == empleadoId).Any(s => s.ServicioId == servicioId);
+        }
+        private bool EmpleadoExists(string documento, string id)
+        {
+            return _context.empleados.Where(i => i.EmpleadoId != id).Any(d => d.Documento == documento);
         }
     }
 }

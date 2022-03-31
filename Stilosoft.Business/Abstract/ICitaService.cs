@@ -13,6 +13,5 @@ namespace Stilosoft.Business.Abstract
         Task<Cita> ObtenerCitaPorId(int id);
         Task GuardarCita(Cita cita);
         Task EditarCita(Cita cita);
-        Task<IEnumerable<DetalleCitaServicios>> ObtenerDetalleCita(int id);
     }
 }
