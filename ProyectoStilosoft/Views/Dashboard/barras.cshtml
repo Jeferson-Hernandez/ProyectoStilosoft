@@ -13,29 +13,31 @@
 
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
     </p>
-    <table class="table table-bordered" id="tabla">
-        <thead>
-            <tr>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="form-group col-xs-4 pl-2 pr-4">
+            <p>Desde: <input type="text" id="datepicker"></p>
+        </div>
+        <div class="form-group col-xs-4 pl-2 pr-4">
+            <p>Hasta: <input type="text" id="datepicker2"></p>
+        </div>
+    </div>
 </section>
 <div id="container"></div>
 
 @section Scripts{
-
     <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-    
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+            $("#datepicker2").datepicker();
+        });
 
-    <script>   
     jQuery.ajax({
-        url: '@Url.Action("reporteServicio", "Dashboard")',
+        url: '@Url.Action("reporteClientes", "Dashboard")',
         type: "GET",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
@@ -43,57 +45,47 @@
 
             console.log(data)
 
-            var arrayNombre = [];
+            var arrayCliente = [];
             var arrayCantidad = [];
 
             for (var i = 0; i < data.length; i++) {
 
                 /*console.log(data[i].nombre)*/
-                arrayNombre.push(data[i].nombre)
+                arrayCliente.push(data[i].cliente)
                 arrayCantidad.push(data[i].cantidad)
             }
             Highcharts.chart('container', {
                 chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
+                    type: 'bar'
                 },
                 title: {
-                    text: 'Browser market shares in January, 2018'
+                    text: 'Top 5 de clientes'
                 },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                xAxis: {
+                    categories: arrayCliente
                 },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Total servicios'
                     }
                 },
+                legend: {
+                    reversed: true
+                },
                 plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                        }
+                    series: {
+                        stacking: 'normal'
                     }
                 },
                 series: [{
-                    name: 'Brands',
-                    colorByPoint: true,
-                    data: [{
-                        name: 'Chrome',
-                        y: 61.41,
-                        sliced: true,
-                        selected: true
-                    }, {
-                        name: 'Intern',
-                        y: arrayCantidad
-                    }]                
+                    name: 'Cantidad de servicios',
+                    data: arrayCantidad
                 }]
-            });           
+            });;
+
+
+
 
         },
         error: function (error) {

@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.ViewModels.Graficas
 {
-    public class reporteServicios
+    public class reporteVentas
     {
-        public string servicio { get; set; }
-        public int cantidad { get; set; }
-
+        public int ventasRealizadas { get; set; }
+        public int VentasCanceladas { get; set; }
     }
 }

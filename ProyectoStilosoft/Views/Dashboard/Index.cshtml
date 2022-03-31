@@ -14,14 +14,14 @@
 
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
     </p>
-    <table class="table table-bordered" id="tabla">
-        <thead>
-            <tr>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="form-group col-xs-4 pl-2 pr-4">
+            <p>Desde: <input type="text" id="datepicker"></p>        
+        </div>
+        <div class="form-group col-xs-4 pl-2 pr-4">          
+            <p>Hasta: <input type="text" id="datepicker2"></p>
+        </div>
+    </div>
 </section>
 <div id="container"></div>
 
@@ -31,25 +31,31 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
+    
 
-     
     <script>
+        $(function () {
+            $("#datepicker").datepicker();
+            $("#datepicker2").datepicker();
+        });
+
+
         var citasFinalizadas = @ViewBag.VentasFinalizadas;
-        var citasCanceladas = @ViewBag.VentasCanceladas;    
+        var citasCanceladas = @ViewBag.VentasCanceladas;
 
         Highcharts.chart('container', {
             chart: {
                 type: 'column'
             },
             title: {
-                text: 'Citas finalizadas vs citas canceladas'
+                text: 'Citas finalizadas Vs Citas canceladas'
             },
             subtitle: {
                 text: ''
             },
             xAxis: {
                 categories: [
-                    '2022-Presente'                  
+                    '2022'
                 ],
                 crosshair: true
             },

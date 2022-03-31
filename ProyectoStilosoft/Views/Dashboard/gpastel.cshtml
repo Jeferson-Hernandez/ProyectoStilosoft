@@ -4,7 +4,6 @@
 @{
 }
 
-
 <hr>
 <section class="content pt-3 pl-3 pr-3">
     <p>
@@ -14,44 +13,95 @@
 
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
     </p>
-    <table class="table table-bordered" id="tabla">
-        <thead>
-            <tr>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="form-group col-xs-4 pl-2 pr-4">
+            <p>Desde: <input type="text" id="datepicker"></p>
+        </div>
+        <div class="form-group col-xs-4 pl-2 pr-4">
+            <p>Hasta: <input type="text" id="datepicker2"></p>
+        </div>
+    </div>
 </section>
-<div id="donutchart" style="width: 900px; height: 500px;"></div>
+<div id="container"></div>
 
-@section Scripts{   
-
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Task', 'Hours per Day'],
-                ['Work', 11],
-                ['Eat', 2],
-                ['Commute', 2],
-                ['Watch TV', 2],
-                ['Sleep', 7]
-            ]);
+@section Scripts{
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 
 
-            var options = {
-                title: 'My Daily Activities',
-                pieHole: 0.4,
-            };
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+            $("#datepicker2").datepicker();
+        });
 
-            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
-            chart.draw(data, options);
+    jQuery.ajax({
+        url: '@Url.Action("reporteServicios", "Dashboard")',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+
+            console.log(data)            
+
+            var arrayServicio = [];
+            var arrayCantidad = [];
+
+            for (var i = 0; i < data.length; i++) {
+
+                /*console.log(data[i].nombre)*/
+                arrayServicio.push(data[i].servicio)
+                arrayCantidad.push(data[i].cantidad)
+            }
+            Highcharts.chart('container', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Porcentaje de servicios solicitados'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.y}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                    name: arrayServicio,
+                    colorByPoint: true,
+                    data: arrayCantidad
+                }]
+            });
+
+        },
+        error: function (error) {
+            console.log(error)
         }
+    });
     </script>
+
+    @*series: [{
+    name: arrayServicio,
+    data: arrayCantidad
+    }]*@
+
+
 }
