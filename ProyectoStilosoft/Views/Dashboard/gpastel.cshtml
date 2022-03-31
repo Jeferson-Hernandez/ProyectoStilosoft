@@ -31,21 +31,15 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 
-
     <script>
-        $(function () {
-            $("#datepicker").datepicker();
-            $("#datepicker2").datepicker();
-        });
-
-    jQuery.ajax({
+        $.ajax({
         url: '@Url.Action("reporteServicios", "Dashboard")',
         type: "GET",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function (data) {
 
-            console.log(data)            
+            /*console.log(data)    */
 
             var arrayServicio = [];
             var arrayCantidad = [];
@@ -53,8 +47,10 @@
             for (var i = 0; i < data.length; i++) {
 
                 /*console.log(data[i].nombre)*/
-                arrayServicio.push(data[i].servicio)
-                arrayCantidad.push(data[i].cantidad)
+
+                arrayServicio.push(data[i].servicio);
+                arrayCantidad.push(data[i].cantidad);
+
             }
             Highcharts.chart('container', {
                 chart: {
@@ -64,7 +60,7 @@
                     type: 'pie'
                 },
                 title: {
-                    text: 'Porcentaje de servicios solicitados'
+                    text: 'Browser market shares in January, 2018'
                 },
                 tooltip: {
                     pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -80,14 +76,19 @@
                         cursor: 'pointer',
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.y}</b>: {point.percentage:.1f} %'
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
                         }
                     }
                 },
                 series: [{
-                    name: arrayServicio,
+                    name: 'Datos',
                     colorByPoint: true,
-                    data: arrayCantidad
+                    data: [{
+                        name: 'dd',
+                        y: 5,
+                        sliced: true,
+                        selected: true
+                    }]
                 }]
             });
 
@@ -97,7 +98,7 @@
         }
     });
     </script>
-
+     
     @*series: [{
     name: arrayServicio,
     data: arrayCantidad
