@@ -44,13 +44,13 @@
                         @if (item.Estado == true)
                         {
                             <form asp-action="EditarEstado" asp-route-id="@item.EmpleadoId">
-                                <button type="submit" class="btn"><i class="fas fa-toggle-on"></i></button>
+                                <button type="submit"><i class="fas fa-toggle-on"></i></button>
                             </form>
                         }
                         else if (item.Estado == false)
                         {
                             <form asp-action="EditarEstado" asp-route-id="@item.EmpleadoId">
-                                <button type="submit" class="btn"><i class="fas fa-toggle-off"></i></button>
+                                <button type="submit"><i class="fas fa-toggle-off"></i></button>
                             </form>
                         }
                     </td>
