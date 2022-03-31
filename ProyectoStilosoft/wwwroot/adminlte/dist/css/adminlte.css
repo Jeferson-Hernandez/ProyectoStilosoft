@@ -35505,6 +35505,9 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   padding: 0 20px 20px;
   text-align: center;
 }
+.login-box-smg p{
+    text-align: left;
+}
 
 .social-auth-links {
   margin: 10px 0;
