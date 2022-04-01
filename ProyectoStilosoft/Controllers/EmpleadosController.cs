@@ -404,7 +404,6 @@ namespace ProyectoStilosoft.Controllers
 
         }
 
-
         //Empleado novedades
 
         [HttpGet]
