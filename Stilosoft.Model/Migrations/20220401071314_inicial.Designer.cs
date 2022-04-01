@@ -10,7 +10,7 @@ using Stilosoft.Model.DAL;
 namespace Stilosoft.Model.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220331234233_inicial")]
+    [Migration("20220401071314_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -164,16 +164,16 @@ namespace Stilosoft.Model.Migrations
                         {
                             Id = "b74ddd14-6340-4840-95c2-db12554843e5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c96a6f5c-ffa8-408c-af35-77cbaf9d7aeb",
+                            ConcurrencyStamp = "4c182ab3-b9dc-4665-af8b-8ffffbbf6054",
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFVsr0nmQOhjPM6MB2sy7wsqL1K7hiNWCHf8lu/U/A6/tBLA7j/1BxzW7CnfgRcbhw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDzKC3gTPJX7a/VrxONm4VS2O1GuggLFlSOvQRWR8xcMqXOvf7eyen95hcADG9vQYw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fce41a85-16b5-4189-8ba6-9ea337a903be",
+                            SecurityStamp = "278bb34e-04c6-4c38-90ce-f6ff51c50ce0",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -522,10 +522,17 @@ namespace Stilosoft.Model.Migrations
                     b.Property<long>("Costo")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("Duracion")
                         .HasColumnType("int");
 
                     b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EstadoLanding")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nombre")

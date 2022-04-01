@@ -21,6 +21,12 @@
                     @Html.DisplayNameFor(model => model.Duracion)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EstadoLanding)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Estado)
                 </th>
                 <th>
@@ -40,6 +46,23 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Duracion) min
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @if (item.EstadoLanding == true)
+                        {
+                            <form asp-action="EditarEstadoLanding" asp-route-id="@item.ServicioId">
+                                <button type="submit"><i class="fas fa-toggle-on"></i></button>
+                            </form>
+                        }
+                        else if (item.EstadoLanding == false)
+                        {
+                            <form asp-action="EditarEstadoLanding" asp-route-id="@item.ServicioId">
+                                <button type="submit"><i class="fas fa-toggle-off"></i></button>
+                            </form>
+                        }
                     </td>
                     <td>
                         @if (item.Estado == true)
