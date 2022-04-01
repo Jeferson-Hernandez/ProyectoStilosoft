@@ -81,7 +81,7 @@
                     <a asp-action="Index" asp-controller="Landing" class="btn btn-info">Ir al inicio</a>
                 </div>
                 <div class="col-3">
-                    <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-primary" />
+                    <input id="terminarCita" type="submit" value="Terminar cita" class="btn btn-primary" />
                 </div>
             </div>
         </form><br /><br />
@@ -240,8 +240,10 @@
                     function (respuesta) {
                         if (respuesta) {
                             $(".hora").hide();
+                            $("#terminarCita").prop('disabled', false);
                         } else if (respuesta == false) {
                             $(".hora").show();
+                            $("#terminarCita").prop('disabled', true);
                         }
                     },
                 error:

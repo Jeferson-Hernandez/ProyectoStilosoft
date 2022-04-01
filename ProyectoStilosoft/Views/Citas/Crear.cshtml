@@ -59,9 +59,9 @@
                         <p class="text-danger hora">La hora ya se encuentra ocupada</p>
                     </div>
                 </div>
-                <div>
+                <div><br />
                     <div class="col-7">
-                        <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-info" />
+                        <input id="terminarCita" type="submit" value="Terminar cita" class="btn btn-info" disabled />
                     </div>
                 </div>
             </div>
@@ -187,8 +187,10 @@
                     function (respuesta) {
                         if (respuesta) {
                             $(".hora").hide();
+                            $("#terminarCita").prop('disabled', false);
                         } else if (respuesta == false) {
                             $(".hora").show();
+                            $("#terminarCita").prop('disabled', true);
                         }
                     },
                 error:
