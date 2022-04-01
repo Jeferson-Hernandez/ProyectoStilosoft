@@ -509,11 +509,25 @@ a.btn-goback:hover {
 
 
    /* -------------------------------------------------------------------------------------------------------------------------------------------------- */
-
-   .titulo{
-       color: aqua;
+.titulo{
+       color: #393939;
+       font-size: 20px;
+       font-family: sans-serif;
+       font-weight: bold;
    }
 
-   #iniciar{
-       color: aqua;
+#titulo2{
+
+}
+
+.icono{
+       color: white;
    }
+.botones {
+    border-radius: 12px;
+    color: #060a38;
+    padding: 10px;
+}
+.cuadro {
+    background: linear-gradient( rgba(35,43,85,0.75), rgba(35,43,85,0.95)), url(https://dl.dropboxusercontent.com/u/22006283/preview/codepen/clouds-cloudy-forest-mountain.jpg) no-repeat center center;
+}

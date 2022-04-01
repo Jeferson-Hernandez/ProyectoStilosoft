@@ -34,8 +34,8 @@
         </div>
         <!-- /.login-logo -->
         <div class="card">
-            <div class="card-body login-card-body">
-                <p class="login-box-msg">Iniciar sesión</p>
+            <div class="card-body login-card-body cuadro">
+                <p class="login-box-msg titulo">Iniciar sesión</p>
 
                 <form asp-action="Login" method="post">
                     <span asp-validation-for="Email" class="text-danger small"></span>
@@ -43,7 +43,7 @@
                         <input asp-for="Email" class="form-control" placeholder="Correo">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-envelope icono"></span>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                         <input type="password" asp-for="Password" class="form-control" placeholder="Contraseña">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                                <span class="fas fa-lock icono"></span>
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
 
                 <div class="row">
                     <p class="col-7">
-                        <button asp-action="Registrar">Registrarse</button>
+                        <a asp-action="Registrar" class="">Registrarse</a>
                     </p>
                     <p class="col-5">
                         <a asp-action="OlvidePassword">Olvidé mi contraseña</a>
