@@ -384,7 +384,7 @@ namespace ProyectoStilosoft.Controllers
                 DateTime novedadHoraInicio = DateTime.Parse(empleadoHoraInicio);
                 DateTime novedadHoraFin = DateTime.Parse(empleadoHoraFin);
                 DateTime horaSeleccionada = DateTime.Parse(horaInicio);
-                if (horaSeleccionada >= novedadHoraInicio && horaSeleccionada <= novedadHoraFin)
+                if (horaSeleccionada >= novedadHoraInicio && horaSeleccionada < novedadHoraFin)
                 {
                     return false;
                 }
@@ -413,11 +413,18 @@ namespace ProyectoStilosoft.Controllers
             {
                 return false;
             }
+            DateTime CitaHoraFinalHorario = DateTime.Parse("20:00");
+            DateTime CitaHoraFinalCita = DateTime.Parse(citaHora).AddMinutes(duracion);
+            if (CitaHoraFinalCita > CitaHoraFinalHorario)
+            {
+                return false;
+            }
 
-            for (int i = 0; i <= contador; i++)
+            for (int i = 0; i < contador; i++)
             {                
                 DateTime CitaHoraNueva = DateTime.Parse(citaHora).AddMinutes(30);
                 string CitaHoraString = CitaHoraNueva.ToString("HH:mm");
+
                 var horaDisponible = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == CitaHoraString);
                 if (horaDisponible || CitaHoraString == "20:30")
                 {

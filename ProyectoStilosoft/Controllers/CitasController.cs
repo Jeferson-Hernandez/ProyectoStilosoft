@@ -115,7 +115,7 @@ namespace ProyectoStilosoft.Controllers
                             DateTime novedadHoraInicio = DateTime.Parse(empleadoHoraInicio);
                             DateTime novedadHoraFin = DateTime.Parse(empleadoHoraFin);
                             DateTime horaSeleccionada = DateTime.Parse(citaDatos.Hora);
-                            if (horaSeleccionada >= novedadHoraInicio && horaSeleccionada <= novedadHoraFin)
+                            if (horaSeleccionada >= novedadHoraInicio && horaSeleccionada < novedadHoraFin)
                             {
                                 TempData["Accion"] = "Error";
                                 TempData["Mensaje"] = "El empleado tiene una novedad para la hora seleccionada";
