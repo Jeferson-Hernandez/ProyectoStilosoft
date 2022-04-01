@@ -375,6 +375,37 @@ namespace ProyectoStilosoft.Controllers
             else if (duracion > 240 && duracion <= 270)
                 contador = 8;
 
+            var empleadoNovedad = _context.empleadoNovedades.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).FirstOrDefault();
+            if (empleadoNovedad != null)
+            {
+                var empleadoHoraInicio = empleadoNovedad.HoraInicio;
+                var empleadoHoraFin = empleadoNovedad.HoraFin;
+
+                DateTime novedadHoraInicio = DateTime.Parse(empleadoHoraInicio);
+                DateTime novedadHoraFin = DateTime.Parse(empleadoHoraFin);
+                DateTime horaSeleccionada = DateTime.Parse(horaInicio);
+                if (horaSeleccionada >= novedadHoraInicio && horaSeleccionada <= novedadHoraFin)
+                {
+                    return false;
+                }
+                else
+                {
+                    var citaHoraCiclo = horaInicio;
+                    DateTime novedadHoraInicioTreinta = DateTime.Parse(empleadoHoraInicio).AddMinutes(30);
+                    string novedadHoraInicioTreintaString = novedadHoraInicioTreinta.ToString("HH:mm");
+                    for (int i = 0; i <= contador; i++)
+                    {
+                        DateTime citaHoraNueva = DateTime.Parse(citaHoraCiclo).AddMinutes(30);
+                        string citaHoraString = citaHoraNueva.ToString("HH:mm");
+
+                        if (citaHoraString == novedadHoraInicioTreintaString)
+                        {
+                            return false;
+                        }
+                        citaHoraCiclo = citaHoraString;
+                    }
+                }
+            }
 
             string citaHora = horaInicio;
             var horaDisponibleInicial = _context.agendaOcupadas.Where(e => e.EmpleadoId == empleadoId).Where(f => f.Fecha == fecha).Any(h => h.HoraInicio == citaHora);
