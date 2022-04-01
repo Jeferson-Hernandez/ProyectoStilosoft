@@ -21,20 +21,24 @@
     <link rel="stylesheet" href="~/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/adminlte/dist/css/adminlte.min.css">
-    <!--<link href="~/css/login.css" rel="stylesheet" />-->
+    <!---<link href="~/css/login.css" rel="stylesheet" />-->
+    <link href="~/css/NuevoLogin.css" rel="stylesheet"/>
     <link href="~/lib/AlertifyJS/css/alertify.css" rel="stylesheet" />
     <link href="~/lib/AlertifyJS/css/themes/default.css" rel="stylesheet" />
-    <link href="~/css/NuevoLogin.css" rel="stylesheet" />
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 </head>
 <body class="hold-transition login-page">
-   <div class="login-box">
+
+    <div class="login-box">
         <div class="login-logo">
-            <a class="h1"><b>Maria C</b> Stilos</a>
+            <a class="h1"><b></b></a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
+
             <div class="card-body login-card-body cuadro">
+                <div class="h1 gran">
+                    <a class="h1"><b>Maria C Stilos</b></a>
+                </div>
                 <p class="login-box-msg titulo">Iniciar sesión</p>
 
                 <form asp-action="Login" method="post">
@@ -58,7 +62,6 @@
                     </div>
 
                     <div class="row">
-                       
                         <!-- /.col -->
                         <div class="col-6">
                             <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
@@ -70,24 +73,30 @@
 
                 <div class="row">
                     <p class="col-7">
-                        <a asp-action="Registrar" class="">Registrarse</a>
+                        <a asp-action="Registrar" class="botones">Registrarse</a>
                     </p>
                     <p class="col-5">
-                        <a asp-action="OlvidePassword">Olvidé mi contraseña</a>
+                        <a asp-action="OlvidePassword" class="botones">Olvidé mi contraseña</a>
+                    </p>
+                    <p class="col-3">
+                        <a asp-action="Index" asp-controller="Landing" class="botones">Ir al incio</a>
                     </p>
                 </div>
-                <div class="row">
-                    <p class="col-7">
-                        <a asp-action="Index" asp-controller="Landing">Ir al inicio</a>
-                    </p>
-                </div>
+
             </div>
             <!-- /.login-card-body -->
         </div>
+        <footer class="footer">
+            <!-- To the right -->
+            <div class="float-right d-none d-sm-inline">
+                Stilosoft
+            </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2022 <a>Stilosoft</a>.</strong> Todos los derechos reservados.
+        </footer>
     </div>
-   
-    <!--Login viejo-->
-   
+    <!-- Main Footer -->
+    
     <!-- /.login-box -->
     <!-- jQuery -->
     <script src="~/adminlte/plugins/jquery/jquery.min.js"></script>
@@ -109,36 +118,8 @@
     </script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 </body>
+
 </html>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
-<script>
-        $(document).ready(function(){
-        $("#contenedor section").each(function(e) {
-            if (e != 0)
-                $(this).hide();
-        });
-
-         $("#siguiente").click(function(){
-        if ($("#contenedor section:visible").next().length != 0)
-            $("#contenedor section:visible").next().show().prev().hide();
-        else {
-            $("#contenedor section:visible").show();
-            $("#contenedor section:first").show();
-        }
-        return false;
-    });
-
-        $("#previo").click(function(){
-            if ($("#contenedor section:visible").prev().length != 0)
-                $("#contenedor section:visible").prev().show().next().hide();
-            else {
-                $("#contenedor section:visible").hide();
-                $("#contenedor section:last").hide();
-            }
-            return false;
-        });
-    });
-</script>

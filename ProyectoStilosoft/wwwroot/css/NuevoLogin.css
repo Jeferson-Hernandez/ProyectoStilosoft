@@ -1,13 +1,24 @@
 html, body * {
     box-sizing: border-box;
-    font-family: 'Open Sans', sans-serif;
-    
+    font-family: 'Open Sans', 'Arial Unicode MS';
+}
+
+.footer {
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 25px;
+    width: 100%;
+    background-color: #fff;
+    border-top: 1px solid #dee2e6;
+    color: #869099;
 }
 
 body {
     background: linear-gradient( rgba(246,247,249,0.8), rgba(246,247,249,0.8)), url(https://dl.dropboxusercontent.com/u/22006283/preview/codepen/sky-clouds-cloudy-mountain.jpg) no-repeat center center fixed;
     background-size: cover;
     background: linear-gradient(5deg, grey, rgba(246,247,249,0.8));
+    background-image: url("../landing/assets/img/inicios2.png");
 }
 
 .container {
@@ -509,24 +520,29 @@ a.btn-goback:hover {
 
 
    /* -------------------------------------------------------------------------------------------------------------------------------------------------- */
-.titulo{
-       color: #393939;
-       font-size: 20px;
-       font-family: sans-serif;
-       font-weight: bold;
-   }
+.titulo {
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+}
 
 #titulo2{
 
 }
+.gran {
 
+    color: #9596ee;
+    text-align:center;
+}
 .icono{
        color: white;
+       text-align:right;
+       
+     
    }
 .botones {
-    border-radius: 12px;
-    color: #060a38;
-    padding: 10px;
+  
+    font-size: 17px;
 }
 .cuadro {
     background: linear-gradient( rgba(35,43,85,0.75), rgba(35,43,85,0.95)), url(https://dl.dropboxusercontent.com/u/22006283/preview/codepen/clouds-cloudy-forest-mountain.jpg) no-repeat center center;
