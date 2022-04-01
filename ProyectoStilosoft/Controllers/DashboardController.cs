@@ -12,9 +12,7 @@ using System.Threading.Tasks;
 using ProyectoStilosoft.Datos;
 using ProyectoStilosoft.ViewModels.Graficas;
 using System.Web;
-
-
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProyectoStilosoft.Controllers
 {
@@ -71,7 +69,10 @@ namespace ProyectoStilosoft.Controllers
             return Json(objLista);
         }
 
-
+        public IActionResult Admin()
+        {
+            return View();
+        }
 
     }
 }

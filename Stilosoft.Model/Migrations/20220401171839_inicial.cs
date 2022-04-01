@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Stilosoft.Model.Migrations
 {
-    public partial class initial : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -87,7 +87,9 @@ namespace Stilosoft.Model.Migrations
                     Nombre = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     Duracion = table.Column<int>(type: "int", nullable: false),
                     Costo = table.Column<long>(type: "bigint", nullable: false),
-                    Estado = table.Column<bool>(type: "bit", nullable: false)
+                    Descripcion = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    Estado = table.Column<bool>(type: "bit", nullable: false),
+                    EstadoLanding = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -393,7 +395,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "7e676daa-9c60-4886-a01e-cbdde45af52d", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEOvx02NE7H40E+uWy2vKYym94ozBfDF9i9SKyFihCX4OFZe6xDETdCZAAfPnuaPJgw==", "1234567890", false, "50b116d9-7103-4a5d-9480-61b0d0fb6bc9", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "7ced9624-876b-47a4-828c-77c0d9e3e29a", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAELt7aiH3pogbbEA+asYouNcO5qs25xQ0dODg8DelUkh4zX0upSu7L5IrF4OYhsRHhQ==", "1234567890", false, "1a9b93f8-8047-49ca-bf5e-e12cab0534b0", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",
