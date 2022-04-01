@@ -133,7 +133,7 @@ namespace Stilosoft.Controllers
                 }
             }
             TempData["Accion"] = "Error";
-            TempData["Mensaje"] = "Debe validar no soy robot";
+            TempData["Mensaje"] = "Debe completar el formulario y validar no soy robot";
             return View();
         }
 
@@ -323,8 +323,14 @@ namespace Stilosoft.Controllers
         public async Task<IActionResult> Editar(UsuarioDto usuarioDto, IdentityUser identityUser, string id)
         {
             if (ModelState.IsValid)
-            {           
-                    Usuario usuario1 = new()
+            {
+                if (DocumentoExists(usuarioDto.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index");
+                }
+                Usuario usuario1 = new()
                     {
                         UsuarioId = usuarioDto.UsuarioId,
                         Nombre = usuarioDto.Nombre,
@@ -497,7 +503,7 @@ namespace Stilosoft.Controllers
         }
 
         //Cuando hacemos clic en el link que llegó al correo
-        [Authorize]
+       
         [HttpGet]
         public IActionResult ResetearPassword(string token, string email)
         {
@@ -508,7 +514,7 @@ namespace Stilosoft.Controllers
             return View();
         }
         //Cuando hacemos clic en el link que llegó al correo
-        [Authorize]
+        
         [HttpPost]
         public async Task<IActionResult> ResetearPassword(ResetearPasswordDto resetearPasswordDto)
         {
@@ -528,7 +534,7 @@ namespace Stilosoft.Controllers
                         foreach (var errores in result.Errors)
                         {
                             if (errores.Description.ToString().Equals("Invalid token."))
-                                ModelState.AddModelError("", "El token es invalido");
+                                ModelState.AddModelError("", "Debe generar un nuevo enlace");
                         }
                         return View(resetearPasswordDto);
                     }

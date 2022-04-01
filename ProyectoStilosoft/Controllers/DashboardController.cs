@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ProyectoStilosoft.Controllers
 {
-    [Authorize(Roles = "Administrador")]
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly AppDbContext _context;
