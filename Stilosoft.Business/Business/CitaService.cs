@@ -23,9 +23,13 @@ namespace Stilosoft.Business.Business
         {
             return await _context.citas.Include(c => c.Cliente).Include(e => e.EstadoCita).Include(em => em.Empleado).Include(s => s.Servicio).ToListAsync();
         }
+        public async Task<IEnumerable<Cita>> ObtenerListaCitasCliente(string clienteId)
+        {
+            return await _context.citas.Where(c => c.ClienteId == clienteId).Where(es => es.EstadoCitaId == 1).Include(c => c.Cliente).Include(e => e.EstadoCita).Include(em => em.Empleado).Include(s => s.Servicio).ToListAsync();
+        }
         public async Task<Cita> ObtenerCitaPorId(int id)
         {
-            return await _context.citas.Include(c => c.Cliente).Include(e => e.EstadoCita).FirstOrDefaultAsync(c => c.CitaId == id);
+            return await _context.citas.Include(c => c.Cliente).Include(e => e.EstadoCita).Include(em => em.Empleado).Include(s => s.Servicio).FirstOrDefaultAsync(c => c.CitaId == id);
         }
         public async Task GuardarCita(Cita cita)
         {

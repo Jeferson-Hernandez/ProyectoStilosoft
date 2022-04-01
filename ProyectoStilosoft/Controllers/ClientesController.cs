@@ -18,16 +18,18 @@ namespace Stilosoft.Controllers
     {
         private readonly IClienteService _clienteService;
         private readonly IUsuarioService _usuarioService;
+        private readonly ICitaService _cita;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppDbContext _context;
 
 
 
-        public ClientesController(AppDbContext context, IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IUsuarioService usuarioService)
+        public ClientesController(AppDbContext context, IClienteService clienteService, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager, IUsuarioService usuarioService, ICitaService cita)
         {
             _clienteService = clienteService;
             _usuarioService = usuarioService;
+            _cita = cita;
             _roleManager = roleManager;
             _userManager = userManager;
             _context = context;
@@ -234,6 +236,30 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return RedirectToAction("index");
         }
+
+        //[HttpPost]
+        //public IActionResult ClienteCitas(string clienteId)
+        //{
+        //    var citas = _cita.ObtenerListaCitasCliente(clienteId);
+
+        //    if (citas != null)
+        //    {
+        //        return Json(_context.citas.Where(c => c.ClienteId == clienteId).Select(a => new
+        //        {
+        //            Empleado = a.Empleado.Nombre,
+        //            Servicio = a.Servicio.Nombre,
+        //            Fecha = a.Fecha,
+        //            Hora = a.Hora,
+        //            Total = a.Total
+        //        }).ToList());
+        //    }
+        //    return Json(_context.citas.Where(c => c.ClienteId == clienteId).Select(a => new
+        //    {
+        //        Empleado = "false",
+        //    }).ToList());
+        //}
+
+
         private bool DocumentoExists(string documento)
         {
             return _context.usuarios.Any(d => d.Documento == documento);
