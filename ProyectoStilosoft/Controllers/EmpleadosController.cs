@@ -15,7 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
-{   
+{
     public class EmpleadosController : Controller
     {
         private readonly AppDbContext _context;
@@ -36,14 +36,17 @@ namespace ProyectoStilosoft.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
+     
         public async Task<IActionResult> Index()
         {
             return View(await _empleado.ObtenerListaEmpleados());
         }
+        [Authorize(Roles = "Empleado")]
         public async Task<IActionResult> AgendaCitasEmpleado(string id)
         {
             return View(await _context.citas.Where(i => i.EmpleadoId == id).Include(c => c.Cliente).Include(s => s.Servicio).Include(e => e.EstadoCita).ToListAsync());
         }
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> Crear()
         {
@@ -51,7 +54,7 @@ namespace ProyectoStilosoft.Controllers
             empleado.Servicios = await _servicio.ObtenerListaServiciosEstado();
             return View(empleado);
         }
-
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> Crear(EmpleadoViewModel serviciosEmpleado)
         {
@@ -145,6 +148,7 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> Editar(string id)
         {
@@ -169,6 +173,7 @@ namespace ProyectoStilosoft.Controllers
 
             return View(empleadoEditarViewModel);
         }
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> Editar(EmpleadoEditarViewModel empleadoEditarViewModel)
         {
@@ -206,6 +211,17 @@ namespace ProyectoStilosoft.Controllers
                             FechaNacimiento = empleadoEditarViewModel.FechaNacimiento,
                             Estado = empleadoEditarViewModel.Estado
                         };
+                        Usuario usuario = new()
+                        {
+                            UsuarioId = empleadoEditarViewModel.EmpleadoId,
+                            Nombre = empleadoEditarViewModel.Nombre,
+                            Apellido = empleadoEditarViewModel.Apellidos,
+                            Numero = "0",
+                            Documento = empleadoEditarViewModel.Documento,
+                            Rol = "Empleado",
+                            Estado = empleadoEditarViewModel.Estado
+                        };
+                        await _usuarioService.EditarUsuario(usuario);
                         await _empleado.EditarEmpleado(empleado);
                         if(empleadoEditarViewModel.EmpleadoServicios != null)
                         {
@@ -245,16 +261,18 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> DetalleEmpleado(string id)
         {
             return View(await _empleado.ObtenerListaServiciosEmpleado(id));
         }
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> ListaServiciosEmpleado(string id)
         {
             return View(await _empleado.ObtenerListaServiciosEmpleado(id));
         }
-
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> EliminarEmpleadoServicio(int id)
         {
@@ -281,7 +299,7 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> EditarEstado(string id)
         {           
@@ -315,6 +333,7 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
+        [Authorize]
         //Validaciones con AJAX
         [HttpPost]
         public IActionResult obtenerEmpleados(int servicioId)
@@ -326,6 +345,7 @@ namespace ProyectoStilosoft.Controllers
                 EmpleadoNombre = e.Empleado.Nombre
             }).ToList());
         }
+        [Authorize]
         [HttpPost]
         public IActionResult ValidarAgenda(string empleadoId, string fecha)
         {
@@ -347,7 +367,7 @@ namespace ProyectoStilosoft.Controllers
                 HoraFin = "20:00"
             }).FirstOrDefault());
         }
-
+        [Authorize]
         [HttpPost]
         public bool HorarioDisponible(string empleadoId, string horaInicio, int duracion, string fecha)
         {
@@ -443,12 +463,13 @@ namespace ProyectoStilosoft.Controllers
         }
 
         //Empleado novedades
-
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> ListarAgenda()
         {
             return View(await _empleado.ObtenerListaNovedades());
         }
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> CrearAgenda()
         {
@@ -462,6 +483,7 @@ namespace ProyectoStilosoft.Controllers
 
             return View();
         }
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> CrearAgenda(EmpleadoAgendaViewModel empleadoNovedad)
         {
@@ -503,7 +525,7 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("ListarAgenda");
             }
         }
-
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> EditarNovedad(int id)
         {
@@ -528,7 +550,7 @@ namespace ProyectoStilosoft.Controllers
 
             return View(editar);
         }
-
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> EditarNovedad(EmpleadoAgendaEditarViewModel empleadoNovedad)
         {

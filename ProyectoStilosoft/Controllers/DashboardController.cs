@@ -8,9 +8,11 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ProyectoStilosoft.ViewModels.Dashboard;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProyectoStilosoft.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class DashboardController : Controller
     {
         private readonly AppDbContext _context;
@@ -71,6 +73,11 @@ namespace ProyectoStilosoft.Controllers
             ViewBag.Datos = _context.citas.Select(e => e.Cliente.Nombre).Distinct().ToList();
 
 
+            return View();
+        }
+
+        public IActionResult Admin()
+        {
             return View();
         }
 

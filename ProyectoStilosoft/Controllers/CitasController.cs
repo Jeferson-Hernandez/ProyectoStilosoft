@@ -15,7 +15,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
-{
+{    
     public class CitasController : Controller
     {
         private readonly AppDbContext _context;
@@ -43,6 +43,7 @@ namespace ProyectoStilosoft.Controllers
         {
             return View(await _cita.ObtenerListaCitas());
         }
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Crear()
         {
@@ -59,7 +60,7 @@ namespace ProyectoStilosoft.Controllers
 
             return View(cita);
         }
-
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Crear(CitasCrearViewModel citaDatos)
         {
@@ -228,7 +229,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index");
         }
-        [Authorize(Roles = "Cliente")]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> clienteCita(string id)
         {
@@ -237,6 +238,7 @@ namespace ProyectoStilosoft.Controllers
             ViewBag.CitasCliente = await _cita.ObtenerListaCitasCliente(id);
             return View(cita);
         }
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> clienteCita(CitasCrearViewModel citaDatos)
         {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoStilosoft.Controllers
 {
-  
+    [Authorize(Roles = "Administrador")]
     public class ServiciosController : Controller
     {
         private readonly IServicioService _servicioService;
@@ -21,7 +21,7 @@ namespace ProyectoStilosoft.Controllers
             _servicioService = servicioService;
             _context = context;
         }
-
+    
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -33,7 +33,7 @@ namespace ProyectoStilosoft.Controllers
         {
             return View();
         }
-
+      
         [HttpPost]
         public async Task<IActionResult> Crear(ServicioViewModel servicioViewModel)
         {
@@ -93,7 +93,7 @@ namespace ProyectoStilosoft.Controllers
 
             return View(servicioViewModel);
         }
-
+      
         [HttpPost]
         public async Task<IActionResult> Editar(ServicioViewModel servicioViewModel, int id)
         {

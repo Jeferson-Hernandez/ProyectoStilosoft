@@ -19,7 +19,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Stilosoft.Controllers
 {
-   
     public class UsuariosController : Controller
     {
         private readonly IClienteService _clienteService;
@@ -46,7 +45,7 @@ namespace Stilosoft.Controllers
             _usuarioService = usuarioService;
             _context = context;
         }
-   
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -160,7 +159,7 @@ namespace Stilosoft.Controllers
 
                     if (rol.Contains("Administrador"))
                     {
-                        return RedirectToAction("index", "Clientes");
+                        return RedirectToAction("Admin", "Dashboard");
                     }
                     else if (rol.Contains("Cliente"))
                     {
@@ -294,6 +293,7 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return RedirectToAction("index");
         }
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> Editar(string id, IdentityUser identityUser)
         {           
@@ -318,6 +318,7 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return RedirectToAction("index");
         }
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> Editar(UsuarioDto usuarioDto, IdentityUser identityUser, string id)
         {
@@ -496,6 +497,7 @@ namespace Stilosoft.Controllers
         }
 
         //Cuando hacemos clic en el link que llegó al correo
+        [Authorize]
         [HttpGet]
         public IActionResult ResetearPassword(string token, string email)
         {
@@ -506,6 +508,7 @@ namespace Stilosoft.Controllers
             return View();
         }
         //Cuando hacemos clic en el link que llegó al correo
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ResetearPassword(ResetearPasswordDto resetearPasswordDto)
         {
@@ -534,14 +537,14 @@ namespace Stilosoft.Controllers
             }
             return View(resetearPasswordDto);
         }
-
+        [Authorize]
         /// Debe permitir al admin cambiar las contraseñas de los usuarios
         [HttpGet]
         public IActionResult ResetPassword(string id, IdentityUser identityUser)
         {                                 
             return View();                
         }
-        
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string id, CambiarPasswordDto cambiarPassWord)
         {
