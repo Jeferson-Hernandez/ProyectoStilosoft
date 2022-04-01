@@ -205,8 +205,19 @@ namespace Stilosoft.Controllers
                     Numero = clienteDto.Celular,
                     Estado = clienteDto.Estado
                 };
+                Usuario usuario = new()
+                {
+                    UsuarioId = clienteDto.ClienteId,
+                    Nombre = clienteDto.Nombre,
+                    Apellido = clienteDto.Apellido,
+                    Numero = clienteDto.Celular,
+                    Documento = clienteDto.Documento,
+                    Rol = "Cliente",
+                    Estado = clienteDto.Estado
+                };
                 try
                 {
+                    await _usuarioService.EditarUsuario(usuario);
                     await _clienteService.EditarCliente(cliente);
                     TempData["Accion"] = "Editar";
                     TempData["Mensaje"] = "Cliente editado correctamente";

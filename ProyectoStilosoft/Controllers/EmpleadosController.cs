@@ -206,6 +206,17 @@ namespace ProyectoStilosoft.Controllers
                             FechaNacimiento = empleadoEditarViewModel.FechaNacimiento,
                             Estado = empleadoEditarViewModel.Estado
                         };
+                        Usuario usuario = new()
+                        {
+                            UsuarioId = empleadoEditarViewModel.EmpleadoId,
+                            Nombre = empleadoEditarViewModel.Nombre,
+                            Apellido = empleadoEditarViewModel.Apellidos,
+                            Numero = "0",
+                            Documento = empleadoEditarViewModel.Documento,
+                            Rol = "Empleado",
+                            Estado = empleadoEditarViewModel.Estado
+                        };
+                        await _usuarioService.EditarUsuario(usuario);
                         await _empleado.EditarEmpleado(empleado);
                         if(empleadoEditarViewModel.EmpleadoServicios != null)
                         {
