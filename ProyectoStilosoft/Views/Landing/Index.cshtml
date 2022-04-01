@@ -1,4 +1,6 @@
-﻿@{ ViewData["Title"] = "Página principal";
+﻿@model IEnumerable<Stilosoft.Model.Entities.Servicio>
+
+@{ ViewData["Title"] = "Página principal";
                 Layout = "_Landing"; }
 
 
@@ -15,34 +17,23 @@
     <div class="container">
         <div class="text-center">
             <h2 class="section-heading text-uppercase">Servicios</h2>
-            <h3 class="section-subheading text-muted">Los servicios mas destacado de Maria C Stilos</h3>
-        </div>
-        <div class="row text-center">
-            <div class="col-md-4">
-                @*<span class="fa-stack fa-4x">
-                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                    <i class="fas fa-shopping-cart fa-stack-1x fa-inverse"></i>
-                </span>*@
-                <h4 class="my-3">Combos</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-            </div>
-            <div class="col-md-4">
-                @*<span class="fa-stack fa-4x">
-                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                    <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
-                </span>*@
-                <h4 class="my-3">Mechas</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
-            </div>
-            <div class="col-md-4">
-                @*<span class="fa-stack fa-4x">
-                    <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                    <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
-                </span>*@
-                <h4 class="my-3">Keratinas</h4>
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+            <h3 class="section-subheading text-muted">Estos son los servicios más destacados de Maria C Stilos</h3>
+            @foreach (var x in Model)
+            {
+        <div style="width:fit-content(); border-color:#000;">
+            <!-- <div class="card shadow-lg" style="width: 110%; overflow:hidden; position:relative; height:430px; border: groove; margin: 0 auto;">-->
+            <div class="row">
+               
+                    <h4 class="my-3">@Html.DisplayFor(modelx => x.Nombre)</h4>
+                    <p class="text-muted"> Valor: $@Html.DisplayFor(modelx => x.Costo) -  Más info. : @Html.DisplayFor(modelx => x.Descripcion)</p>
+                
+
             </div>
         </div>
+                <!-- </div>-->
+            }
+        </div>
+            
     </div>
 </section>
 <!-- About-->
@@ -73,7 +64,7 @@
                     <div class="timeline-body"><p class="text-muted">Tenemos un personal experto en diferentes areas como el cepillado, uñas, cejas y ademas con una muy buena actitud, siempre dando lo mejor para complacer a nuestros clientes.  </p></div>
                 </div>
             </li>
-            <li>
+            @*<li>
                 <div class="timeline-image"><img class="rounded-circle img-fluid" src="~/landing/assets/img/about/3.jpg" alt="..." /></div>
                 <div class="timeline-panel">
                     <div class="timeline-heading">
@@ -82,9 +73,9 @@
                     </div>
                     <div class="timeline-body"><p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p></div>
                 </div>
-            </li>
+            </li>*@
           
-            <li class="timeline-inverted">
+           @* <li class="timeline-inverted">
                 <div class="timeline-image">
                     <h4>
                         Be Part
@@ -94,7 +85,7 @@
                         Story!
                     </h4>
                 </div>
-            </li>
+            </li>*@
         </ul>
     </div>
 </section>

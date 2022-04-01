@@ -44,6 +44,8 @@ namespace ProyectoStilosoft.Controllers
                     Nombre = servicioViewModel.Nombre,
                     Duracion = servicioViewModel.Duracion,
                     Costo = servicioViewModel.Costo,
+                    Descripcion = servicioViewModel.Descripcion,
+                    EstadoLanding = false,
                     Estado = true
                 };
 
@@ -88,6 +90,8 @@ namespace ProyectoStilosoft.Controllers
                 Nombre = servicio.Nombre,
                 Duracion = servicio.Duracion,
                 Costo = servicio.Costo,
+                Descripcion = servicio.Descripcion,
+                EstadoLanding = servicio.EstadoLanding,
                 Estado = servicio.Estado
             };
 
@@ -105,6 +109,8 @@ namespace ProyectoStilosoft.Controllers
                     Nombre = servicioViewModel.Nombre,
                     Duracion = servicioViewModel.Duracion,
                     Costo = servicioViewModel.Costo,
+                    Descripcion = servicioViewModel.Descripcion,
+                    EstadoLanding = servicioViewModel.EstadoLanding,
                     Estado = servicioViewModel.Estado
                 };
 
@@ -145,6 +151,29 @@ namespace ProyectoStilosoft.Controllers
                 servicio.Estado = false;
             else if (servicio.Estado == false)
                 servicio.Estado = true;
+
+            try
+            {
+                await _servicioService.EditarServicio(servicio);
+                TempData["Accion"] = "EditarEstado";
+                TempData["Mensaje"] = "Estado editado correctamente";
+                return RedirectToAction("index");
+            }
+            catch (Exception)
+            {
+                TempData["Accion"] = "Error";
+                TempData["Mensaje"] = "Ingresaste un valor inválido";
+                return RedirectToAction("index");
+            }
+        }
+        public async Task<IActionResult> EditarEstadoLanding(int id)
+        {
+            Servicio servicio = await _servicioService.ObtenerServicioPorId(id);
+
+            if (servicio.EstadoLanding == true)
+                servicio.EstadoLanding = false;
+            else if (servicio.EstadoLanding == false)
+                servicio.EstadoLanding = true;
 
             try
             {

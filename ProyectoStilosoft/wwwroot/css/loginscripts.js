@@ -25,10 +25,10 @@ $('#switch2').on('click', function () {
     $login.toggleClass('hide');
 })
 
-setTimeout(function () {
+/*setTimeout(function () {
     $('#switch1').click()
 }, 1000)
 
 setTimeout(function () {
     $('#switch2').click()
-}, 3000)
+}, 3000)*/

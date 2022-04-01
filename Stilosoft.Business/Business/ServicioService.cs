@@ -23,6 +23,10 @@ namespace Stilosoft.Business.Business
         {
             return await _context.servicios.ToListAsync();
         }
+        public async Task<IEnumerable<Servicio>> ObtenerServiciosLanding()
+        {
+            return await _context.servicios.Where(s => s.EstadoLanding == true).ToListAsync();
+        }
 
         public async Task<List<Servicio>> ObtenerListaServiciosEstado()
         {

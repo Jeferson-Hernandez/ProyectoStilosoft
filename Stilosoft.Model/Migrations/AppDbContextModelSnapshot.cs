@@ -520,10 +520,17 @@ namespace Stilosoft.Model.Migrations
                     b.Property<long>("Costo")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<int>("Duracion")
                         .HasColumnType("int");
 
                     b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("EstadoLanding")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nombre")
