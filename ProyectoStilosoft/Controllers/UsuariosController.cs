@@ -324,11 +324,11 @@ namespace Stilosoft.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (DocumentoExists(usuarioDto.Documento))
+                if (DocumentoExists(usuarioDto.Documento, usuarioDto.UsuarioId))
                 {
                     TempData["Accion"] = "Error";
                     TempData["Mensaje"] = "El documento ya se encuentra registrado";
-                    return RedirectToAction("index");
+                    return RedirectToAction("Index");
                 }
                 Usuario usuario1 = new()
                     {
@@ -353,14 +353,29 @@ namespace Stilosoft.Controllers
                             Documento = usuarioDto.Documento,
                             Numero = usuarioDto.Numero,
                             Estado = true
-                        };
+                        };                      
                         if (!ClienteExists(cliente.ClienteId))
                         {
                             await _clienteService.GuardarCliente(cliente);                                               
-                        }
+                        }                       
                         await _clienteService.EditarCliente(cliente);                             
-                    }                           
-                        if (usuario1.Rol != "Cliente")
+                    }
+                    Empleado empleado = await _EmpleadoService.ObtenerEmpleadoPorId(id);
+                    if (usuario1.Rol == "Empleado")
+                    {
+                        Empleado empleado1 = new()
+                        {
+                            EmpleadoId = usuario1.UsuarioId,
+                            Nombre = usuarioDto.Nombre,
+                            Apellidos = usuarioDto.Apellido,
+                            DetalleEmpleadoServicios = empleado.DetalleEmpleadoServicios,
+                            Documento = usuarioDto.Documento,
+                            FechaNacimiento = empleado.FechaNacimiento,
+                            Estado = true
+                        };
+                        await _EmpleadoService.EditarEmpleado(empleado1);
+                    }
+                    if (usuario1.Rol != "Cliente")
                       {
                         Cliente cliente = new()
                         {
@@ -603,6 +618,10 @@ namespace Stilosoft.Controllers
         private bool DocumentoExists(string documento)
         {
             return _context.usuarios.Any(d => d.Documento == documento);
+        }
+        private bool DocumentoExists(string documento, string id)
+        {
+            return _context.usuarios.Where(i => i.UsuarioId != id).Any(d => d.Documento == documento);
         }
     }
 }
