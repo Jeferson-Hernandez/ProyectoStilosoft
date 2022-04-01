@@ -4,24 +4,23 @@
 @{
 }
 
-
 <hr>
 <section class="content pt-3 pl-3 pr-3">
     <p>
         <a asp-action="index" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de ventas</a>
-    
+
         <a asp-action="gpastel" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de servicios</a>
-    
+
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
     </p>
-    <table class="table table-bordered" id="tabla">
-        <thead>
-            <tr>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    @*<div class="row">
+        <div class="form-group col-xs-4 pl-2 pr-4">
+            <p>Desde: <input type="text" id="datepicker"></p>
+        </div>
+        <div class="form-group col-xs-4 pl-2 pr-4">
+            <p>Hasta: <input type="text" id="datepicker2"></p>
+        </div>
+    </div>*@
 </section>
 <div id="container"></div>
 
@@ -31,50 +30,76 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-       
-    <script>
-        var Cantidad = @ViewBag.VentasFinalizadas;
-        var servicio = @ViewBag.servicio
-        
 
-        Highcharts.chart('container', {
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie'
-            },
-            title: {
-                text: 'Servicios realizados en el 2022'
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.0f}%</b>'
-            },
-            accessibility: {
-                point: {
-                    valueSuffix: '%'
-                }
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.0f} %'
+    <script>       
+
+        $.ajax({
+        url: '@Url.Action("reporteServicios", "Dashboard")',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
+
+            console.log(data)    
+
+            var arrayServicio = [];
+            var arrayCantidad = [];
+
+            for (var i = 0; i < data.length; i++) {
+
+                /*console.log(data[i].nombre)*/
+
+                arrayServicio.push(data[i].servicio);
+                arrayCantidad.push(data[i].cantidad);
+
+            }
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Servicios solicitados'
+                },
+                xAxis: {
+                    categories: arrayServicio,
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Cantidad de servicios'
                     }
-                }
-            },
-            series: [{
-                name: 'Porcentaje',
-                colorByPoint: true,
-                data:[{                  
-                    name: servicio,
-                    y: Cantidad,
-                    sliced: true,
-                    selected: true
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: 'Total servicios',
+                    data: arrayCantidad
+
                 }]
-            }]
-        });
+            });
+
+
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    });
     </script>
+     
+   
+
+
 }

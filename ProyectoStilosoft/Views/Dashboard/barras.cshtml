@@ -12,15 +12,7 @@
         <a asp-action="gpastel" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de servicios</a>
 
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
-    </p>
-    <table class="table table-bordered" id="tabla">
-        <thead>
-            <tr>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    </p>    
 </section>
 <div id="container"></div>
 
@@ -30,46 +22,66 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
+    <script>       
 
-    <script>
+    jQuery.ajax({
+        url: '@Url.Action("reporteClientes", "Dashboard")',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        success: function (data) {
 
+            console.log(data)
 
-        Highcharts.chart('container', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Stacked bar chart'
-            },
-            xAxis: {
-                categories: @ViewBag.Datos;
-            },
-            yAxis: {
-                min: 0,
+            var arrayCliente = [];
+            var arrayCantidad = [];
+
+            for (var i = 0; i < data.length; i++) {
+
+                /*console.log(data[i].nombre)*/
+                arrayCliente.push(data[i].cliente)
+                arrayCantidad.push(data[i].cantidad)
+            }
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'bar'
+                },
                 title: {
-                    text: 'Total fruit consumption'
-                }
-            },
-            legend: {
-                reversed: true
-            },
-            plotOptions: {
-                series: {
-                    stacking: 'normal'
-                }
-            },
-            series: [{
-                name: 'John',
-                data: [5, 3, 4, 7, 2]
+                    text: 'Top 7 de clientes'
+                },
+                xAxis: {
+                    categories: arrayCliente
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Cantidad de citas'
+                    }
+                },
+                legend: {
+                    reversed: true
+                },
+                plotOptions: {
+                    series: {
+                        stacking: 'normal'
+                    }
+                },
+                series: [{
+                    name: 'Total citas',
+                    data: arrayCantidad
+                }]
+            });;
 
-            }, {
-                name: 'Jane',
-                data: [2, 2, 3, 2, 1]
-            }, {
-                name: 'Joe',
-                data: [3, 4, 4, 2, 5]
-            }]
-        });
+
+
+
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    });
+
     </script>
+
 
 }
