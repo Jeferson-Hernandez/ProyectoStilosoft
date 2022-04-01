@@ -8,9 +8,11 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using ProyectoStilosoft.ViewModels.Dashboard;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProyectoStilosoft.Controllers
 {
+    [Authorize(Roles = "Administrador")]
     public class DashboardController : Controller
     {
         private readonly AppDbContext _context;
