@@ -12,15 +12,7 @@
         <a asp-action="gpastel" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de servicios</a>
 
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
-    </p>
-    <div class="row">
-        <div class="form-group col-xs-4 pl-2 pr-4">
-            <p>Desde: <input type="text" id="datepicker"></p>
-        </div>
-        <div class="form-group col-xs-4 pl-2 pr-4">
-            <p>Hasta: <input type="text" id="datepicker2"></p>
-        </div>
-    </div>
+    </p>    
 </section>
 <div id="container"></div>
 
@@ -30,11 +22,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
-    <script>
-        $(function () {
-            $("#datepicker").datepicker();
-            $("#datepicker2").datepicker();
-        });
+    <script>       
 
     jQuery.ajax({
         url: '@Url.Action("reporteClientes", "Dashboard")',
@@ -67,7 +55,7 @@
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Total servicios'
+                        text: 'Cantidad de citas'
                     }
                 },
                 legend: {
@@ -79,7 +67,7 @@
                     }
                 },
                 series: [{
-                    name: 'Cantidad de servicios',
+                    name: 'Total citas',
                     data: arrayCantidad
                 }]
             });;

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Stilosoft.Model.Migrations
 {
-    public partial class inicial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -393,7 +393,7 @@ namespace Stilosoft.Model.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "9c875fb2-9417-4925-b127-b2d5e8015cd1", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAENtNjUEKVjby9084WDUh+N0vKTZ+B7fHW564AwyipIPXMAKHGs3wJ9A2GkOSiDMmjA==", "1234567890", false, "460a8704-8f13-49af-8d49-41311b851489", false, "admin@gmail.com" });
+                values: new object[] { "b74ddd14-6340-4840-95c2-db12554843e5", 0, "7e676daa-9c60-4886-a01e-cbdde45af52d", "admin@gmail.com", false, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAEAACcQAAAAEOvx02NE7H40E+uWy2vKYym94ozBfDF9i9SKyFihCX4OFZe6xDETdCZAAfPnuaPJgw==", "1234567890", false, "50b116d9-7103-4a5d-9480-61b0d0fb6bc9", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "estadoCitas",

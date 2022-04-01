@@ -23,7 +23,7 @@ namespace ProyectoStilosoft.Datos
 
             using (SqlConnection conexionSQL = new SqlConnection("Data Source = DESKTOP-STNJGIJ; Initial catalog = Stilosoft; Integrated Security = True"))
             {
-                string query = "sp_pruebauno";
+                string query = "sp_servicios";
 
                 SqlCommand cmd = new SqlCommand(query, conexionSQL);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -51,7 +51,7 @@ namespace ProyectoStilosoft.Datos
 
             using (SqlConnection conexionSQL = new SqlConnection("Data Source = DESKTOP-STNJGIJ; Initial catalog = Stilosoft; Integrated Security = True"))
             {
-                string query = "sp_topClientes";
+                string query = "sp_clientes";
 
                 SqlCommand cmd = new SqlCommand(query, conexionSQL);
                 cmd.CommandType = CommandType.StoredProcedure;

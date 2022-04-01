@@ -13,14 +13,14 @@
 
         <a asp-action="barras" asp-controller="Dashboard" class="btn btn-success"> Comportamiento de clientes</a>
     </p>
-    <div class="row">
+    @*<div class="row">
         <div class="form-group col-xs-4 pl-2 pr-4">
             <p>Desde: <input type="text" id="datepicker"></p>
         </div>
         <div class="form-group col-xs-4 pl-2 pr-4">
             <p>Hasta: <input type="text" id="datepicker2"></p>
         </div>
-    </div>
+    </div>*@
 </section>
 <div id="container"></div>
 
@@ -31,7 +31,8 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
 
-    <script>
+    <script>       
+
         $.ajax({
         url: '@Url.Action("reporteServicios", "Dashboard")',
         type: "GET",
@@ -39,7 +40,7 @@
         contentType: "application/json; charset=utf-8",
         success: function (data) {
 
-            /*console.log(data)    */
+            console.log(data)    
 
             var arrayServicio = [];
             var arrayCantidad = [];
@@ -54,43 +55,42 @@
             }
             Highcharts.chart('container', {
                 chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
+                    type: 'column'
                 },
                 title: {
-                    text: 'Browser market shares in January, 2018'
+                    text: 'Servicios solicitados'
                 },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                xAxis: {
+                    categories: arrayServicio,
+                    crosshair: true
                 },
-                accessibility: {
-                    point: {
-                        valueSuffix: '%'
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Cantidad de servicios'
                     }
                 },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.0f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
                 plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
-                        }
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
                     }
                 },
                 series: [{
-                    name: 'Datos',
-                    colorByPoint: true,
-                    data: [{
-                        name: 'dd',
-                        y: 5,
-                        sliced: true,
-                        selected: true
-                    }]
+                    name: 'Total servicios',
+                    data: arrayCantidad
+
                 }]
             });
+
 
         },
         error: function (error) {
@@ -99,10 +99,7 @@
     });
     </script>
      
-    @*series: [{
-    name: arrayServicio,
-    data: arrayCantidad
-    }]*@
+   
 
 
 }
