@@ -25,8 +25,7 @@
     <link href="~/lib/AlertifyJS/css/alertify.css" rel="stylesheet" />
     <link href="~/lib/AlertifyJS/css/themes/default.css" rel="stylesheet" />
     <link href="~/lib/jquery-timepicker/jquery.timepicker.css" rel="stylesheet" />
-    <link href="~/lib/jquery-ui-1.13.1/jquery-ui.css" rel="stylesheet" />
-    
+    <link href="~/lib/jquery-ui-1.13.1/jquery-ui.css" rel="stylesheet" />    
 </head>
 
 <body>
@@ -35,7 +34,7 @@
         <form asp-action="clienteCita" asp-controller="Citas" method="post">
             <input type="hidden" asp-for="Total" id="totalCita" />
             <input type="hidden" asp-for="Duracion" id="duracion" />
-            <input type="hidden" asp-for="ClienteId" value="@Context.Session.GetString("_ClienteId")" id="totalCita" />
+            <input type="hidden" asp-for="ClienteId" value="@Context.Session.GetString("_ClienteId")" id="clienteId" />
             <h2 class="text"><b>Pedir cita</b></h2>
             <br />
             <div class="row">
@@ -60,12 +59,12 @@
                         </div>
                         <div class=" col-xs-4 pl-2 pr-4">
                             <p><b>Fecha *</b></p>
-                            <input asp-for="Fecha" id="datepicker" class="datepicker form-control" readonly/>
+                            <input asp-for="Fecha" id="datepicker" class="datepicker form-control" readonly />
                             <span asp-validation-for="Fecha" class="text-danger"></span>
                         </div>
                         <div class=" col-xs-4 pl-2">
                             <p><b>Hora *</b></p>
-                            <input asp-for="Hora" id="timepicker" class="timepicker form-control" readonly/>
+                            <input asp-for="Hora" id="timepicker" class="timepicker form-control" readonly />
                             <span asp-validation-for="Hora" class="text-danger"></span>
                             <p class="text-danger hora">La hora ya se encuentra ocupada</p>
                         </div>
@@ -79,13 +78,37 @@
             </div><br />
             <div class="row">
                 <div class="col-9">
-                    <input id="terminarSolicitud" type="submit" value="Terminar cita" class="btn btn-primary" />
-                </div>
-                <div class="col-3"> 
                     <a asp-action="Index" asp-controller="Landing" class="btn btn-info">Ir al inicio</a>
                 </div>
+                <div class="col-3">
+                    <input id="terminarCita" type="submit" value="Terminar cita" class="btn btn-primary" />
+                </div>
             </div>
-        </form>
+        </form><br /><br />
+        <h2>Lista de citas confirmadas</h2>
+        <table class="table table-bordered" id="tabla">
+            <thead>
+                <tr>
+                    <th>Empleado</th>
+                    <th>Servicio</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.CitasCliente)
+                {
+                    <tr>
+                        <td>@item.Empleado.Nombre</td>
+                        <td>@item.Servicio.Nombre</td>
+                        <td>@item.Fecha</td>
+                        <td>@item.Hora</td>
+                        <td>@item.Total</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->
@@ -112,21 +135,25 @@
         $(document).ready(function () {
             $(".text-danger").hide();
 
-            $('.timepicker').timepicker({
+            $('input.timepicker').timepicker({
                 timeFormat: 'HH:mm',
                 interval: 30,
                 minTime: '08:00',
                 maxTime: '20:00',
+                defaultTime: '08:00',
                 startTime: '08:00',
                 dynamic: false,
                 dropdown: true,
                 scrollbar: true,
-                change: validarHorario()
+                change: function () {
+                    validarHorario();
+                }
             });
 
-            
-            $(".datepicker").datepicker({
-                minDate: -0, maxDate: "+1M"
+            $(function () {
+                $("input.datepicker").datepicker({
+                    minDate: -0, maxDate: "+1M",
+                });
             });
         });
     </script>
@@ -144,7 +171,7 @@
                 data: { servicioId: valorSeleccionado },
                 success:
                     function (respuesta) {
-                        let opciones = '<option value="0">Seleccione</option>';
+                        let opciones = '';
                         for (let i = 0; i < respuesta.length; i++) {
                             opciones += '<option value="' + respuesta[i].empleadoId + '">' + respuesta[i].empleadoNombre + '</option>';
                         }
@@ -158,6 +185,7 @@
                     }
             });
         })
+
         $("#empleadoDropdown").change(function () {
             $("#datepicker").val('');
             $("#timepicker").val('');
@@ -176,13 +204,18 @@
                     function (respuesta) {
                         console.log(respuesta)
                         let opciones = '';
-                        for (let i = 0; i < 1; i++) {
-                            opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
-                        }
 
-                        $('#timepicker').timepicker('option', 'minTime', respuesta.horaInicio);
-                        $('#timepicker').timepicker('option', 'maxTime', respuesta.horaFin);
-                        $('#timepicker').timepicker('setTime', respuesta.horaInicio);
+                        if (respuesta.empleadoId == "novedad") {
+                            opciones = '<li>El empleado seleccionado tiene una novedad para esa fecha.</br>No es posible seleccionar entre el siguiente horario</p></li>';
+                            for (let i = 0; i < 1; i++) {
+                                opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+                            }
+                        } else {
+                            for (let i = 0; i < 1; i++) {
+                                opciones += '<li>' + respuesta.horaInicio + ' a ' + respuesta.horaFin + '</li>';
+                            }
+                        }
+                        $('#timepicker').timepicker('setTime', "08:00");
                         $("#listaAgendaOcupada").html(opciones);
                     },
                 error:
@@ -207,8 +240,10 @@
                     function (respuesta) {
                         if (respuesta) {
                             $(".hora").hide();
+                            $("#terminarCita").prop('disabled', false);
                         } else if (respuesta == false) {
                             $(".hora").show();
+                            $("#terminarCita").prop('disabled', true);
                         }
                     },
                 error:

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -23,8 +24,10 @@ namespace ProyectoStilosoft.Controllers
         private readonly IEmpleadoService _empleado;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IClienteService _cliente;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public CitasController(AppDbContext context, ICitaService citaService, IServicioService servicio, IEmpleadoService empleado, UserManager<IdentityUser> userManager, IConfiguration configuration)
+        public CitasController(AppDbContext context, ICitaService citaService, IServicioService servicio, IEmpleadoService empleado, UserManager<IdentityUser> userManager, IConfiguration configuration, IClienteService cliente, IHttpContextAccessor httpContext)
         {
             _context = context;
             _cita = citaService;
@@ -32,6 +35,8 @@ namespace ProyectoStilosoft.Controllers
             _empleado = empleado;
             _userManager = userManager;
             _configuration = configuration;
+            _cliente = cliente;
+            _httpContext = httpContext;
         }
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
@@ -172,24 +177,6 @@ namespace ProyectoStilosoft.Controllers
                             citaHora = CitaHoraString;
                         }                            
 
-                        var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
-
-                        //MailMessage mensaje = new();
-                        //mensaje.To.Add(usuario.Email); //destinatario
-                        //mensaje.Subject = "Cita Stilosoft";
-
-                        //mensaje.Body = "<h1> Cita reservada correctamente </h1><br>" +
-                        //    "<h3> Gracias por confiar en nosotros <h3><br>";
-
-                        //mensaje.IsBodyHtml = true;
-                        //mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
-                        //SmtpClient smtpClient = new("smtp.gmail.com");
-                        //smtpClient.Port = 587;
-                        //smtpClient.UseDefaultCredentials = false;
-                        //smtpClient.EnableSsl = true;
-                        //smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
-                        //smtpClient.Send(mensaje);
-
                         transaction.Commit();
                     }
                     catch (Exception)
@@ -200,7 +187,39 @@ namespace ProyectoStilosoft.Controllers
                         return RedirectToAction("index");
                     }
                 }
-                
+
+                try
+                {
+                    var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
+
+                    var empleado = await _empleado.ObtenerEmpleadoPorId(citaDatos.EmpleadoId);
+                    var servicio = await _servicio.ObtenerServicioPorId(citaDatos.ServicioId);
+                    var cliente = await _cliente.ObtenerClientePorId(citaDatos.ClienteId);
+
+                    MailMessage mensaje = new();
+                    mensaje.To.Add(usuario.Email); //destinatario
+                    mensaje.Subject = "Confirmación de cita";
+
+                    mensaje.Body = "<h1>Hola " + cliente.Nombre + " " + cliente.Apellido + " su cita a sido registrada correctamente </h1>" +
+                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + empleado.Nombre + "</br><b>Servicio:</b> " + servicio.Nombre +
+                        "</br><b>Fecha y hora:</b> " + citaDatos.Fecha + " " + citaDatos.Hora + "</br><b>Valor a pagar:</b> " + citaDatos.Total +" </p><h3>Gracias por confiar en nosotros!</h3>";
+
+                    mensaje.IsBodyHtml = true;
+                    mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
+                    SmtpClient smtpClient = new("smtp.gmail.com");
+                    smtpClient.Port = 587;
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
+                    smtpClient.Send(mensaje);
+                }
+                catch (Exception)
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "No se pudo enviar el correo de confirmación de la cita";
+                    return RedirectToAction("index");
+                }
+
                 TempData["Accion"] = "Crear";
                 TempData["Mensaje"] = "Cita creada correctamente";
                 return RedirectToAction("index");
@@ -211,12 +230,14 @@ namespace ProyectoStilosoft.Controllers
         }
         [Authorize(Roles = "Cliente")]
         [HttpGet]
-        public async Task<IActionResult> clienteCita()
+        public async Task<IActionResult> clienteCita(string id)
         {
             CitasCrearViewModel cita = new();
             cita.Servicios = await _servicio.ObtenerListaServiciosEstado();
+            ViewBag.CitasCliente = await _cita.ObtenerListaCitasCliente(id);
             return View(cita);
         }
+        [HttpPost]
         public async Task<IActionResult> clienteCita(CitasCrearViewModel citaDatos)
         {
             if (ModelState.IsValid)
@@ -236,7 +257,7 @@ namespace ProyectoStilosoft.Controllers
                         {
                             TempData["Accion"] = "Error";
                             TempData["Mensaje"] = "La hora seleccionada ya se encuentra agendada";
-                            return RedirectToAction("index");
+                            return RedirectToAction("index", "Landing");
                         }
 
                         var clienteCita = _context.citas.Where(c => c.ClienteId == citaDatos.ClienteId).Where(f => f.Fecha == citaDatos.Fecha).Where(h => h.Hora == citaDatos.Hora).Any();
@@ -244,20 +265,8 @@ namespace ProyectoStilosoft.Controllers
                         {
                             TempData["Accion"] = "Error";
                             TempData["Mensaje"] = "Ya hay una cita registrada para la fecha y hora seleccionadas";
-                            return RedirectToAction("index");
+                            return RedirectToAction("index", "Landing");
                         }
-                        Cita cita = new()
-                        {
-                            ClienteId = citaDatos.ClienteId,
-                            EmpleadoId = citaDatos.EmpleadoId,
-                            ServicioId = citaDatos.ServicioId,
-                            Fecha = citaDatos.Fecha,
-                            Hora = citaDatos.Hora,
-                            Total = citaDatos.Total,
-                            EstadoCitaId = 1
-                        };
-                        _context.Add(cita);
-                        await _context.SaveChangesAsync();
 
                         int contador = 0;
                         if (citaDatos.Duracion > 0 && citaDatos.Duracion <= 30)
@@ -278,6 +287,56 @@ namespace ProyectoStilosoft.Controllers
                             contador = 8;
                         else if (citaDatos.Duracion > 240 && citaDatos.Duracion <= 270)
                             contador = 9;
+
+                        var empleadoNovedad = _context.empleadoNovedades.Where(e => e.EmpleadoId == citaDatos.EmpleadoId).Where(f => f.Fecha == citaDatos.Fecha).FirstOrDefault();
+
+                        if (empleadoNovedad != null)
+                        {
+                            var empleadoHoraInicio = empleadoNovedad.HoraInicio;
+                            var empleadoHoraFin = empleadoNovedad.HoraFin;
+
+                            DateTime novedadHoraInicio = DateTime.Parse(empleadoHoraInicio);
+                            DateTime novedadHoraFin = DateTime.Parse(empleadoHoraFin);
+                            DateTime horaSeleccionada = DateTime.Parse(citaDatos.Hora);
+                            if (horaSeleccionada >= novedadHoraInicio && horaSeleccionada <= novedadHoraFin)
+                            {
+                                TempData["Accion"] = "Error";
+                                TempData["Mensaje"] = "El empleado tiene una novedad para la hora seleccionada";
+                                return RedirectToAction("index", "Landing");
+                            }
+                            else
+                            {
+                                var citaHoraCiclo = citaDatos.Hora;
+                                DateTime novedadHoraInicioTreinta = DateTime.Parse(empleadoHoraInicio).AddMinutes(30);
+                                string novedadHoraInicioTreintaString = novedadHoraInicioTreinta.ToString("HH:mm");
+                                for (int i = 0; i <= contador; i++)
+                                {
+                                    DateTime citaHoraNueva = DateTime.Parse(citaHoraCiclo).AddMinutes(30);
+                                    string citaHoraString = citaHoraNueva.ToString("HH:mm");
+
+                                    if (citaHoraString == novedadHoraInicioTreintaString)
+                                    {
+                                        TempData["Accion"] = "Error";
+                                        TempData["Mensaje"] = "El empleado tiene una novedad, tenga en cuenta que si la duración pasa el horario de novedad no es posible asignarla";
+                                        return RedirectToAction("index", "Landing");
+                                    }
+                                    citaHoraCiclo = citaHoraString;
+                                }
+                            }
+                        }
+
+                        Cita cita = new()
+                        {
+                            ClienteId = citaDatos.ClienteId,
+                            EmpleadoId = citaDatos.EmpleadoId,
+                            ServicioId = citaDatos.ServicioId,
+                            Fecha = citaDatos.Fecha,
+                            Hora = citaDatos.Hora,
+                            Total = citaDatos.Total,
+                            EstadoCitaId = 1
+                        };
+                        _context.Add(cita);
+                        await _context.SaveChangesAsync();
 
                         DateTime fechaHoraFin = DateTime.Parse(citaDatos.Hora).AddMinutes(citaDatos.Duracion);
                         string horaFin = fechaHoraFin.ToString("HH:mm");
@@ -301,24 +360,6 @@ namespace ProyectoStilosoft.Controllers
                             citaHora = CitaHoraString;
                         }
 
-                        var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
-
-                        MailMessage mensaje = new();
-                        mensaje.To.Add(usuario.Email); //destinatario
-                        mensaje.Subject = "Cita Stilosoft";
-
-                        mensaje.Body = "<h1> Cita reservada correctamente </h1><br>" +
-                            "<h3> Gracias por confiar en nosotros <h3><br>";
-
-                        mensaje.IsBodyHtml = true;
-                        mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
-                        SmtpClient smtpClient = new("smtp.gmail.com");
-                        smtpClient.Port = 587;
-                        smtpClient.UseDefaultCredentials = false;
-                        smtpClient.EnableSsl = true;
-                        smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
-                        smtpClient.Send(mensaje);
-
                         transaction.Commit();
                     }
                     catch (Exception)
@@ -329,6 +370,39 @@ namespace ProyectoStilosoft.Controllers
                         return RedirectToAction("index","Landing");
                     }
                 }
+
+                try
+                {
+                    var usuario = await _userManager.FindByIdAsync(citaDatos.ClienteId);
+
+                    var empleado = await _empleado.ObtenerEmpleadoPorId(citaDatos.EmpleadoId);
+                    var servicio = await _servicio.ObtenerServicioPorId(citaDatos.ServicioId);
+                    var cliente = await _cliente.ObtenerClientePorId(citaDatos.ClienteId);
+
+                    MailMessage mensaje = new();
+                    mensaje.To.Add(usuario.Email); //destinatario
+                    mensaje.Subject = "Confirmación de cita";
+
+                    mensaje.Body = "<h1>Hola " + cliente.Nombre + " " + cliente.Apellido + " su cita a sido registrada correctamente </h1>" +
+                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + empleado.Nombre + "</br><b>Servicio:</b> " + servicio.Nombre +
+                        "</br><b>Fecha y hora:</b> " + citaDatos.Fecha + " " + citaDatos.Hora + "</br><b>Valor a pagar:</b> " + citaDatos.Total + " </p><h3>Gracias por confiar en nosotros!</h3>";
+
+                    mensaje.IsBodyHtml = true;
+                    mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
+                    SmtpClient smtpClient = new("smtp.gmail.com");
+                    smtpClient.Port = 587;
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.EnableSsl = true;
+                    smtpClient.Credentials = new System.Net.NetworkCredential(_configuration["Mail"], _configuration["Password"]);
+                    smtpClient.Send(mensaje);
+                }
+                catch (Exception)
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "No se pudo enviar el correo de confirmación de la cita";
+                    return RedirectToAction("index", "Landing");
+                }
+
                 TempData["Accion"] = "Crear";
                 TempData["Mensaje"] = "Cita creada correctamente";
                 return RedirectToAction("index", "Landing");
@@ -362,12 +436,15 @@ namespace ProyectoStilosoft.Controllers
 
                     var usuario = await _userManager.FindByIdAsync(cita.ClienteId);
 
+                    var citaCorreo = await _cita.ObtenerCitaPorId(citaId);
+
                     MailMessage mensaje = new();
                     mensaje.To.Add(usuario.Email); //destinatario
-                    mensaje.Subject = "Cita Stilosoft";
+                    mensaje.Subject = "Cancelación de cita";
 
-                    mensaje.Body = "<h1> Cita cancelada correctamente </h1><br>" +
-                        "<h3> Gracias por confiar en nosotros <h3><br>";
+                    mensaje.Body = "<h1>Hola " + citaCorreo.Cliente.Nombre + " " + citaCorreo.Cliente.Apellido + " su cita ha sido cancelada </h1>" +
+                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + citaCorreo.Empleado.Nombre + "</br><b>Servicio:</b> " + citaCorreo.Servicio.Nombre +
+                        "</br><b>Fecha y hora:</b> " + citaCorreo.Fecha + " " + citaCorreo.Hora + "</br></p><h3>Si tienes alguna duda comunícate con nosotros!</h3>";
 
                     mensaje.IsBodyHtml = true;
                     mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
