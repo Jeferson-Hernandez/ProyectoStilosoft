@@ -19,7 +19,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Stilosoft.Controllers
 {
-   
     public class UsuariosController : Controller
     {
         private readonly IClienteService _clienteService;
@@ -46,7 +45,7 @@ namespace Stilosoft.Controllers
             _usuarioService = usuarioService;
             _context = context;
         }
-   
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -134,7 +133,7 @@ namespace Stilosoft.Controllers
                 }
             }
             TempData["Accion"] = "Error";
-            TempData["Mensaje"] = "Debe validar no soy robot";
+            TempData["Mensaje"] = "Debe completar el formulario y validar no soy robot";
             return View();
         }
 
@@ -160,7 +159,7 @@ namespace Stilosoft.Controllers
 
                     if (rol.Contains("Administrador"))
                     {
-                        return RedirectToAction("index", "Clientes");
+                        return RedirectToAction("Admin", "Dashboard");
                     }
                     else if (rol.Contains("Cliente"))
                     {
@@ -294,6 +293,7 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return RedirectToAction("index");
         }
+        [Authorize(Roles = "Administrador")]
         [HttpGet]
         public async Task<IActionResult> Editar(string id, IdentityUser identityUser)
         {           
@@ -318,12 +318,19 @@ namespace Stilosoft.Controllers
             TempData["Mensaje"] = "Ingresaste un valor inválido";
             return RedirectToAction("index");
         }
+        [Authorize(Roles = "Administrador")]
         [HttpPost]
         public async Task<IActionResult> Editar(UsuarioDto usuarioDto, IdentityUser identityUser, string id)
         {
             if (ModelState.IsValid)
-            {           
-                    Usuario usuario1 = new()
+            {
+                if (DocumentoExists(usuarioDto.Documento))
+                {
+                    TempData["Accion"] = "Error";
+                    TempData["Mensaje"] = "El documento ya se encuentra registrado";
+                    return RedirectToAction("index");
+                }
+                Usuario usuario1 = new()
                     {
                         UsuarioId = usuarioDto.UsuarioId,
                         Nombre = usuarioDto.Nombre,
@@ -496,6 +503,7 @@ namespace Stilosoft.Controllers
         }
 
         //Cuando hacemos clic en el link que llegó al correo
+       
         [HttpGet]
         public IActionResult ResetearPassword(string token, string email)
         {
@@ -506,6 +514,7 @@ namespace Stilosoft.Controllers
             return View();
         }
         //Cuando hacemos clic en el link que llegó al correo
+        
         [HttpPost]
         public async Task<IActionResult> ResetearPassword(ResetearPasswordDto resetearPasswordDto)
         {
@@ -525,7 +534,7 @@ namespace Stilosoft.Controllers
                         foreach (var errores in result.Errors)
                         {
                             if (errores.Description.ToString().Equals("Invalid token."))
-                                ModelState.AddModelError("", "El token es invalido");
+                                ModelState.AddModelError("", "Debe generar un nuevo enlace");
                         }
                         return View(resetearPasswordDto);
                     }
@@ -534,14 +543,14 @@ namespace Stilosoft.Controllers
             }
             return View(resetearPasswordDto);
         }
-
+        [Authorize]
         /// Debe permitir al admin cambiar las contraseñas de los usuarios
         [HttpGet]
         public IActionResult ResetPassword(string id, IdentityUser identityUser)
         {                                 
             return View();                
         }
-        
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(string id, CambiarPasswordDto cambiarPassWord)
         {

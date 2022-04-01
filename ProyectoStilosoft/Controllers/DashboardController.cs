@@ -18,6 +18,7 @@ using System.Web;
 
 namespace ProyectoStilosoft.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly AppDbContext _context;

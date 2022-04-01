@@ -22,7 +22,13 @@ namespace Stilosoft.Model.Entities
         public int Duracion { get; set; }
         [Required(ErrorMessage = "El costo es obligatorio")]
         public long Costo { get; set; }
+        [DisplayName("Descripción")]
+        [Required(ErrorMessage = "La descripción es obligatoria")]
+        [Column(TypeName = "nvarchar(100)")]
+        public string Descripcion { get; set; }
         public bool Estado { get; set; }
+        [DisplayName("Mostrar servicio")]
+        public bool EstadoLanding { get; set; }
 
         public virtual List<DetalleEmpleadoServicios> DetalleEmpleadoServicios { get; set; }
     }

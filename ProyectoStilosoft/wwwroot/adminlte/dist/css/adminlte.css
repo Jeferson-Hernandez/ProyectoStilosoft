@@ -35444,7 +35444,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 .login-card-body,
 .register-card-body {
-  background-color: #fff;
+  background-color: #234086;
   border-top: 0;
   color: #666;
   padding: 20px;
@@ -35491,7 +35491,7 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
 
 .login-card-body .input-group .input-group-text,
 .register-card-body .input-group .input-group-text {
-  background-color: transparent;
+  background-color: rgba(52, 58, 64, 0.8);
   border-bottom-right-radius: 0.25rem;
   border-left: 0;
   border-top-right-radius: 0.25rem;
@@ -35504,6 +35504,9 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
   margin: 0;
   padding: 0 20px 20px;
   text-align: center;
+}
+.login-box-smg p{
+    text-align: left;
 }
 
 .social-auth-links {

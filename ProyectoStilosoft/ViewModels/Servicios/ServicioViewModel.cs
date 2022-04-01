@@ -25,6 +25,12 @@ namespace ProyectoStilosoft.ViewModels.Servicios
         [Range(5000, 1000000, ErrorMessage = "Ingrese un valor entre 5.000 y 1.000.000")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Ingrese valores numéricos")]
         public long Costo { get; set; }
+        [DisplayName("Descripción")]
+        [Required(ErrorMessage ="La descripción es obligatoria")]
+        [StringLength(100, ErrorMessage = "Máximo 100 caracteres")] 
+        [RegularExpression(@"^[0-9-a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
+        public string Descripcion { get; set; }
         public bool Estado { get; set; }
+        public bool EstadoLanding { get; set; }
     }
 }
