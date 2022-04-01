@@ -159,7 +159,7 @@ namespace Stilosoft.Controllers
 
                     if (rol.Contains("Administrador"))
                     {
-                        return RedirectToAction("index", "Clientes");
+                        return RedirectToAction("Admin", "Dashboard");
                     }
                     else if (rol.Contains("Cliente"))
                     {

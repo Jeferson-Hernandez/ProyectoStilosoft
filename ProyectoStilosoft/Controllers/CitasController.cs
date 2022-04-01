@@ -43,7 +43,7 @@ namespace ProyectoStilosoft.Controllers
         {
             return View(await _cita.ObtenerListaCitas());
         }
-        [Authorize(Roles = "Administrador")]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Crear()
         {
@@ -60,7 +60,7 @@ namespace ProyectoStilosoft.Controllers
 
             return View(cita);
         }
-        [Authorize(Roles = "Administrador")]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Crear(CitasCrearViewModel citaDatos)
         {
@@ -229,7 +229,7 @@ namespace ProyectoStilosoft.Controllers
             TempData["Mensaje"] = "Se ingresó un valor inválido";
             return RedirectToAction("index");
         }
-        [Authorize(Roles = "Cliente")]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> clienteCita(string id)
         {
@@ -238,7 +238,7 @@ namespace ProyectoStilosoft.Controllers
             ViewBag.CitasCliente = await _cita.ObtenerListaCitasCliente(id);
             return View(cita);
         }
-        [Authorize(Roles = "Cliente")]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> clienteCita(CitasCrearViewModel citaDatos)
         {

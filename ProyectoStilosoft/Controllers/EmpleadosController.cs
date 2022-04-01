@@ -333,7 +333,7 @@ namespace ProyectoStilosoft.Controllers
                 return RedirectToAction("index");
             }
         }
-        [Authorize(Roles = "Administrador")]
+        [Authorize]
         //Validaciones con AJAX
         [HttpPost]
         public IActionResult obtenerEmpleados(int servicioId)
@@ -345,7 +345,7 @@ namespace ProyectoStilosoft.Controllers
                 EmpleadoNombre = e.Empleado.Nombre
             }).ToList());
         }
-        [Authorize(Roles = "Administrador")]
+        [Authorize]
         [HttpPost]
         public IActionResult ValidarAgenda(string empleadoId, string fecha)
         {
@@ -367,7 +367,7 @@ namespace ProyectoStilosoft.Controllers
                 HoraFin = "20:00"
             }).FirstOrDefault());
         }
-        [Authorize(Roles = "Administrador")]
+        [Authorize]
         [HttpPost]
         public bool HorarioDisponible(string empleadoId, string horaInicio, int duracion, string fecha)
         {
