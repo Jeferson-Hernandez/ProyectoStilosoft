@@ -19,6 +19,7 @@ namespace Stilosoft.Business.Dtos.Usuarios
         [Display(Name = "Confirmar contraseña")]
         [Compare("Password",
             ErrorMessage = "Las contraseñas deben coincidir")]
+        [Required(ErrorMessage = "La contraseña es requerida")]
         public string ConfirmarPassword { get; set; }
  
     }

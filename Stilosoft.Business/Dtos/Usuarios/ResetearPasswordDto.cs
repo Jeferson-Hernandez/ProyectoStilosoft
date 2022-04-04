@@ -9,8 +9,8 @@ namespace Stilosoft.Business.Dtos.Usuarios
 {
     public class ResetearPasswordDto
     {
-        [Required(ErrorMessage = "El email es requerido")]
-        [EmailAddress(ErrorMessage = "Email inválido")]
+        [Required(ErrorMessage = "El cooreo es requerido")]
+        [EmailAddress(ErrorMessage = "Correo inválido")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "La contraseña es requerida")]
@@ -21,6 +21,7 @@ namespace Stilosoft.Business.Dtos.Usuarios
         [Display(Name = "Confirmar contraseña")]
         [Compare("Password",
             ErrorMessage = "Las contraseñas deben coincidir")]
+        [Required(ErrorMessage = "La contraseña es requerida")]
         public string ConfirmarPassword { get; set; }
 
         public string Token { get; set; }

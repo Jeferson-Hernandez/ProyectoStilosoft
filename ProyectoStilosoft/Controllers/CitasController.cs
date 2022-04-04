@@ -201,9 +201,9 @@ namespace ProyectoStilosoft.Controllers
                     mensaje.To.Add(usuario.Email); //destinatario
                     mensaje.Subject = "Confirmación de cita";
 
-                    mensaje.Body = "<h1>Hola " + cliente.Nombre + " " + cliente.Apellido + " su cita a sido registrada correctamente </h1>" +
-                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + empleado.Nombre + "</br><b>Servicio:</b> " + servicio.Nombre +
-                        "</br><b>Fecha y hora:</b> " + citaDatos.Fecha + " " + citaDatos.Hora + "</br><b>Valor a pagar:</b> " + citaDatos.Total +" </p><h3>Gracias por confiar en nosotros!</h3>";
+                    mensaje.Body = "<h1>Hola " + cliente.Nombre + " " + cliente.Apellido + ", su cita ha sido registrada correctamente. </h1>" +
+                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + empleado.Nombre + "<br/><b>Servicio:</b> " + servicio.Nombre +
+                        "<br/><b>Fecha y hora:</b> " + citaDatos.Fecha + " " + citaDatos.Hora + "<br/><b>Valor a pagar:</b> " + citaDatos.Total +"<br/><h3>Gracias por confiar en nosotros!</h3>";
 
                     mensaje.IsBodyHtml = true;
                     mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
@@ -224,6 +224,7 @@ namespace ProyectoStilosoft.Controllers
                 TempData["Accion"] = "Crear";
                 TempData["Mensaje"] = "Cita creada correctamente";
                 return RedirectToAction("index");
+                
             }
             TempData["Accion"] = "Error";
             TempData["Mensaje"] = "Se ingresó un valor inválido";
@@ -385,9 +386,9 @@ namespace ProyectoStilosoft.Controllers
                     mensaje.To.Add(usuario.Email); //destinatario
                     mensaje.Subject = "Confirmación de cita";
 
-                    mensaje.Body = "<h1>Hola " + cliente.Nombre + " " + cliente.Apellido + " su cita a sido registrada correctamente </h1>" +
-                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + empleado.Nombre + "</br><b>Servicio:</b> " + servicio.Nombre +
-                        "</br><b>Fecha y hora:</b> " + citaDatos.Fecha + " " + citaDatos.Hora + "</br><b>Valor a pagar:</b> " + citaDatos.Total + " </p><h3>Gracias por confiar en nosotros!</h3>";
+                    mensaje.Body = "<h1>Hola " + cliente.Nombre + " " + cliente.Apellido + ", su cita ha sido registrada correctamente </h1>" +
+                         "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + empleado.Nombre + "<br/><b>Servicio:</b> " + servicio.Nombre +
+                         "<br/><b>Fecha y hora:</b> " + citaDatos.Fecha + " " + citaDatos.Hora + "<br/><b>Valor a pagar:</b> " + citaDatos.Total + "<br/><h3>Gracias por confiar en nosotros!</h3>";
 
                     mensaje.IsBodyHtml = true;
                     mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");
@@ -445,8 +446,8 @@ namespace ProyectoStilosoft.Controllers
                     mensaje.Subject = "Cancelación de cita";
 
                     mensaje.Body = "<h1>Hola " + citaCorreo.Cliente.Nombre + " " + citaCorreo.Cliente.Apellido + " su cita ha sido cancelada </h1>" +
-                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + citaCorreo.Empleado.Nombre + "</br><b>Servicio:</b> " + citaCorreo.Servicio.Nombre +
-                        "</br><b>Fecha y hora:</b> " + citaCorreo.Fecha + " " + citaCorreo.Hora + "</br></p><h3>Si tienes alguna duda comunícate con nosotros!</h3>";
+                        "<h2> Datos de la cita </h2><p><b>Empleado:</b> " + citaCorreo.Empleado.Nombre + "<br/><b>Servicio:</b> " + citaCorreo.Servicio.Nombre +
+                        "<br/><b>Fecha y hora:</b> " + citaCorreo.Fecha + " " + citaCorreo.Hora + "<br/><h3>Si tienes alguna duda comunícate con nosotros!</h3>";
 
                     mensaje.IsBodyHtml = true;
                     mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");

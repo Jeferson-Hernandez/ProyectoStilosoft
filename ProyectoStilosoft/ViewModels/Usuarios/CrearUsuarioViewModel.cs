@@ -13,11 +13,11 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [DisplayName("Nombres *")]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
-        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres válidos")]
         public string Nombre { get; set; }
         [DisplayName("Apellidos *")]
         [Required(ErrorMessage = "El apellido es obligatorio")]
-        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres válidos")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         public string Apellido { get; set; }
         [DisplayName("Celular *")]
@@ -31,7 +31,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [StringLength(10, ErrorMessage = "Máximo 10 caracteres")]
         public string Documento { get; set; }
         [DisplayName("Correo *")]
-        [Required(ErrorMessage = "El email es obligatorio")]
+        [Required(ErrorMessage = "El correo es obligatorio")]
         [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "Correo electrónico incorrecto")]
         [StringLength(70, ErrorMessage = "Máximo 70 caracteres")]
         public string Email { get; set; }
@@ -43,6 +43,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [Display(Name = "Confirmar contraseña")]
         [Compare("Password",
         ErrorMessage = "Las contraseñas deben coincidir")]
+        [Required(ErrorMessage = "La contraseña es obligatoria")]
         public string ConfirmarPassword { get; set; }
         [DisplayName("Rol *")]
         [Required(ErrorMessage = "El rol es obligatorio")]

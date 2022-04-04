@@ -12,15 +12,15 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [DisplayName("Nombre*")]
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
-        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres válidos")]
         public string Nombre { get; set; }
         [DisplayName("Apellido*")]
         [Required(ErrorMessage = "El apellido es obligatorio")]
-        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres")]
+        [RegularExpression(@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$", ErrorMessage = "Ingrese caracteres válidos")]
         [StringLength(30, ErrorMessage = "Máximo 30 caracteres")]
         public string Apellido { get; set; }
         [DisplayName("Celular*")]
-        [Required(ErrorMessage = "El numero es obligatorio")]
+        [Required(ErrorMessage = "El número es obligatorio")]
         [RegularExpression("^[0-9]*$", ErrorMessage = "Ingrese valores numéricos")]
         [StringLength(10, ErrorMessage = "Máximo 10 caracteres")]
         public string Numero { get; set; }
@@ -42,6 +42,7 @@ namespace ProyectoStilosoft.ViewModels.Usuarios
         [Display(Name = "Confirmar contraseña")]
         [Compare("Password",
             ErrorMessage = "Las contraseñas deben coincidir")]
+        [Required(ErrorMessage = "La contraseña es obligatoria")]
         public string ConfirmarPassword { get; set; }
     }
 }

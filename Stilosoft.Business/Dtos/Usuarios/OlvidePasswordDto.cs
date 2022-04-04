@@ -9,8 +9,8 @@ namespace Stilosoft.Business.Dtos.Usuarios
 {
     public class OlvidePasswordDto 
     {
-        [Required(ErrorMessage = "El email es requerido")]
-        [EmailAddress(ErrorMessage = "Email invalido")]
+        [Required(ErrorMessage = "El correo es requerido")]
+        [EmailAddress(ErrorMessage = "Correo invalido")]
         public string Email { get; set; }
     }
 }

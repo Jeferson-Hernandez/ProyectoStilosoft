@@ -21,7 +21,7 @@ namespace ProyectoStilosoft.Datos
 
             List<reporteServicios> objLista = new List<reporteServicios>();
 
-            using (SqlConnection conexionSQL = new SqlConnection("Data Source = DESKTOP-STNJGIJ; Initial catalog = Stilosoft; Integrated Security = True"))
+            using (SqlConnection conexionSQL = new SqlConnection("Data Source =DESKTOP-APBMAQK; Initial catalog = Stilosoft; Integrated Security = True"))
             {
                 string query = "sp_servicios";
 
@@ -49,7 +49,7 @@ namespace ProyectoStilosoft.Datos
 
             List<reporteClientes> objLista = new List<reporteClientes>();
 
-            using (SqlConnection conexionSQL = new SqlConnection("Data Source = DESKTOP-STNJGIJ; Initial catalog = Stilosoft; Integrated Security = True"))
+            using (SqlConnection conexionSQL = new SqlConnection("Data Source = DESKTOP-APBMAQK; Initial catalog = Stilosoft; Integrated Security = True"))
             {
                 string query = "sp_clientes";
 

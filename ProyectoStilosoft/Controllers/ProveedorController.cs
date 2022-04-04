@@ -55,7 +55,7 @@ namespace ProyectoStilosoft.Controllers
                     }
                     await _proveedorService.GuardarProveedor(proveedor);
                     TempData["Accion"] = "Crear";
-                    TempData["Mensaje"] = "Proveedor registrado";
+                    TempData["Mensaje"] = "Proveedor registrado correctamente";
                     return RedirectToAction("Index");
                 }
                 catch (Exception)

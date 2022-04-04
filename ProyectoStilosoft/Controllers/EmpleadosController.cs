@@ -282,7 +282,7 @@ namespace ProyectoStilosoft.Controllers
                 {
                     await _empleado.EliminarEmpleadoServicio(id);
                     TempData["Accion"] = "Eliminar";
-                    TempData["Mensaje"] = "Compra eliminada correctamente";
+                    TempData["Mensaje"] = "Servicio eliminado correctamente";
                     return RedirectToAction("Index");
                 }
                 catch (Exception)
@@ -508,7 +508,7 @@ namespace ProyectoStilosoft.Controllers
 
                     await _empleado.GuardarEmpleadoNovedad(novedad);
                     TempData["Accion"] = "Crear";
-                    TempData["Mensaje"] = "Empleado creado correctamente";
+                    TempData["Mensaje"] = "Novedad creada correctamente";
                     return RedirectToAction("ListarAgenda");
                 }
                 catch (Exception)
@@ -575,7 +575,7 @@ namespace ProyectoStilosoft.Controllers
 
                     await _empleado.EditarEmpleadoNovedad(novedad);
                     TempData["Accion"] = "Editar";
-                    TempData["Mensaje"] = "Empleado editado correctamente";
+                    TempData["Mensaje"] = "Novedad editada correctamente";
                     return RedirectToAction("ListarAgenda");
                 }
                 catch (Exception)
