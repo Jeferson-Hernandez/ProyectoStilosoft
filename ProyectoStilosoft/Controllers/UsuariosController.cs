@@ -495,7 +495,8 @@ namespace Stilosoft.Controllers
                     mensaje.Subject = "Recuperar contraseña";
 
                     mensaje.Body = "<h1> Gracias por contactarte con nosotros </h1><br>" +
-                        "<h3> Ingresa al siguiente link para recuperar tu contraseña<h3><br>"+ passwordresetLink;
+                        "<h3> Ingresa al siguiente link para recuperar tu contraseña<h3><br>" + passwordresetLink;
+    
                    
                     mensaje.IsBodyHtml = true;
                     mensaje.From = new MailAddress(_configuration["Mail"], "Maria C Stilos");

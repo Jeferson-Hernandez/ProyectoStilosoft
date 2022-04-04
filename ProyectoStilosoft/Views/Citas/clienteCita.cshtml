@@ -30,7 +30,7 @@
 
 <body>
     <br /><br />
-    <div class="container h-100">
+    <div class="container fluid">
         <form asp-action="clienteCita" asp-controller="Citas" method="post">
             <input type="hidden" asp-for="Total" id="totalCita" />
             <input type="hidden" asp-for="Duracion" id="duracion" />
@@ -77,13 +77,11 @@
                 </div>
             </div><br />
             <div class="row">
-                <div class="col-9">
-                    <a asp-action="Index" asp-controller="Landing" class="btn btn-info">Ir al inicio</a>
-                </div>
                 <div class="col-3">
                     <input id="terminarCita" type="submit" value="Terminar cita" class="btn btn-primary" />
                 </div>
             </div>
+            
         </form><br /><br />
         <h2>Lista de citas confirmadas</h2>
         <table class="table table-bordered" id="tabla">
@@ -109,6 +107,10 @@
                 }
             </tbody>
         </table>
+        <div class="row">
+                <div class="col-9">
+                    <a asp-action="Index" asp-controller="Landing" class="btn btn-info">Ir al inicio</a>
+                </div>
     </div>
     <!-- /.login-box -->
     <!-- jQuery -->
